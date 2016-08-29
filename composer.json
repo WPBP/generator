@@ -1,0 +1,28 @@
+{
+  "name": "wpbp/generator",
+  "license": "GPL 2.0",
+  "description": "Generetor of Wordpress Plugin Boilerplate",
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "generator"
+  ],
+  "homepage": "https://wpbp.github.io/",
+  "authors": [
+    {
+      "name": "Daniele Scasciafratte",
+      "email": "mte90net@gmail.com",
+      "homepage": "https://github.com/wpbp"
+    }
+  ],
+  "require": {
+    "php": ">=5.2",
+    "zordius/lightncandy": "dev-master",
+    "nategood/commando": "*",
+    "1happyplace/clio": "^0.5.1@beta"
+  },
+  "minimum-stability": "beta",
+  "bin": [
+    "scripts/wpbp-generator"
+  ]
+}

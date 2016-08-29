@@ -1,0 +1,69 @@
+{
+  "plugin": {
+    "name": "My New Plugin",
+    "version": "1.0.0"
+  },
+  "author": {
+    "name": "Your Name",
+    "email": "my@email.com",
+    "url": "http://domain.tld"
+  },
+  "copyright": "GPL 2.0",
+  "public-assets": {
+    "js": "true",
+    "css": "true"
+  },
+  "act-deact": {
+    "actdeact": "true",
+    "uninstall": "true"
+  },
+  "admin-page": "true",
+  "git-repo": "true",
+  "coffeescript": "true",
+  "libraries": [
+    "athlan/custom-fields-permalink-plugin",
+    "Freemius/wordpress-sdk",
+    "julien731/WP-Dismissible-Notices-Handler",
+    "julien731/WP-Review-Me",
+    "nathanielks/wp-admin-notice",
+    "origgami/CMB2-grid",
+    "voceconnect/wp-contextual-help",
+    "WebDevStudios/CMB2",
+    "WebDevStudios/CPT_Core",
+    "WebDevStudios/Taxonomy_Core",
+    "wpackagist-plugin/posts-to-posts",
+    "WPBP/CPT_Columns",
+    "WPBP/CronPlus",
+    "WPBP/Debug",
+    "WPBP/FakePage",
+    "WPBP/Language",
+    "WPBP/PointerPlus",
+    "WPBP/Requirements",
+    "WPBP/Template",
+    "WPBP/Widgets-Helper"
+  ],
+  "snippet": {
+    "backend": [
+      "bubble-notification-pending-cpt",
+      "dashboard-atglance",
+      "dashboard-activity",
+      "donate-link-plugin-list"
+    ],
+    "frontend": [
+      "body-class",
+      "cpt-search-support",
+      "js-dom-routing",
+      "wp-localize-script"
+    ],
+    "system": [
+      "capability-system",
+      "transient-example",
+      "push-notification"
+    ],
+    "custom": [
+      "action",
+      "filter",
+      "shortcode"
+    ]
+  }
+}
