@@ -1,6 +1,7 @@
 <?php
 
 use LightnCandy\LightnCandy;
+use LightnCandy\Runtime;
 
 function print_v( $label ) {
   global $cmd, $clio;
@@ -28,51 +29,115 @@ function create_wpbp_json() {
   }
 }
 
-function parse_wpbp_json() {
-//
-//  $data = array( 'name' => $config[ 'name' ], 'value' => 10000, 'testo' => true );
-//  $template = file_get_contents( 'test.php' );
-//  $php = LightnCandy::compile( $template );
-//  $render = LightnCandy::prepare( $php );
-//
-//  print_v( 'Siamo in verbose' );
-//
-//  $dev = $cmd[ 'dev' ] ? ucwords( $cmd[ 0 ] ) : $cmd[ 0 ];
-//
-//  if ( $dev ) {
-//    $clio->textColor( "white" )->setBold()->line( "Modalita dev" )->nl();
+function download_wpbp() {
+  global $cmd, $clio, $white;
+  $version = WPBP_VERSION;
+
+  if ( $cmd[ 'dev' ] ) {
+    $version = 'dev';
+  }
+  $clio->styleLine( 'Downloading ' . $version . ' package', $white );
+
+//  if ( file_exists( getcwd() . '/plugin.zip' ) ) {
+//    $zip = new ZipArchive;
+//    $res = $zip->open( getcwd() .'plugin.zip' );
+//    if ( $res === TRUE ) {
+//	$zip->extractTo( '/' );
+//	$zip->close();
+//	echo 'woot!';
+//    } else {
+//	echo 'doh!';
+//    }
 //  }
-//
-//// Save the compiled PHP code into a php file
-//  file_put_contents( 'render.php', str_replace( "//WPBPGen\n", '', $render( $data ) ) );
-//  $clio->styleLine( "Fatto", $h1 );
-//  $clio->textColor( "blue" )->setUnderscore()->out( "Some regular text underneath the title" )->nl( 2 );
+}
+
+function execute_generator( $config ) {
+  global $yellow, $cmd, $clio;
+  $files = get_files();
+  foreach ( $files as $file ) {
+    $file_content = file_get_contents( $file );
+    if ( $cmd[ 'dev' ] ) {
+	$lc = LightnCandy::compile( $file_content, Array(
+			'flags' => LightnCandy::FLAG_RENDER_DEBUG
+		  ) );
+	$lc_prepare = LightnCandy::prepare( $lc );
+	$newfile = $lc_prepare( $config, array( 'debug' => Runtime::DEBUG_ERROR_EXCEPTION ) );
+    } else {
+	$lc = LightnCandy::compile( $file_content );
+	$lc_prepare = LightnCandy::prepare( $lc );
+	$newfile = $lc_prepare( $config );
+    }
+    $newfile = replace_content_names( $config, $newfile );
+    if ( $cmd[ 'dev' ] ) {
+	if ( $newfile !== $file_content ) {
+	  $clio->styleLine( 'Parsed ' . $file, $yellow );
+	}
+    }
+    file_put_contents( $file, $newfile );
+  }
 }
 
 //LightnCandy require an array bidimensional "key" = true, so we need toconvert a multidimensional in bidimensional
 function array_to_var( $array ) {
   $newarray = array();
+  //Get the json
   foreach ( $array as $key => $subarray ) {
+    //Check if an array
     if ( is_array( $subarray ) ) {
 	foreach ( $subarray as $subkey => $subvalue ) {
+	  //Again it's an array with another inside
 	  if ( is_array( $subvalue ) ) {
 	    foreach ( $subvalue as $subsubkey => $subsubvalue ) {
 		if ( !is_nan( $subsubkey ) ) {
-		  $newarray[ $subkey . '_' . strtolower( $subsubvalue ) ] = true;
+		  //If empty lightcandy takes as true
+		  $newarray[ $subkey . '_' . strtolower( str_replace( '/', '_', $subsubvalue ) ) ] = '';
 		}
 	    }
 	  } else {
 	    if ( !is_numeric( $subkey ) ) {
-		$newarray[ $key . '_' . strtolower($subkey) ] = $subvalue;
+		$newarray[ $key . '_' . strtolower( $subkey ) ] = $subvalue;
 	    } else {
-		$newarray[ $key . '_' . strtolower($subvalue) ] = true;
+		$newarray[ $key . '_' . strtolower( str_replace( '/', '_', $subvalue ) ) ] = '';
 	    }
 	  }
 	}
     } else {
+	//Is a single key
 	$newarray[ $key ] = ( bool ) $subarray;
     }
   }
 
   return $newarray;
+}
+
+function get_files() {
+  $files = scandir( getcwd() );
+  $list = array();
+  foreach ( $files as $file ) {
+    //do your work here
+    if ( !in_array( $file, array( '.', '..', 'wpbp.json' ) ) ) {
+	if ( !is_dir( $file ) ) {
+	  if ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) ) {
+	    $list[] = $file;
+	  }
+	}
+    }
+  }
+  return $list;
+}
+
+function replace_content_names( $config, $content ) {
+  $ucword = '';
+  $lower = '';
+  $content = str_replace( "//WPBPGen\n", '', $content );
+  $content = str_replace( "//\n", '', $content );
+  $content = str_replace( "Plugin_Name", str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
+  $content = str_replace( "plugin-name", str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ), $content );
+  preg_match_all( "/[A-Z]/", ucwords( strtolower( $config[ 'plugin_name' ] ) ), $ucword );
+  $ucword = implode( '', $ucword[ 0 ] );
+  $content = str_replace( "PN_", $ucword . '_', $content );
+  $lower = strtolower( $ucword );
+  $content = str_replace( "Pn_", ucwords( $lower ) . '_', $content );
+  $content = str_replace( "pn_", $lower . '_', $content );
+  return $content;
 }

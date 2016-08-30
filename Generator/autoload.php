@@ -1,5 +1,6 @@
 <?php
 
+define("WPBP_VERSION", "2.0.0");
 // Use composer autoloader
 require_once(dirname( __FILE__ ) . '/../vendor/autoload.php');
 require_once(dirname( __FILE__ ) . '/functions.php');
@@ -14,6 +15,8 @@ $white = new Style();
 $white->setTextColor( "white" )->setBold( true )->setUnderscore();
 $red = new Style();
 $red->setTextColor( "red" )->setBold( true );
+$yellow = new Style();
+$yellow->setTextColor( "yellow" )->setBold( true );
 $clio = new Clio();
 //Set info for the script
 $cmd->setHelp( 'WPBP Generator enable you to get a customized version based from your needs a WordPress Plugin Boilerplate Powered' );
@@ -26,4 +29,6 @@ create_wpbp_json();
 
 $config = array_to_var( json_decode( file_get_contents( getcwd() . '/wpbp.json' ), true ) );
 
-parse_wpbp_json();
+download_wpbp();
+
+execute_generator( $config );
