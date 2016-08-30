@@ -79,7 +79,7 @@ function execute_generator( $config ) {
 
 function parse_config() {
   $config = array_to_var( json_decode( file_get_contents( getcwd() . '/wpbp.json' ), true ) );
-  $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) .'/wpbp.json' ), true ) );
+  $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true ) );
   foreach ( $config_default as $key => $value ) {
     if ( !isset( $config[ $key ] ) ) {
 	$config[ $key ] = 'false';
@@ -133,6 +133,7 @@ function array_to_var( $array ) {
 }
 
 function get_files() {
+  global $cmd, $clio, $yellow, $config;
   $files = scandir( getcwd() );
   $list = array();
   foreach ( $files as $file ) {
@@ -140,7 +141,17 @@ function get_files() {
     if ( !in_array( $file, array( '.', '..', 'wpbp.json' ) ) ) {
 	if ( !is_dir( $file ) ) {
 	  if ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) ) {
-	    $list[] = $file;
+	    $pathparts = pathinfo( $file );
+	    $newname = replace_content_names( $config, $pathparts[ 'filename' ] );
+	    if ( $newname !== $file ) {
+		rename( $file, $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ] );
+		$list[] = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
+		if ( $cmd[ 'dev' ] ) {
+		  $clio->styleLine( 'Renamed ' . $file . ' to ' . $newname . '.' . $pathparts[ 'extension' ], $yellow );
+		}
+	    } else {
+		$list[] = $file;
+	    }
 	  }
 	}
     }
