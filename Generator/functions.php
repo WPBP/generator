@@ -77,6 +77,17 @@ function execute_generator( $config ) {
   }
 }
 
+function parse_config() {
+  $config = array_to_var( json_decode( file_get_contents( getcwd() . '/wpbp.json' ), true ) );
+  $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) .'/wpbp.json' ), true ) );
+  foreach ( $config_default as $key => $value ) {
+    if ( !isset( $config[ $key ] ) ) {
+	$config[ $key ] = 'false';
+    }
+  }
+  return $config;
+}
+
 //LightnCandy require an array bidimensional "key" = true, so we need toconvert a multidimensional in bidimensional
 function array_to_var( $array ) {
   $newarray = array();
@@ -95,7 +106,13 @@ function array_to_var( $array ) {
 	    }
 	  } else {
 	    if ( !is_numeric( $subkey ) ) {
-		$newarray[ $key . '_' . strtolower( $subkey ) ] = $subvalue;
+		if ( $subvalue === 'true' ) {
+		  $newarray[ $key . '_' . strtolower( $subkey ) ] = '';
+		} elseif ( $subvalue === 'false' ) {
+		  $newarray[ $key . '_' . strtolower( $subkey ) ] = 'false';
+		} else {
+		  $newarray[ $key . '_' . strtolower( $subkey ) ] = $subvalue;
+		}
 	    } else {
 		$newarray[ $key . '_' . strtolower( str_replace( '/', '_', $subvalue ) ) ] = '';
 	    }
@@ -103,10 +120,15 @@ function array_to_var( $array ) {
 	}
     } else {
 	//Is a single key
-	$newarray[ $key ] = ( bool ) $subarray;
+	if ( $subarray === 'true' ) {
+	  $newarray[ $key ] = '';
+	} elseif ( $subarray === 'false' ) {
+	  $newarray[ $key ] = 'false';
+	} else {
+	  $newarray[ $key ] = $subvalue;
+	}
     }
   }
-
   return $newarray;
 }
 
@@ -130,6 +152,7 @@ function replace_content_names( $config, $content ) {
   $ucword = '';
   $lower = '';
   $content = str_replace( "//WPBPGen\n", '', $content );
+  $content = str_replace( "//WPBPGen", '', $content );
   $content = str_replace( "//\n", '', $content );
   $content = str_replace( "Plugin_Name", str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
   $content = str_replace( "plugin-name", str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ), $content );
