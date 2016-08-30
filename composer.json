@@ -19,7 +19,8 @@
     "php": ">=5.2",
     "zordius/lightncandy": "dev-master",
     "nategood/commando": "*",
-    "1happyplace/clio": "^0.5.1@beta"
+    "1happyplace/clio": "^0.5.1@beta",
+    "perchten/rmrdir": "1.*"
   },
   "minimum-stability": "beta",
   "bin": [

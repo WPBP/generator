@@ -4,10 +4,10 @@ use LightnCandy\LightnCandy;
 use LightnCandy\Runtime;
 
 function print_v( $label ) {
-  global $cmd, $clio;
+  global $cmd, $clio, $yellow;
 
   if ( $cmd[ 'verbose' ] ) {
-    $clio->textColor( "white" )->setBold()->line( $label )->nl();
+    $clio->styleLine( $label, $yellow );
   }
 }
 
@@ -34,25 +34,39 @@ function download_wpbp() {
   $version = WPBP_VERSION;
 
   if ( $cmd[ 'dev' ] ) {
-    $version = 'dev';
+    $version = 'master';
   }
   $clio->styleLine( 'Downloading ' . $version . ' package', $white );
+}
 
-//  if ( file_exists( getcwd() . '/plugin.zip' ) ) {
-//    $zip = new ZipArchive;
-//    $res = $zip->open( getcwd() .'plugin.zip' );
-//    if ( $res === TRUE ) {
-//	$zip->extractTo( '/' );
-//	$zip->close();
-//	echo 'woot!';
-//    } else {
-//	echo 'doh!';
-//    }
-//  }
+function extract_wpbp() {
+  global $cmd, $clio, $white, $red, $config;
+  if ( file_exists( getcwd() . '/plugin.zip' ) ) {
+    $clio->styleLine( 'Extract Boilerplate', $white );
+    $zip = new ZipArchive;
+    $res = $zip->open( getcwd() . '/plugin.zip' );
+    if ( $res === TRUE ) {
+	$zip->extractTo( getcwd() . '/plugin_temp/' );
+	$zip->close();
+	$version = WPBP_VERSION;
+
+	if ( $cmd[ 'dev' ] ) {
+	  $version = 'master';
+	}
+	try {
+	  rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) );
+	  rmrdir( getcwd() . '/plugin_temp/' );
+//	unlink( getcwd() . '/plugin.zip' );
+	} catch ( Exception $e ) {
+	  $clio->styleLine( $e, $red );
+	}
+	$clio->styleLine( 'Boilerplate Extracted ', $white );
+    }
+  }
 }
 
 function execute_generator( $config ) {
-  global $yellow, $cmd, $clio;
+  global $cmd;
   $files = get_files();
   foreach ( $files as $file ) {
     $file_content = file_get_contents( $file );
@@ -68,10 +82,8 @@ function execute_generator( $config ) {
 	$newfile = $lc_prepare( $config );
     }
     $newfile = replace_content_names( $config, $newfile );
-    if ( $cmd[ 'dev' ] ) {
-	if ( $newfile !== $file_content ) {
-	  $clio->styleLine( 'Parsed ' . $file, $yellow );
-	}
+    if ( $newfile !== $file_content ) {
+	print_v( 'Parsed ' . $file );
     }
     file_put_contents( $file, $newfile );
   }
@@ -132,31 +144,33 @@ function array_to_var( $array ) {
   return $newarray;
 }
 
-function get_files() {
-  global $cmd, $clio, $yellow, $config;
-  $files = scandir( getcwd() );
-  $list = array();
-  foreach ( $files as $file ) {
-    //do your work here
-    if ( !in_array( $file, array( '.', '..', 'wpbp.json' ) ) ) {
-	if ( !is_dir( $file ) ) {
-	  if ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) ) {
-	    $pathparts = pathinfo( $file );
-	    $newname = replace_content_names( $config, $pathparts[ 'filename' ] );
-	    if ( $newname !== $file ) {
-		rename( $file, $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ] );
-		$list[] = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
-		if ( $cmd[ 'dev' ] ) {
-		  $clio->styleLine( 'Renamed ' . $file . ' to ' . $newname . '.' . $pathparts[ 'extension' ], $yellow );
-		}
-	    } else {
-		$list[] = $file;
-	    }
+function get_files( $path = null ) {
+  global $config, $clio, $red;
+  if ( $path === null ) {
+    $path = getcwd() . DIRECTORY_SEPARATOR . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) );
+  }
+  $files = array();
+  $dir_iterator = new RecursiveDirectoryIterator( $path );
+  $iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
+  foreach ( $iterator as $file => $object ) {
+    if ( (!strpos( $file, '..' ) && !strpos( $file, '/.' )) && (strpos( $file, '.php' ) || strpos( $file, '.txt' )) ) {
+	$pathparts = pathinfo( $file );
+	$newname = replace_content_names( $config, $pathparts[ 'filename' ] );
+	$newname = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
+	if ( $newname !== $file ) {
+	  try {
+	    rename( $file, $newname );
+	  } catch ( Exception $e ) {
+	    $clio->styleLine( $e, $red );
 	  }
+	  $files[] = $newname;
+	  print_v( 'Renamed ' . $file . ' to ' . $newname );
+	} else {
+	  $files[] = $file;
 	}
     }
   }
-  return $list;
+  return $files;
 }
 
 function replace_content_names( $config, $content ) {

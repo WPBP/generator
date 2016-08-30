@@ -1,6 +1,6 @@
 <?php
 
-define("WPBP_VERSION", "2.0.0");
+define( "WPBP_VERSION", "2.0.0" );
 // Use composer autoloader
 require_once(dirname( __FILE__ ) . '/../vendor/autoload.php');
 require_once(dirname( __FILE__ ) . '/functions.php');
@@ -29,6 +29,11 @@ create_wpbp_json();
 
 $config = parse_config();
 
-download_wpbp();
+if ( file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) ) ) {
+  $clio->styleLine( 'Folder ' . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) . ' already exist!', $red );
+  die( 0 );
+}
+
+extract_wpbp();
 
 execute_generator( $config );
