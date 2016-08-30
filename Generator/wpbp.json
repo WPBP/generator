@@ -6,9 +6,10 @@
   "author": {
     "name": "Your Name",
     "email": "my@email.com",
-    "url": "http://domain.tld"
+    "url": "http://domain.tld",
+    "license": "GPL 2.0+",
+    "copyright": "2016 Your Name or Company Name"
   },
-  "copyright": "GPL 2.0",
   "public-assets": {
     "js": "true",
     "css": "true"

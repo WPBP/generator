@@ -1,0 +1,13 @@
+### Composer ###
+/vendor/
+composer.lock
+
+
+### NetBeans ###
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+.nb-gradle/

@@ -24,3 +24,6 @@ $cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the folder' )
 //Generate the wpbp.json file
 create_wpbp_json();
 
+$config = array_to_var( json_decode( file_get_contents( getcwd() . '/wpbp.json' ), true ) );
+
+parse_wpbp_json();

@@ -20,7 +20,7 @@ function create_wpbp_json() {
 	$clio->styleLine( 'wpbp.json generated', $white );
     }
   } else {
-    if ( !file_exists( getcwd() . 'wpbp.json' ) ) {
+    if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
 	$clio->styleLine( "wpbp.json file missing...", $red );
 	$clio->styleLine( "Generate with: wpbp-generator --json", $red );
 	exit();
@@ -28,8 +28,7 @@ function create_wpbp_json() {
   }
 }
 
-//function parse_wpbp_json() {
-//  $config = json_decode( file_get_contents( getcwd() . 'wpbp.json' ), true );
+function parse_wpbp_json() {
 //
 //  $data = array( 'name' => $config[ 'name' ], 'value' => 10000, 'testo' => true );
 //  $template = file_get_contents( 'test.php' );
@@ -48,4 +47,32 @@ function create_wpbp_json() {
 //  file_put_contents( 'render.php', str_replace( "//WPBPGen\n", '', $render( $data ) ) );
 //  $clio->styleLine( "Fatto", $h1 );
 //  $clio->textColor( "blue" )->setUnderscore()->out( "Some regular text underneath the title" )->nl( 2 );
-//}
+}
+
+//LightnCandy require an array bidimensional "key" = true, so we need toconvert a multidimensional in bidimensional
+function array_to_var( $array ) {
+  $newarray = array();
+  foreach ( $array as $key => $subarray ) {
+    if ( is_array( $subarray ) ) {
+	foreach ( $subarray as $subkey => $subvalue ) {
+	  if ( is_array( $subvalue ) ) {
+	    foreach ( $subvalue as $subsubkey => $subsubvalue ) {
+		if ( !is_nan( $subsubkey ) ) {
+		  $newarray[ $subkey . '_' . strtolower( $subsubvalue ) ] = true;
+		}
+	    }
+	  } else {
+	    if ( !is_numeric( $subkey ) ) {
+		$newarray[ $key . '_' . strtolower($subkey) ] = $subvalue;
+	    } else {
+		$newarray[ $key . '_' . strtolower($subvalue) ] = true;
+	    }
+	  }
+	}
+    } else {
+	$newarray[ $key ] = ( bool ) $subarray;
+    }
+  }
+
+  return $newarray;
+}
