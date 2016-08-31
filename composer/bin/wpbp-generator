@@ -14,6 +14,6 @@ foreach ( $files as $file ) {
 }
 if ( !$found ) {
   die(
-	    'You need install Composer!' . PHP_EOL
+	    'You need to install Composer!' . PHP_EOL
   );
 } 

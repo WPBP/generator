@@ -1,7 +1,7 @@
 {
   "name": "wpbp/generator",
-  "license": "GPL 2.0",
-  "description": "Generetor of Wordpress Plugin Boilerplate",
+  "license": "GPL-2.0",
+  "description": "Generator of Wordpress Plugin Boilerplate Powered",
   "keywords": [
     "wordpress",
     "plugin",
@@ -15,14 +15,14 @@
       "homepage": "https://github.com/wpbp"
     }
   ],
+  "minimum-stability":"dev",
   "require": {
-    "php": ">=5.2",
-    "zordius/lightncandy": "dev-master",
-    "nategood/commando": "*",
-    "1happyplace/clio": "^0.5.1@beta",
+    "php": ">=5.4",
+    "zordius/lightncandy": "0.95",
+    "nategood/commando": "0.2.8",
+    "1happyplace/clio": "v0.5.1-beta",
     "perchten/rmrdir": "1.*"
   },
-  "minimum-stability": "stable",
   "bin": [
     "wpbp-generator"
   ]
