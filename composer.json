@@ -22,7 +22,7 @@
     "1happyplace/clio": "^0.5.1@beta",
     "perchten/rmrdir": "1.*"
   },
-  "minimum-stability": "beta",
+  "minimum-stability": "stable",
   "bin": [
     "wpbp-generator"
   ]
