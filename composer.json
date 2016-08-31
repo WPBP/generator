@@ -24,6 +24,6 @@
   },
   "minimum-stability": "beta",
   "bin": [
-    "scripts/wpbp-generator"
+    "wpbp-generator"
   ]
 }

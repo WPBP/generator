@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+$files = array(
+    __DIR__ .'/../../Generator/init.php',
+    __DIR__ . '/../../vendor/autoload.php',
+    __DIR__ . '/../../../../autoload.php'
+);
+$found = FALSE;
+foreach ( $files as $file ) {
+  if ( file_exists( $file ) ) {
+    require $file;
+    $found = TRUE;
+  }
+}
+if ( !$found ) {
+  die(
+	    'You need install Composer!' . PHP_EOL
+  );
+} 

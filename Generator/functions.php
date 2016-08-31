@@ -25,6 +25,7 @@ function create_wpbp_json() {
     if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
 	$clio->styleLine( "😡 wpbp.json file missing...", $red );
 	$clio->styleLine( "😉 Generate with: wpbp-generator --json", $red );
+	$clio->styleLine( "  Do your changes and execute again! Use the --dev parameter to get the development version!", $red );
 	exit();
     }
   }
@@ -78,7 +79,7 @@ function extract_wpbp() {
 }
 
 function execute_generator( $config ) {
-  global $cmd;
+  global $cmd, $clio, $white;
   $files = get_files();
   foreach ( $files as $file ) {
     $file_content = file_get_contents( $file );
@@ -99,7 +100,12 @@ function execute_generator( $config ) {
     }
     file_put_contents( $file, $newfile );
   }
+
+  echo "\n";
+  $clio->styleLine( "Generation done, i am superfast! You: (ʘ_ʘ)", $white );
   execute_composer();
+  git_init();
+  grunt();
 }
 
 function parse_config() {
@@ -119,7 +125,7 @@ function parse_config() {
   return $config;
 }
 
-//LightnCandy require an array bidimensional "key" = true, so we need toconvert a multidimensional in bidimensional
+//LightnCandy require an array bidimensional "key" = true, so we need to convert a multidimensional in bidimensional
 function array_to_var( $array ) {
   $newarray = array();
   //Get the json
@@ -138,7 +144,7 @@ function array_to_var( $array ) {
 	  } else {
 	    if ( !is_numeric( $subkey ) ) {
 		if ( $subvalue === 'true' ) {
-		  $newarray[ $key . '_' . strtolower( $subkey ) ] = '';
+		  $newarray[ $key . '_' . strtolower( $subkey ) ] = 'true';
 		} elseif ( $subvalue === 'false' ) {
 		  $newarray[ $key . '_' . strtolower( $subkey ) ] = 'false';
 		} else {
@@ -152,7 +158,7 @@ function array_to_var( $array ) {
     } else {
 	//Is a single key
 	if ( $subarray === 'true' ) {
-	  $newarray[ $key ] = '';
+	  $newarray[ $key ] = 'true';
 	} elseif ( $subarray === 'false' ) {
 	  $newarray[ $key ] = 'false';
 	} else {
@@ -173,7 +179,7 @@ function get_files( $path = null ) {
   $dir_iterator = new RecursiveDirectoryIterator( $path );
   $iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
   foreach ( $iterator as $file => $object ) {
-    if ( (!strpos( $file, '..' ) && !strpos( $file, '/.' )) && (strpos( $file, '.php' ) || strpos( $file, '.txt' )) ) {
+    if ( (!strpos( $file, '..' ) && !strpos( $file, '/.' )) && (strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' )) ) {
 	$pathparts = pathinfo( $file );
 	$newname = replace_content_names( $config, $pathparts[ 'filename' ] );
 	$newname = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
@@ -211,7 +217,7 @@ function replace_content_names( $config, $content ) {
 }
 
 function execute_composer() {
-  global $config;
+  global $config, $clio, $white;
   $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/composer.json' ), true );
   foreach ( $config as $key => $value ) {
     if ( strpos( $key, 'libraries_' ) !== false ) {
@@ -233,4 +239,38 @@ function execute_composer() {
     }
   }
   file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
+  $clio->styleLine( '😀 Composer install in progress', $white );
+  $output = '';
+  exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; composer update 2>&1', $output );
+}
+
+function git_init() {
+  global $config, $clio, $white;
+
+  if ( $config[ 'git-repo' ] === 'true' ) {
+    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; git init' );
+    $clio->styleLine( '😀 .git folder generated', $white );
+  }
+}
+
+function grunt() {
+  global $config, $clio, $white;
+
+  if ( $config[ 'coffeescript' ] === 'false' ) {
+    rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
+    rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' );
+
+    $grunt = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/Gruntfile.js' );
+    $newgrunt = array();
+    foreach ( $grunt as $line => $content ) {
+	if ( !(($line >= 45 && $line <= 84 ) || $line === 91 || $line === 92 || $line === 96 || $line === 105 || $line === 110) ) {
+	  $newgrunt[] = $grunt[ $line ];
+	}
+    }
+    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/Gruntfile.js', $newgrunt );
+    $clio->styleLine( '😀 Coffeescript removed', $white );
+  }
+  $clio->styleLine( '😀 Grunt install in progress', $white );
+  $output = '';
+  exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; npm install 2>&1', $output );
 }
