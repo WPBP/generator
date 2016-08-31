@@ -24,6 +24,8 @@ $cmd->option( 'dev' )->describedAs( 'Download from the master branch' )->boolean
 $cmd->option( 'verbose' )->describedAs( 'Get a verbose output' )->boolean();
 $cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the folder' )->boolean();
 
+$clio->styleLine( "(>'-')> WPBP Code Generator by Mte90", $white );
+echo "\n";
 //Generate the wpbp.json file
 create_wpbp_json();
 
@@ -37,3 +39,6 @@ if ( file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . str_replace( ' ', 
 extract_wpbp();
 
 execute_generator( $config );
+
+echo "\n";
+$clio->styleLine( "Done, i am superfast! You:(ʘ_ʘ)", $white );

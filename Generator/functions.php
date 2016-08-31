@@ -18,12 +18,13 @@ function create_wpbp_json() {
     if ( !copy( dirname( __FILE__ ) . '/wpbp.json', getcwd() . '/wpbp.json' ) ) {
 	$clio->styleLine( "Failed to copy wpbp.json...", $red );
     } else {
-	$clio->styleLine( 'wpbp.json generated', $white );
+	$clio->styleLine( '😀 wpbp.json generated', $white );
+	exit();
     }
   } else {
     if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
-	$clio->styleLine( "wpbp.json file missing...", $red );
-	$clio->styleLine( "Generate with: wpbp-generator --json", $red );
+	$clio->styleLine( "😡 wpbp.json file missing...", $red );
+	$clio->styleLine( "😉 Generate with: wpbp-generator --json", $red );
 	exit();
     }
   }
@@ -36,12 +37,19 @@ function download_wpbp() {
   if ( $cmd[ 'dev' ] ) {
     $version = 'master';
   }
-  $clio->styleLine( 'Downloading ' . $version . ' package', $white );
+  $clio->styleLine( '😎 Downloading ' . $version . ' package', $white );
+  $download = file_get_contents( 'http://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/archive/' . $version . '.zip' );
+  file_put_contents( 'plugin.zip', $download );
+  extract_wpbp();
 }
 
 function extract_wpbp() {
   global $cmd, $clio, $white, $red, $config;
   if ( file_exists( getcwd() . '/plugin.zip' ) ) {
+    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) ) ) {
+	$clio->styleLine( "Folder " . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) . ' already exist!', $red );
+	exit();
+    }
     $clio->styleLine( 'Extract Boilerplate', $white );
     $zip = new ZipArchive;
     $res = $zip->open( getcwd() . '/plugin.zip' );
@@ -56,12 +64,16 @@ function extract_wpbp() {
 	try {
 	  rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) );
 	  rmrdir( getcwd() . '/plugin_temp/' );
-//	unlink( getcwd() . '/plugin.zip' );
+	  if ( !$cmd[ 'dev' ] ) {
+	    unlink( getcwd() . '/plugin.zip' );
+	  }
 	} catch ( Exception $e ) {
 	  $clio->styleLine( $e, $red );
 	}
 	$clio->styleLine( 'Boilerplate Extracted ', $white );
     }
+  } else {
+    download_wpbp();
   }
 }
 
@@ -87,10 +99,17 @@ function execute_generator( $config ) {
     }
     file_put_contents( $file, $newfile );
   }
+  execute_composer();
 }
 
 function parse_config() {
-  $config = array_to_var( json_decode( file_get_contents( getcwd() . '/wpbp.json' ), true ) );
+  global $clio, $red;
+  $config = json_decode( file_get_contents( getcwd() . '/wpbp.json' ), true );
+  if ( json_last_error() !== JSON_ERROR_NONE ) {
+    $clio->styleLine( "😡 Your JSON is wrong!", $red );
+    exit;
+  }
+  $config = array_to_var( $config );
   $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true ) );
   foreach ( $config_default as $key => $value ) {
     if ( !isset( $config[ $key ] ) ) {
@@ -113,7 +132,7 @@ function array_to_var( $array ) {
 	    foreach ( $subvalue as $subsubkey => $subsubvalue ) {
 		if ( !is_nan( $subsubkey ) ) {
 		  //If empty lightcandy takes as true
-		  $newarray[ $subkey . '_' . strtolower( str_replace( '/', '_', $subsubvalue ) ) ] = '';
+		  $newarray[ $subkey . '_' . strtolower( str_replace( '/', '.', $subsubvalue ) ) ] = '';
 		}
 	    }
 	  } else {
@@ -126,7 +145,7 @@ function array_to_var( $array ) {
 		  $newarray[ $key . '_' . strtolower( $subkey ) ] = $subvalue;
 		}
 	    } else {
-		$newarray[ $key . '_' . strtolower( str_replace( '/', '_', $subvalue ) ) ] = '';
+		$newarray[ $key . '_' . strtolower( str_replace( '/', '.', $subvalue ) ) ] = '';
 	    }
 	  }
 	}
@@ -145,11 +164,12 @@ function array_to_var( $array ) {
 }
 
 function get_files( $path = null ) {
-  global $config, $clio, $red;
+  global $config, $clio, $red, $white;
   if ( $path === null ) {
     $path = getcwd() . DIRECTORY_SEPARATOR . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) );
   }
   $files = array();
+  $clio->styleLine( "Rename in progress", $white );
   $dir_iterator = new RecursiveDirectoryIterator( $path );
   $iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
   foreach ( $iterator as $file => $object ) {
@@ -188,4 +208,22 @@ function replace_content_names( $config, $content ) {
   $content = str_replace( "Pn_", ucwords( $lower ) . '_', $content );
   $content = str_replace( "pn_", $lower . '_', $content );
   return $content;
+}
+
+function execute_composer() {
+  global $config;
+
+  foreach ( $config as $key => $value ) {
+    print_r( $key );
+    echo "\n";
+    if ( strpos( $key, 'libraries' ) ) {
+
+	if ( $value === 'false' ) {
+	  $package = str_replace( 'libraries_', '', $key );
+	  $package = str_replace( '.', '/', $package );
+	  exec( 'composer remove ' . $package );
+	  print_v( 'Package ' . $package . ' removed!' );
+	}
+    }
+  }
 }
