@@ -46,8 +46,8 @@ function download_wpbp() {
 function extract_wpbp() {
   global $cmd, $clio, $white, $red, $config;
   if ( file_exists( getcwd() . '/plugin.zip' ) ) {
-    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) ) ) {
-	$clio->styleLine( "Folder " . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) . ' already exist!', $red );
+    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG ) ) {
+	$clio->styleLine( "Folder " . WPBP_PLUGUIN_SLUG . ' already exist!', $red );
 	exit();
     }
     $clio->styleLine( 'Extract Boilerplate', $white );
@@ -62,7 +62,7 @@ function extract_wpbp() {
 	  $version = 'master';
 	}
 	try {
-	  rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) );
+	  rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG );
 	  rmrdir( getcwd() . '/plugin_temp/' );
 	  if ( !$cmd[ 'dev' ] ) {
 	    unlink( getcwd() . '/plugin.zip' );
@@ -113,7 +113,7 @@ function parse_config() {
   $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true ) );
   foreach ( $config_default as $key => $value ) {
     if ( !isset( $config[ $key ] ) ) {
-	$config[ $key ] = 'false';
+	$config[ $key ] = 'no';
     }
   }
   return $config;
@@ -132,7 +132,7 @@ function array_to_var( $array ) {
 	    foreach ( $subvalue as $subsubkey => $subsubvalue ) {
 		if ( !is_nan( $subsubkey ) ) {
 		  //If empty lightcandy takes as true
-		  $newarray[ $subkey . '_' . strtolower( str_replace( '/', '.', $subsubvalue ) ) ] = '';
+		  $newarray[ $subkey . '_' . strtolower( str_replace( '/', '__', $subsubvalue ) ) ] = '';
 		}
 	    }
 	  } else {
@@ -145,7 +145,7 @@ function array_to_var( $array ) {
 		  $newarray[ $key . '_' . strtolower( $subkey ) ] = $subvalue;
 		}
 	    } else {
-		$newarray[ $key . '_' . strtolower( str_replace( '/', '.', $subvalue ) ) ] = '';
+		$newarray[ $key . '_' . strtolower( str_replace( '/', '__', $subvalue ) ) ] = '';
 	    }
 	  }
 	}
@@ -166,7 +166,7 @@ function array_to_var( $array ) {
 function get_files( $path = null ) {
   global $config, $clio, $red, $white;
   if ( $path === null ) {
-    $path = getcwd() . DIRECTORY_SEPARATOR . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) );
+    $path = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG;
   }
   $files = array();
   $clio->styleLine( "Rename in progress", $white );
@@ -200,7 +200,7 @@ function replace_content_names( $config, $content ) {
   $content = str_replace( "//WPBPGen", '', $content );
   $content = str_replace( "//\n", '', $content );
   $content = str_replace( "Plugin_Name", str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
-  $content = str_replace( "plugin-name", str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ), $content );
+  $content = str_replace( "plugin-name", WPBP_PLUGUIN_SLUG, $content );
   preg_match_all( "/[A-Z]/", ucwords( strtolower( $config[ 'plugin_name' ] ) ), $ucword );
   $ucword = implode( '', $ucword[ 0 ] );
   $content = str_replace( "PN_", $ucword . '_', $content );
@@ -212,18 +212,25 @@ function replace_content_names( $config, $content ) {
 
 function execute_composer() {
   global $config;
-
+  $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/composer.json' ), true );
   foreach ( $config as $key => $value ) {
-    print_r( $key );
-    echo "\n";
-    if ( strpos( $key, 'libraries' ) ) {
-
-	if ( $value === 'false' ) {
+    if ( strpos( $key, 'libraries_' ) !== false ) {
+	if ( $value === 'no' ) {
 	  $package = str_replace( 'libraries_', '', $key );
-	  $package = str_replace( '.', '/', $package );
-	  exec( 'composer remove ' . $package );
+	  $package = str_replace( '__', '/', $package );
+	  if ( isset( $composer[ 'require' ][ $package ] ) ) {
+	    unset( $composer[ 'require' ][ $package ] );
+	  }
+	  foreach ( $composer[ 'extra' ][ 'installer-paths' ] as $folder => $packageset ) {
+	    foreach ( $packageset as $ispackage => $value ) {
+		if ( $value === $package ) {
+		  unset( $composer[ 'extra' ][ 'installer-paths' ][ $folder ][ $ispackage ] );
+		}
+	    }
+	  }
 	  print_v( 'Package ' . $package . ' removed!' );
 	}
     }
   }
+  file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
 }

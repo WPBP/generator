@@ -31,8 +31,10 @@ create_wpbp_json();
 
 $config = parse_config();
 
-if ( file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) ) ) {
-  $clio->styleLine( 'Folder ' . str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) . ' already exist!', $red );
+define( "WPBP_PLUGUIN_SLUG", str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) );
+
+if ( file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG ) ) {
+  $clio->styleLine( 'Folder ' . WPBP_PLUGUIN_SLUG . ' already exist!', $red );
   die( 0 );
 }
 
