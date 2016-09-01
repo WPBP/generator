@@ -222,13 +222,23 @@ function array_to_var( $array ) {
   return $newarray;
 }
 
+/**
+ * Get the wpbp files, rename it and return a list of files ready to be parsed
+ * 
+ * @global array $config
+ * @global object $clio
+ * @global object $red
+ * @global object $white
+ * @param string $path
+ * @return array
+ */
 function get_files( $path = null ) {
   global $config, $clio, $red, $white;
   if ( $path === null ) {
     $path = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG;
   }
   $files = array();
-  $clio->styleLine( "Rename in progress", $white );
+  $clio->styleLine( 'Rename in progress', $white );
   $dir_iterator = new RecursiveDirectoryIterator( $path );
   $iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
   foreach ( $iterator as $file => $object ) {
@@ -252,6 +262,13 @@ function get_files( $path = null ) {
   return $files;
 }
 
+/**
+ * Replace some keywords with based ones from the plugin name
+ * 
+ * @param array $config
+ * @param string $content
+ * @return string
+ */
 function replace_content_names( $config, $content ) {
   $ucword = '';
   $lower = '';
@@ -269,6 +286,13 @@ function replace_content_names( $config, $content ) {
   return $content;
 }
 
+/**
+ * Clean teh composer files and execute the install of the packages
+ * 
+ * @global array $config
+ * @global object $clio
+ * @global object $white
+ */
 function execute_composer() {
   global $config, $clio, $white;
   $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/composer.json' ), true );
@@ -295,17 +319,32 @@ function execute_composer() {
   $clio->styleLine( '😀 Composer install in progress', $white );
   $output = '';
   exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; composer update 2>&1', $output );
+  $clio->styleLine( '😎 Composer install done', $white );
 }
 
+/**
+ * Create the .git folder
+ * 
+ * @global array $config
+ * @global object $clio
+ * @global object $white
+ */
 function git_init() {
   global $config, $clio, $white;
 
   if ( $config[ 'git-repo' ] === 'true' ) {
     exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; git init' );
-    $clio->styleLine( '😀 .git folder generated', $white );
+    $clio->styleLine( '😎 .git folder generated', $white );
   }
 }
 
+/**
+ * Clean the grunt file and install his packages
+ * 
+ * @global array $config
+ * @global object $clio
+ * @global object $white
+ */
 function grunt() {
   global $config, $clio, $white;
 
@@ -326,4 +365,5 @@ function grunt() {
   $clio->styleLine( '😀 Grunt install in progress', $white );
   $output = '';
   exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; npm install 2>&1', $output );
+  $clio->styleLine( '😎 Grunt install done', $white );
 }
