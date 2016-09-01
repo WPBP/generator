@@ -15,6 +15,7 @@
       "homepage": "https://github.com/wpbp"
     }
   ],
+  "minimum-stability": "dev",
   "require": {
     "php": ">=5.5",
     "zordius/lightncandy": "0.95",
