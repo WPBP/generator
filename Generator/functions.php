@@ -41,6 +41,7 @@ function create_wpbp_json() {
     if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
 	$clio->styleLine( '😡 wpbp.json file missing...', $red );
 	$clio->styleLine( '😉 Generate with: wpbp-generator --json', $red );
+	$clio->styleLine( 'Forget a Q&A system and fill that json with your custom configuration!', $red );
 	$clio->styleLine( '  Do your changes and execute again! Use the --dev parameter to get the development version!', $red );
 	exit();
     }
@@ -173,7 +174,7 @@ function parse_config() {
   $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true ) );
   foreach ( $config_default as $key => $value ) {
     if ( !isset( $config[ $key ] ) ) {
-	$config[ $key ] = 'no';
+	$config[ $key ] = 'false';
     }
   }
   return $config;
@@ -237,12 +238,22 @@ function get_files( $path = null ) {
   if ( $path === null ) {
     $path = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG;
   }
-  $files = array();
+  $files = $list = array();
   $clio->styleLine( 'Rename in progress', $white );
-  $dir_iterator = new RecursiveDirectoryIterator( $path );
+  $dir_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
   $iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
+  //Move in array with only paths
   foreach ( $iterator as $file => $object ) {
-    if ( (!strpos( $file, '..' ) && !strpos( $file, '/.' )) && (strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' )) ) {
+    $list[] = $file;
+  }
+  foreach ( $list as $file ) {
+    if ( !file_exists( $file ) ) {
+	continue;
+    }
+    if ( remove_file( $file ) ) {
+	continue;
+    }
+    if ( (strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) ) ) {
 	$pathparts = pathinfo( $file );
 	$newname = replace_content_names( $config, $pathparts[ 'filename' ] );
 	$newname = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
@@ -294,7 +305,7 @@ function replace_content_names( $config, $content ) {
  * @global object $white
  */
 function execute_composer() {
-  global $config, $clio, $white;
+  global $config, $cmd, $clio, $white;
   $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/composer.json' ), true );
   foreach ( $config as $key => $value ) {
     if ( strpos( $key, 'libraries_' ) !== false ) {
@@ -316,10 +327,12 @@ function execute_composer() {
     }
   }
   file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
-  $clio->styleLine( '😀 Composer install in progress', $white );
-  $output = '';
-  exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; composer update 2>&1', $output );
-  $clio->styleLine( '😎 Composer install done', $white );
+  if ( !$cmd[ 'no-download' ] ) {
+    $clio->styleLine( '😀 Composer install in progress', $white );
+    $output = '';
+    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; composer update 2>&1', $output );
+    $clio->styleLine( '😎 Composer install done', $white );
+  }
 }
 
 /**
@@ -346,11 +359,15 @@ function git_init() {
  * @global object $white
  */
 function grunt() {
-  global $config, $clio, $white;
+  global $config, $cmd, $clio, $white;
 
   if ( $config[ 'coffeescript' ] === 'false' ) {
-    rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
-    rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' );
+    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' ) ) {
+	rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' );
+    }
+    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' ) ) {
+	rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
+    }
 
     $grunt = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/Gruntfile.js' );
     $newgrunt = array();
@@ -362,8 +379,57 @@ function grunt() {
     file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/Gruntfile.js', $newgrunt );
     $clio->styleLine( '😀 Coffeescript removed', $white );
   }
-  $clio->styleLine( '😀 Grunt install in progress', $white );
-  $output = '';
-  exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; npm install 2>&1', $output );
-  $clio->styleLine( '😎 Grunt install done', $white );
+  if ( !$cmd[ 'no-download' ] ) {
+    $clio->styleLine( '😀 Grunt install in progress', $white );
+    $output = '';
+    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; npm install 2>&1', $output );
+    $clio->styleLine( '😎 Grunt install done', $white );
+  }
+}
+
+/**
+ * Remove file in case of settings
+ * 
+ * @global array $config
+ * @param string $file
+ * @return boolean
+ */
+function remove_file( $file ) {
+  global $config;
+  $return = false;
+
+  switch ( $file ) {
+    case strpos( $file, '_ActDeact.php' ) && $config[ 'act-deact_actdeact' ] === 'false':
+    case strpos( $file, '_ImpExp.php' ) && $config[ 'backend_impexp-settings' ] === 'false':
+    case strpos( $file, '_Uninstall.php' ) && $config[ 'act-deact_uninstall' ] === 'false':
+    case strpos( $file, '_P2P.php' ) && $config[ 'libraries_wpackagist-plugin__posts-to-posts' ] === 'false':
+    case strpos( $file, '_FakePage.php' ) && $config[ 'libraries_wpbp__fakepage' ] === 'false':
+    case strpos( $file, '_Pointers.php' ) && $config[ 'libraries_wpbp__pointerplus' ] === 'false':
+    case strpos( $file, '_CMB.php' ) && $config[ 'libraries_webdevstudios__cmb2' ] === 'false':
+    case strpos( $file, '_ContextualHelp.php' ) && $config[ 'libraries_voceconnect__wp-contextual-help' ] === 'false':
+    case strpos( $file, '/help-docs' ) && $config[ 'libraries_voceconnect__wp-contextual-help' ] === 'false':
+    case strpos( $file, '/templates' ) && $config[ 'frontend_template-system' ] === 'false':
+    case strpos( $file, '/widgets/sample.php' ) && $config[ 'libraries_wpbp__widgets-helper' ] === 'false':
+    case strpos( $file, '/widgets' ) && $config[ 'libraries_wpbp__widgets-helper' ] === 'false':
+    case strpos( $file, '/public/assets/js' ) && $config[ 'public-assets_js' ] === 'false':
+    case strpos( $file, '/public/assets/css' ) && $config[ 'public-assets_css' ] === 'false':
+    case strpos( $file, '/public/assets/sass' ) && $config[ 'public-assets_css' ] === 'false':
+    case strpos( $file, '/public/assets' ) && $config[ 'public-assets_css' ] === 'false' && $config[ 'public-assets_js' ] === 'false':
+    case strpos( $file, '/admin/views' ) && $config[ 'admin-page' ] === 'false':
+    case strpos( $file, '/admin/assets' ) && $config[ 'admin-page' ] === 'false':
+    case strpos( $file, '_Extras.php' ) && ( $config[ 'backend_bubble-notification-pending-cpt' ] === 'false' &&
+    $config[ 'backend_dashboard-atglance' ] === 'false' && $config[ 'backend_dashboard-activity' ] === 'false' &&
+    $config[ 'system_push-notification' ] === 'false' && $config[ 'system_transient-example' ] === 'false' ):
+	if ( file_exists( $file ) ) {
+	  if ( is_dir( $file ) ) {
+	    rmrdir( $file );
+	  } else {
+	    unlink( $file );
+	  }
+	}
+	$return = true;
+	break;
+  }
+
+  return $return;
 }

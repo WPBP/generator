@@ -23,6 +23,7 @@ $cmd->setHelp( 'WPBP Generator enable you to get a customized version based from
 $cmd->option( 'dev' )->describedAs( 'Download from the master branch' )->boolean();
 $cmd->option( 'verbose' )->describedAs( 'Get a verbose output' )->boolean();
 $cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the folder' )->boolean();
+$cmd->option( 'no-download' )->describedAs( 'Do you want to execute composer and npm manually? This is your flag' )->boolean();
 $clio->styleLine( "(>'-')> WPBP Code Generator by Mte90", $white );
 echo "\n";
 //Generate the wpbp.json file

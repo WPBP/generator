@@ -48,13 +48,15 @@
       "bubble-notification-pending-cpt",
       "dashboard-atglance",
       "dashboard-activity",
-      "donate-link-plugin-list"
+      "donate-link-plugin-list",
+      "impexp-settings"
     ],
     "frontend": [
       "body-class",
       "cpt-search-support",
       "js-dom-routing",
-      "wp-localize-script"
+      "wp-localize-script",
+      "template-system"
     ],
     "system": [
       "capability-system",
