@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.5",
     "zordius/lightncandy": "0.95",
     "nategood/commando": "0.2.8",
     "1happyplace/clio": "v0.5.1-beta",
