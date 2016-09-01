@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 $files = array(
-    __DIR__ .'/../../Generator/init.php',
-    __DIR__ . '/../../vendor/autoload.php',
-    __DIR__ . '/../../../../autoload.php'
+    __DIR__ .'/..//Generator/init.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php'
 );
 $found = FALSE;
 foreach ( $files as $file ) {
