@@ -3,6 +3,14 @@
 use LightnCandy\LightnCandy;
 use LightnCandy\Runtime;
 
+/**
+ * Print the label if the shell is executed as verbose
+ * 
+ * @global object $cmd
+ * @global object $clio
+ * @global object $yellow
+ * @param string $label
+ */
 function print_v( $label ) {
   global $cmd, $clio, $yellow;
 
@@ -11,44 +19,73 @@ function print_v( $label ) {
   }
 }
 
+/**
+ * Generate a new wpbp.json in the folder
+ * 
+ * @global object $cmd
+ * @global object $clio
+ * @global object $red
+ * @global object $white
+ */
 function create_wpbp_json() {
   global $cmd, $clio, $red, $white;
 
   if ( $cmd[ 'json' ] ) {
     if ( !copy( dirname( __FILE__ ) . '/wpbp.json', getcwd() . '/wpbp.json' ) ) {
-	$clio->styleLine( "Failed to copy wpbp.json...", $red );
+	$clio->styleLine( 'Failed to copy wpbp.json...', $red );
     } else {
 	$clio->styleLine( '😀 wpbp.json generated', $white );
 	exit();
     }
   } else {
     if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
-	$clio->styleLine( "😡 wpbp.json file missing...", $red );
-	$clio->styleLine( "😉 Generate with: wpbp-generator --json", $red );
-	$clio->styleLine( "  Do your changes and execute again! Use the --dev parameter to get the development version!", $red );
+	$clio->styleLine( '😡 wpbp.json file missing...', $red );
+	$clio->styleLine( '😉 Generate with: wpbp-generator --json', $red );
+	$clio->styleLine( '  Do your changes and execute again! Use the --dev parameter to get the development version!', $red );
 	exit();
     }
   }
 }
 
+/**
+ * Download the boilerplate based from theversion asked
+ * 
+ * @global object $cmd
+ * @global object $clio
+ * @global object $white
+ */
 function download_wpbp() {
-  global $cmd, $clio, $white;
+  global $cmd, $clio, $white, $red;
   $version = WPBP_VERSION;
 
   if ( $cmd[ 'dev' ] ) {
     $version = 'master';
   }
   $clio->styleLine( '😎 Downloading ' . $version . ' package', $white );
-  $download = file_get_contents( 'http://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/archive/' . $version . '.zip' );
+
+  $download = @file_get_contents( 'http://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/archive/' . $version . '.zip' );
+  if ( $download === false ) {
+    $clio->styleLine( '😡 The ' . $version . ' version is not avalaible', $red );
+    die();
+  }
   file_put_contents( 'plugin.zip', $download );
+
   extract_wpbp();
 }
 
+/**
+ * Extract the boilerplate
+ * 
+ * @global object $cmd
+ * @global object $clio
+ * @global object $white
+ * @global object $red
+ */
 function extract_wpbp() {
-  global $cmd, $clio, $white, $red, $config;
+  global $cmd, $clio, $white, $red;
   if ( file_exists( getcwd() . '/plugin.zip' ) ) {
     if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG ) ) {
-	$clio->styleLine( "Folder " . WPBP_PLUGUIN_SLUG . ' already exist!', $red );
+	$clio->styleLine( 'Folder ' . WPBP_PLUGUIN_SLUG . ' already exist!', $red );
 	exit();
     }
     $clio->styleLine( 'Extract Boilerplate', $white );
@@ -74,10 +111,19 @@ function extract_wpbp() {
 	$clio->styleLine( 'Boilerplate Extracted ', $white );
     }
   } else {
+    //If the package not exist download it
     download_wpbp();
   }
 }
 
+/**
+ * Execute Lightncandy on the boilerplate files
+ * 
+ * @global object $cmd
+ * @global object $clio
+ * @global object $white
+ * @param array $config
+ */
 function execute_generator( $config ) {
   global $cmd, $clio, $white;
   $files = get_files();
@@ -102,17 +148,25 @@ function execute_generator( $config ) {
   }
 
   echo "\n";
-  $clio->styleLine( "Generation done, i am superfast! You: (ʘ_ʘ)", $white );
+  $clio->styleLine( 'Generation done, i am superfast! You: (ʘ_ʘ)', $white );
   execute_composer();
   git_init();
   grunt();
 }
 
+/**
+ * Load user wpbp.json and add the terms missing as false
+ * 
+ * @global object $clio
+ * @global object $red
+ * @return array
+ */
 function parse_config() {
   global $clio, $red;
   $config = json_decode( file_get_contents( getcwd() . '/wpbp.json' ), true );
+  //Detect a misleading json file
   if ( json_last_error() !== JSON_ERROR_NONE ) {
-    $clio->styleLine( "😡 Your JSON is wrong!", $red );
+    $clio->styleLine( '😡 Your JSON is broken!', $red );
     exit;
   }
   $config = array_to_var( $config );
@@ -125,7 +179,12 @@ function parse_config() {
   return $config;
 }
 
-//LightnCandy require an array bidimensional "key" = true, so we need to convert a multidimensional in bidimensional
+/**
+ * LightnCandy require an array bidimensional "key" = true, so we need to convert a multidimensional in bidimensional
+ * 
+ * @param array $array
+ * @return array
+ */
 function array_to_var( $array ) {
   $newarray = array();
   //Get the json
@@ -143,13 +202,7 @@ function array_to_var( $array ) {
 	    }
 	  } else {
 	    if ( !is_numeric( $subkey ) ) {
-		if ( $subvalue === 'true' ) {
-		  $newarray[ $key . '_' . strtolower( $subkey ) ] = 'true';
-		} elseif ( $subvalue === 'false' ) {
-		  $newarray[ $key . '_' . strtolower( $subkey ) ] = 'false';
-		} else {
-		  $newarray[ $key . '_' . strtolower( $subkey ) ] = $subvalue;
-		}
+		$newarray[ $key . '_' . strtolower( $subkey ) ] = $subvalue;
 	    } else {
 		$newarray[ $key . '_' . strtolower( str_replace( '/', '__', $subvalue ) ) ] = '';
 	    }
