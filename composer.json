@@ -24,6 +24,6 @@
     "perchten/rmrdir": "1.*"
   },
   "bin": [
-    "composer/bin/wpbp-generator"
+    "bin/wpbp-generator"
   ]
 }
