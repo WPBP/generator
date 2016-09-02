@@ -309,18 +309,31 @@ function execute_composer() {
   $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/composer.json' ), true );
   foreach ( $config as $key => $value ) {
     if ( strpos( $key, 'libraries_' ) !== false ) {
-	if ( $value === 'no' ) {
+	if ( $value === 'false' ) {
 	  $package = str_replace( 'libraries_', '', $key );
 	  $package = str_replace( '__', '/', $package );
 	  if ( isset( $composer[ 'require' ][ $package ] ) ) {
 	    unset( $composer[ 'require' ][ $package ] );
 	  }
 	  foreach ( $composer[ 'extra' ][ 'installer-paths' ] as $folder => $packageset ) {
-	    foreach ( $packageset as $ispackage => $value ) {
-		if ( $value === $package ) {
-		  unset( $composer[ 'extra' ][ 'installer-paths' ][ $folder ][ $ispackage ] );
+	    if ( empty( $composer[ 'extra' ][ 'installer-paths' ][ $folder ] ) ) {
+		unset( $composer[ 'extra' ][ 'installer-paths' ][ $folder ] );
+	    } else {
+		foreach ( $packageset as $ispackage => $value ) {
+		  if ( $value === $package ) {
+		    unset( $composer[ 'extra' ][ 'installer-paths' ][ $folder ][ $ispackage ] );
+		  }
 		}
 	    }
+	  }
+	  if ( strpos( $package, 'webdevstudios/cmb2' ) !== false ) {
+	    $composer = remove_composer_autoload( $composer, 'Cmb2/' );
+	  }
+	  if ( strpos( $package, 'origgami/cmb2-grid' ) !== false ) {
+	    $composer = remove_composer_autoload( $composer, 'Cmb2-grid' );
+	  }
+	  if ( strpos( $package, 'plugin/posts-to-posts' ) !== false ) {
+	    $composer = remove_composer_autoload( $composer, 'posts-to' );
 	  }
 	  print_v( 'Package ' . $package . ' removed!' );
 	}
@@ -333,6 +346,25 @@ function execute_composer() {
     exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; composer update 2>&1', $output );
     $clio->styleLine( '😎 Composer install done', $white );
   }
+}
+
+/**
+ * Remove the path from autoload
+ * 
+ * @param array $composer
+ * @param string $searchpath
+ * @return array
+ */
+function remove_composer_autoload( $composer, $searchpath ) {
+  foreach ( $composer[ 'autoload' ][ 'files' ] as $keyautoload => $path ) {
+    if ( strpos( $path, $searchpath ) ) {
+	unset( $composer[ 'autoload' ][ 'files' ][ $keyautoload ] );
+    }
+  }
+  if ( empty( $composer[ 'autoload' ][ 'files' ] ) ) {
+    unset( $composer[ 'autoload' ] );
+  }
+  return $composer;
 }
 
 /**
