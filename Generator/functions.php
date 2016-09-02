@@ -328,12 +328,17 @@ function execute_composer() {
 	  }
 	  if ( strpos( $package, 'webdevstudios/cmb2' ) !== false ) {
 	    $composer = remove_composer_autoload( $composer, 'Cmb2/' );
+	    $composer = remove_composer_repositories( $composer, 'wpackagist' );
 	  }
 	  if ( strpos( $package, 'origgami/cmb2-grid' ) !== false ) {
 	    $composer = remove_composer_autoload( $composer, 'Cmb2-grid' );
+	    $composer = remove_composer_repositories( $composer, 'cmb2-grid' );
 	  }
 	  if ( strpos( $package, 'plugin/posts-to-posts' ) !== false ) {
 	    $composer = remove_composer_autoload( $composer, 'posts-to' );
+	  }
+	  if ( strpos( $package, 'wp-admin-notice' ) !== false ) {
+	    $composer = remove_composer_repositories( $composer, 'wordpress-admin-notice' );
 	  }
 	  print_v( 'Package ' . $package . ' removed!' );
 	}
@@ -356,13 +361,29 @@ function execute_composer() {
  * @return array
  */
 function remove_composer_autoload( $composer, $searchpath ) {
-  foreach ( $composer[ 'autoload' ][ 'files' ] as $keyautoload => $path ) {
+  foreach ( $composer[ 'autoload' ][ 'files' ] as $key => $path ) {
     if ( strpos( $path, $searchpath ) ) {
-	unset( $composer[ 'autoload' ][ 'files' ][ $keyautoload ] );
+	unset( $composer[ 'autoload' ][ 'files' ][ $key ] );
     }
   }
   if ( empty( $composer[ 'autoload' ][ 'files' ] ) ) {
     unset( $composer[ 'autoload' ] );
+  }
+  return $composer;
+}
+
+/**
+ * Remove the url from repositories
+ * 
+ * @param array $composer
+ * @param string $searchpath
+ * @return array
+ */
+function remove_composer_repositories( $composer, $searchpath ) {
+  foreach ( $composer[ 'repositories' ] as $key => $path ) {
+    if ( strpos( $path['url'], $searchpath ) ) {
+	unset( $composer[ 'repositories' ][ $key ] );
+    }
   }
   return $composer;
 }
