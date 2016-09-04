@@ -1,7 +1,6 @@
 <?php
 
 define( "WPBP_VERSION", "2.0.0" );
-// Use composer autoloader
 require_once(dirname( __FILE__ ) . '/functions.php');
 
 //Load libraries
