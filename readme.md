@@ -1,5 +1,6 @@
 #WPBP Generator
 This script parse [WPBP](https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered) and remove the stuff that you don't need.
+Require PHP on your system!
 
 ##Install
 

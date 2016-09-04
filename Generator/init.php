@@ -2,7 +2,6 @@
 
 define( "WPBP_VERSION", "2.0.0" );
 // Use composer autoloader
-require_once(dirname( __FILE__ ) . '/../vendor/autoload.php');
 require_once(dirname( __FILE__ ) . '/functions.php');
 
 //Load libraries
@@ -43,4 +42,4 @@ extract_wpbp();
 execute_generator( $config );
 //Done!
 echo "\n";
-$clio->styleLine( "Done, i am superfast! You:(ʘ_ʘ)", $white );
+$clio->styleLine( "Done, I am superfast! You:(ʘ_ʘ)", $white );

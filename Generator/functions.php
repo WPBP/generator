@@ -144,12 +144,12 @@ function execute_generator( $config ) {
     $newfile = replace_content_names( $config, $newfile );
     if ( $newfile !== $file_content ) {
 	print_v( 'Parsed ' . $file );
+	file_put_contents( $file, $newfile );
     }
-    file_put_contents( $file, $newfile );
   }
 
   echo "\n";
-  $clio->styleLine( 'Generation done, i am superfast! You: (ʘ_ʘ)', $white );
+  $clio->styleLine( 'Generation done, I am superfast! You: (ʘ_ʘ)', $white );
   execute_composer();
   git_init();
   grunt();
@@ -381,7 +381,7 @@ function remove_composer_autoload( $composer, $searchpath ) {
  */
 function remove_composer_repositories( $composer, $searchpath ) {
   foreach ( $composer[ 'repositories' ] as $key => $path ) {
-    if ( strpos( $path['url'], $searchpath ) ) {
+    if ( strpos( $path[ 'url' ], $searchpath ) ) {
 	unset( $composer[ 'repositories' ][ $key ] );
     }
   }
@@ -421,7 +421,16 @@ function grunt() {
     if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' ) ) {
 	rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
     }
-
+    $package = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/package.json' );
+    $newpackage = array();
+    foreach ( $package as $line => $content ) {
+	if ( strpos( $content, 'coffee' ) ) {
+	  $newpackage[ $line - 1 ] = str_replace( ',', '', $package[ $line - 1 ] );
+	} else {
+	  $newpackage[] = $package[ $line ];
+	}
+    }
+    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/package.json', $newpackage );
     $grunt = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/Gruntfile.js' );
     $newgrunt = array();
     foreach ( $grunt as $line => $content ) {
