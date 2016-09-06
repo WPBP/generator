@@ -3,30 +3,30 @@
 $files = array(
     __DIR__ . '/../vendor/autoload.php',
     __DIR__ . '/../../../autoload.php',
-    __DIR__ .'/../Generator/init.php'
+    __DIR__ . '/../Generator/init.php',
 );
 
-$found = FALSE;
+$found = false;
 foreach ( $files as $file ) {
   if ( file_exists( $file ) ) {
     require $file;
-    $found = TRUE;
+    $found = true;
   }
 }
 if ( !$found ) {
   die(
 	    'You need to install Composer!' . PHP_EOL
   );
-} 
+}
 
-if (!'which npm') {
-    die(
+if ( !'which npm' ) {
+  die(
 	    'You need to install NPM!' . PHP_EOL
   );
 }
 
-if (!'which git') {
-    die(
+if ( !'which git' ) {
+  die(
 	    'You need to install Git!' . PHP_EOL
   );
 }

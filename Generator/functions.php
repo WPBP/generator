@@ -5,11 +5,11 @@ use LightnCandy\Runtime;
 
 /**
  * Print the label if the shell is executed as verbose
- * 
+ *
  * @global object $cmd
  * @global object $clio
  * @global object $yellow
- * @param string $label
+ * @param  string $label Text.
  */
 function print_v( $label ) {
   global $cmd, $clio, $yellow;
@@ -21,7 +21,7 @@ function print_v( $label ) {
 
 /**
  * Generate a new wpbp.json in the folder
- * 
+ *
  * @global object $cmd
  * @global object $clio
  * @global object $red
@@ -50,7 +50,7 @@ function create_wpbp_json() {
 
 /**
  * Download the boilerplate based from theversion asked
- * 
+ *
  * @global object $cmd
  * @global object $clio
  * @global object $white
@@ -76,7 +76,7 @@ function download_wpbp() {
 
 /**
  * Extract the boilerplate
- * 
+ *
  * @global object $cmd
  * @global object $clio
  * @global object $white
@@ -92,7 +92,7 @@ function extract_wpbp() {
     $clio->styleLine( 'Extract Boilerplate', $white );
     $zip = new ZipArchive;
     $res = $zip->open( getcwd() . '/plugin.zip' );
-    if ( $res === TRUE ) {
+    if ( $res === true ) {
 	$zip->extractTo( getcwd() . '/plugin_temp/' );
 	$zip->close();
 	$version = WPBP_VERSION;
@@ -112,18 +112,18 @@ function extract_wpbp() {
 	$clio->styleLine( 'Boilerplate Extracted ', $white );
     }
   } else {
-    //If the package not exist download it
+    // If the package not exist download it
     download_wpbp();
   }
 }
 
 /**
  * Execute Lightncandy on the boilerplate files
- * 
+ *
  * @global object $cmd
  * @global object $clio
  * @global object $white
- * @param array $config
+ * @param  array $config The config of the request.
  */
 function execute_generator( $config ) {
   global $cmd, $clio, $white;
@@ -131,7 +131,7 @@ function execute_generator( $config ) {
   foreach ( $files as $file ) {
     $file_content = file_get_contents( $file );
     if ( $cmd[ 'dev' ] ) {
-	$lc = LightnCandy::compile( $file_content, Array(
+	$lc = LightnCandy::compile( $file_content, array(
 			'flags' => LightnCandy::FLAG_RENDER_DEBUG
 		  ) );
 	$lc_prepare = LightnCandy::prepare( $lc );
@@ -157,7 +157,7 @@ function execute_generator( $config ) {
 
 /**
  * Load user wpbp.json and add the terms missing as false
- * 
+ *
  * @global object $clio
  * @global object $red
  * @return array
@@ -182,22 +182,22 @@ function parse_config() {
 
 /**
  * LightnCandy require an array bidimensional "key" = true, so we need to convert a multidimensional in bidimensional
- * 
- * @param array $array
+ *
+ * @param  array $array The config to parse.
  * @return array
  */
 function array_to_var( $array ) {
   $newarray = array();
-  //Get the json
+  // Get the json
   foreach ( $array as $key => $subarray ) {
-    //Check if an array
+    // Check if an array
     if ( is_array( $subarray ) ) {
 	foreach ( $subarray as $subkey => $subvalue ) {
-	  //Again it's an array with another inside
+	  // Again it's an array with another inside
 	  if ( is_array( $subvalue ) ) {
 	    foreach ( $subvalue as $subsubkey => $subsubvalue ) {
 		if ( !is_nan( $subsubkey ) ) {
-		  //If empty lightcandy takes as true
+		  // If empty lightcandy takes as true
 		  $newarray[ $subkey . '_' . strtolower( str_replace( '/', '__', $subsubvalue ) ) ] = '';
 		}
 	    }
@@ -210,7 +210,7 @@ function array_to_var( $array ) {
 	  }
 	}
     } else {
-	//Is a single key
+	// Is a single key
 	if ( $subarray === 'true' ) {
 	  $newarray[ $key ] = 'true';
 	} elseif ( $subarray === 'false' ) {
@@ -225,12 +225,12 @@ function array_to_var( $array ) {
 
 /**
  * Get the wpbp files, rename it and return a list of files ready to be parsed
- * 
+ *
  * @global array $config
  * @global object $clio
  * @global object $red
  * @global object $white
- * @param string $path
+ * @param  string $path Where scan.
  * @return array
  */
 function get_files( $path = null ) {
@@ -242,7 +242,7 @@ function get_files( $path = null ) {
   $clio->styleLine( 'Rename in progress', $white );
   $dir_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
   $iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
-  //Move in array with only paths
+  // Move in array with only paths
   foreach ( $iterator as $file => $object ) {
     $list[] = $file;
   }
@@ -253,7 +253,7 @@ function get_files( $path = null ) {
     if ( remove_file( $file ) ) {
 	continue;
     }
-    if ( (strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) ) ) {
+    if ( (strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) || strpos( $file, '.pot' ) ) ) {
 	$pathparts = pathinfo( $file );
 	$newname = replace_content_names( $config, $pathparts[ 'filename' ] );
 	$newname = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
@@ -275,25 +275,25 @@ function get_files( $path = null ) {
 
 /**
  * Replace some keywords with based ones from the plugin name
- * 
- * @param array $config
- * @param string $content
+ *
+ * @param array  $config  Generator parameters.
+ * @param string $content The text.
  * @return string
  */
 function replace_content_names( $config, $content ) {
   $ucword = '';
   $lower = '';
   $content = str_replace( "//WPBPGen\n", '', $content );
-  $content = str_replace( "//WPBPGen", '', $content );
+  $content = str_replace( '//WPBPGen', '', $content );
   $content = str_replace( "//\n", '', $content );
-  $content = str_replace( "Plugin_Name", str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
-  $content = str_replace( "plugin-name", WPBP_PLUGUIN_SLUG, $content );
-  preg_match_all( "/[A-Z]/", ucwords( strtolower( $config[ 'plugin_name' ] ) ), $ucword );
+  $content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
+  $content = str_replace( 'plugin-name', WPBP_PLUGUIN_SLUG, $content );
+  preg_match_all( '/[A-Z]/', ucwords( strtolower( $config[ 'plugin_name' ] ) ), $ucword );
   $ucword = implode( '', $ucword[ 0 ] );
-  $content = str_replace( "PN_", $ucword . '_', $content );
+  $content = str_replace( 'PN_', $ucword . '_', $content );
   $lower = strtolower( $ucword );
-  $content = str_replace( "Pn_", ucwords( $lower ) . '_', $content );
-  $content = str_replace( "pn_", $lower . '_', $content );
+  $content = str_replace( 'Pn_', ucwords( $lower ) . '_', $content );
+  $content = str_replace( 'pn_', $lower . '_', $content );
   return $content;
 }
 
