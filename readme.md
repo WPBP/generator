@@ -3,7 +3,18 @@
 ![Downloads](https://img.shields.io/packagist/dt/wpbp/generator.svg) 
 
 This script parse [WPBP](https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered) and remove the stuff that you don't need.
-Require PHP on your system!
+
+##Requirements
+
+This generator is completely based on PHP. Let's have a look on what you need and how to install it:
+
+###Debian/Ubuntu
+
+`sudo apt-get install php php-zip php-mbstring`
+
+###Fedora/Centos
+
+`sudo dnf install php php-zip php-mbstring`
 
 ##Install
 
