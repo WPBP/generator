@@ -84,7 +84,10 @@ function download_wpbp() {
  */
 function extract_wpbp() {
   global $cmd, $clio, $white, $red;
-  if ( file_exists( getcwd() . '/plugin.zip' ) ) {
+  if ( file_exists( getcwd() . '/plugin_temp' ) ) {
+    $clio->styleLine( 'Boilerplate extracted found', $white );
+    rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG );
+  } else if ( file_exists( getcwd() . '/plugin.zip' ) ) {
     if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG ) ) {
 	$clio->styleLine( 'Folder ' . WPBP_PLUGUIN_SLUG . ' already exist!', $red );
 	exit();
