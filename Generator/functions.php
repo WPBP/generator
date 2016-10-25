@@ -86,7 +86,11 @@ function extract_wpbp() {
   global $cmd, $clio, $white, $red;
   if ( file_exists( getcwd() . '/plugin_temp' ) ) {
     $clio->styleLine( 'Boilerplate extracted found', $white );
-    rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG );
+    if ( $cmd[ 'dev' ] ) {
+	copy_dir( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG );
+    } else {
+	rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG );
+    }
   } else if ( file_exists( getcwd() . '/plugin.zip' ) ) {
     if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG ) ) {
 	$clio->styleLine( 'Folder ' . WPBP_PLUGUIN_SLUG . ' already exist!', $red );
@@ -497,4 +501,31 @@ function remove_file( $file ) {
   }
 
   return $return;
+}
+
+function copy_dir( $source, $dest ) {
+  // Simple copy for a file
+  if ( is_file( $source ) ) {
+    return copy( $source, $dest );
+  }
+  // Make destination directory
+  if ( !is_dir( $dest ) ) {
+    mkdir( $dest );
+  }
+
+  // Loop through the folder
+  $dir = dir( $source );
+  while ( false !== $entry = $dir->read() ) {
+    // Skip pointers
+    if ( $entry == '.' || $entry == '..' ) {
+	continue;
+    }
+
+    // Deep copy directories
+    copy_dir( "$source/$entry", "$dest/$entry" );
+  }
+
+  // Clean up
+  $dir->close();
+  return true;
 }
