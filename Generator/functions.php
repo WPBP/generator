@@ -43,6 +43,7 @@ function create_wpbp_json() {
 	$clio->styleLine( '😉 Generate with: wpbp-generator --json', $red );
 	$clio->styleLine( 'Forget a Q&A system and fill that json with your custom configuration!', $red );
 	$clio->styleLine( '  Do your changes and execute again! Use the --dev parameter to get the development version!', $red );
+	$clio->styleLine( 'Help: wpbp-generator --help 😉', $white );
 	exit();
     }
   }
@@ -86,10 +87,14 @@ function extract_wpbp() {
   global $cmd, $clio, $white, $red;
   if ( file_exists( getcwd() . '/plugin_temp' ) ) {
     $clio->styleLine( 'Boilerplate extracted found', $white );
-    rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG );
+    if ( $cmd[ 'dev' ] ) {
+	copy_dir( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
+    } else {
+	rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
+    }
   } else if ( file_exists( getcwd() . '/plugin.zip' ) ) {
-    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG ) ) {
-	$clio->styleLine( 'Folder ' . WPBP_PLUGUIN_SLUG . ' already exist!', $red );
+    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
+	$clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $red );
 	exit();
     }
     $clio->styleLine( 'Extract Boilerplate', $white );
@@ -104,7 +109,7 @@ function extract_wpbp() {
 	  $version = 'master';
 	}
 	try {
-	  rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG );
+	  rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
 	  rmrdir( getcwd() . '/plugin_temp/' );
 	  if ( !$cmd[ 'dev' ] ) {
 	    unlink( getcwd() . '/plugin.zip' );
@@ -239,7 +244,7 @@ function array_to_var( $array ) {
 function get_files( $path = null ) {
   global $config, $clio, $red, $white;
   if ( $path === null ) {
-    $path = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG;
+    $path = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG;
   }
   $files = $list = array();
   $clio->styleLine( 'Rename in progress', $white );
@@ -290,7 +295,7 @@ function replace_content_names( $config, $content ) {
   $content = str_replace( '//WPBPGen', '', $content );
   $content = str_replace( "//\n", '', $content );
   $content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
-  $content = str_replace( 'plugin-name', WPBP_PLUGUIN_SLUG, $content );
+  $content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
   preg_match_all( '/[A-Z]/', ucwords( strtolower( $config[ 'plugin_name' ] ) ), $ucword );
   $ucword = implode( '', $ucword[ 0 ] );
   $content = str_replace( 'PN_', $ucword . '_', $content );
@@ -309,7 +314,7 @@ function replace_content_names( $config, $content ) {
  */
 function execute_composer() {
   global $config, $cmd, $clio, $white;
-  $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/composer.json' ), true );
+  $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json' ), true );
   foreach ( $config as $key => $value ) {
     if ( strpos( $key, 'libraries_' ) !== false ) {
 	if ( $value === 'false' ) {
@@ -347,11 +352,11 @@ function execute_composer() {
 	}
     }
   }
-  file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
+  file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
   if ( !$cmd[ 'no-download' ] ) {
     $clio->styleLine( '😀 Composer install in progress', $white );
     $output = '';
-    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; composer update 2>&1', $output );
+    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; composer update 2>&1', $output );
     $clio->styleLine( '😎 Composer install done', $white );
   }
 }
@@ -402,7 +407,7 @@ function git_init() {
   global $config, $clio, $white;
 
   if ( $config[ 'git-repo' ] === 'true' ) {
-    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; git init' );
+    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; git init' );
     $clio->styleLine( '😎 .git folder generated', $white );
   }
 }
@@ -418,13 +423,13 @@ function grunt() {
   global $config, $cmd, $clio, $white;
 
   if ( $config[ 'coffeescript' ] === 'false' ) {
-    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' ) ) {
-	rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' );
+    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' ) ) {
+	rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' );
     }
-    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' ) ) {
-	rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
+    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' ) ) {
+	rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
     }
-    $package = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/package.json' );
+    $package = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
     $newpackage = array();
     foreach ( $package as $line => $content ) {
 	if ( strpos( $content, 'coffee' ) ) {
@@ -433,21 +438,21 @@ function grunt() {
 	  $newpackage[] = $package[ $line ];
 	}
     }
-    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/package.json', $newpackage );
-    $grunt = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/Gruntfile.js' );
+    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
+    $grunt = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
     $newgrunt = array();
     foreach ( $grunt as $line => $content ) {
 	if ( !(($line >= 45 && $line <= 84 ) || $line === 91 || $line === 92 || $line === 96 || $line === 105 || $line === 110) ) {
 	  $newgrunt[] = $grunt[ $line ];
 	}
     }
-    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '/Gruntfile.js', $newgrunt );
+    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js', $newgrunt );
     $clio->styleLine( '😀 Coffeescript removed', $white );
   }
   if ( !$cmd[ 'no-download' ] ) {
     $clio->styleLine( '😀 Grunt install in progress', $white );
     $output = '';
-    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGUIN_SLUG . '; npm install 2>&1', $output );
+    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; npm install 2>&1', $output );
     $clio->styleLine( '😎 Grunt install done', $white );
   }
 }
@@ -497,4 +502,31 @@ function remove_file( $file ) {
   }
 
   return $return;
+}
+
+function copy_dir( $source, $dest ) {
+  // Simple copy for a file
+  if ( is_file( $source ) ) {
+    return copy( $source, $dest );
+  }
+  // Make destination directory
+  if ( !is_dir( $dest ) ) {
+    mkdir( $dest );
+  }
+
+  // Loop through the folder
+  $dir = dir( $source );
+  while ( false !== $entry = $dir->read() ) {
+    // Skip pointers
+    if ( $entry == '.' || $entry == '..' ) {
+	continue;
+    }
+
+    // Deep copy directories
+    copy_dir( "$source/$entry", "$dest/$entry" );
+  }
+
+  // Clean up
+  $dir->close();
+  return true;
 }
