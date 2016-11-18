@@ -356,7 +356,11 @@ function execute_composer() {
   if ( !$cmd[ 'no-download' ] ) {
     $clio->styleLine( '😀 Composer install in progress', $white );
     $output = '';
-    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; composer update 2>&1', $output );
+    $composer_cmd = 'composer update';
+    if ( !$cmd[ 'verbose' ] ) {
+      $composer_cmd .= ' 2>&1';
+    } 
+    exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; ' . $composer_cmd, $output );
     $clio->styleLine( '😎 Composer install done', $white );
   }
 }
