@@ -359,8 +359,8 @@ function execute_composer() {
     $output = '';
     $composer_cmd = 'composer update';
     if ( !$cmd[ 'verbose' ] ) {
-      $composer_cmd .= ' 2>&1';
-    } 
+	$composer_cmd .= ' 2>&1';
+    }
     exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; ' . $composer_cmd, $output );
     $clio->styleLine( '😎 Composer install done', $white );
   }
@@ -414,14 +414,11 @@ function git_init() {
   if ( $config[ 'git-repo' ] === 'true' ) {
     exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; git init' );
     $clio->styleLine( '😎 .git folder generated', $white );
-    $file = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore';
-    $file_content = file_get_contents( $file );
-    $file_content = str_replace( '/plugin-name/', '', $file_content );
-    file_put_contents( $file, $file_content );
-    $clio->styleLine( '😎 .git ignore file generated', $white );
-  }
-  else {
-    unlink(getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore');
+    $gitignore = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore';
+    file_put_contents( $gitignore, str_replace( '/plugin-name/', '', file_get_contents( $gitignore ) ) );
+    $clio->styleLine( '😎 .gitignore file generated', $white );
+  } else {
+    unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore' );
   }
 }
 
