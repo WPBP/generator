@@ -110,6 +110,7 @@ function extract_wpbp() {
 	}
 	try {
 	  rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
+	  rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/.gitignore', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore' );
 	  rmrdir( getcwd() . '/plugin_temp/' );
 	  if ( !$cmd[ 'dev' ] ) {
 	    unlink( getcwd() . '/plugin.zip' );
@@ -401,7 +402,7 @@ function remove_composer_repositories( $composer, $searchpath ) {
 }
 
 /**
- * Create the .git folder
+ * Create the .git folder and update the boilerplate .gitignore file
  * 
  * @global array $config
  * @global object $clio
@@ -413,6 +414,14 @@ function git_init() {
   if ( $config[ 'git-repo' ] === 'true' ) {
     exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; git init' );
     $clio->styleLine( '😎 .git folder generated', $white );
+    $file = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore';
+    $file_content = file_get_contents( $file );
+    $file_content = str_replace( '/plugin-name/', '', $file_content );
+    file_put_contents( $file, $file_content );
+    $clio->styleLine( '😎 .git ignore file generated', $white );
+  }
+  else {
+    unlink(getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore');
   }
 }
 
