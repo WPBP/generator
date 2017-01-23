@@ -1,7 +1,8 @@
 ### Composer ###
 /vendor/
 composer.lock
-
+generator.phar
+wpbp-generator
 
 ### NetBeans ###
 nbproject/
