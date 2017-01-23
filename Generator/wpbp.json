@@ -21,6 +21,10 @@
   "admin-page": "true",
   "git-repo": "true",
   "coffeescript": "true",
+  "grumphp": "true",
+  "phpcs": "true",
+  "unit-test": "true",
+  "wp-cli": "true",
   "libraries": [
     "athlan/custom-fields-permalink-plugin",
     "Freemius/wordpress-sdk",
