@@ -93,7 +93,7 @@ function extract_wpbp() {
 		} else {
 			rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
 		}
-	} else if ( file_exists( getcwd() . '/plugin.zip' ) ) {
+	} elseif ( file_exists( getcwd() . '/plugin.zip' ) ) {
 		if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
 			$clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $red );
 			exit();
@@ -195,8 +195,7 @@ function parse_config() {
  *
  * @param  array $array The config to parse.
  * @return array
- */
-function array_to_var( $array ) {
+ */function array_to_var( $array ) {
 	$newarray = array();
 	// Get the json
 	foreach ( $array as $key => $subarray ) {
@@ -252,6 +251,11 @@ function get_files( $path = null ) {
 	$clio->styleLine( 'Rename in progress', $white );
 	$dir_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
 	$iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
+	// Remove phpcs file if set
+	if ( $config[ 'phpcs' ] === 'false' ) {
+		unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.php_cs' );
+		$clio->styleLine( 'Remove PHPCS done', $white );
+	}
 	// Move in array with only paths
 	foreach ( $iterator as $file => $object ) {
 		$list[] = $file;
@@ -304,6 +308,8 @@ function replace_content_names( $config, $content ) {
 	$lower = strtolower( $ucword );
 	$content = str_replace( 'Pn_', ucwords( $lower ) . '_', $content );
 	$content = str_replace( 'pn_', $lower . '_', $content );
+	$content = str_replace( '                                      ', '', $content );
+	$content = str_replace( "\n\n", "\n", $content );
 	return $content;
 }
 
@@ -433,7 +439,7 @@ function git_init() {
 
 /**
  * Clean the grunt file and install his packages
- * 
+ *
  * @global array $config
  * @global object $clio
  * @global object $white
@@ -510,7 +516,6 @@ function remove_file( $file ) {
 		case strpos( $file, 'codeception.yml' ) && $config[ 'unit-test' ] === 'false':
 		case strpos( $file, 'wp-config-test.php' ) && $config[ 'unit-test' ] === 'false':
 		case strpos( $file, '_WPCli.php' ) && $config[ 'wpcli' ] === 'false':
-		case strpos( $file, '.phpcs' ) && $config[ 'phpcs' ] === 'false':
 		case strpos( $file, 'grumphp.yml' ) && $config[ 'grumphp' ] === 'false':
 		case strpos( $file, '_Extras.php' ) && ( $config[ 'backend_bubble-notification-pending-cpt' ] === 'false' &&
 		$config[ 'backend_dashboard-atglance' ] === 'false' && $config[ 'backend_dashboard-activity' ] === 'false' &&

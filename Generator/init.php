@@ -42,4 +42,4 @@ execute_generator( $config );
 // Done!
 echo "\n";
 $clio->styleLine( 'Done, I am superfast! You:(ʘ_ʘ)', $white );
-$clio->styleLine( 'Don\'t forget to look on https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/wiki !', $white );
+$clio->styleLine( 'Don\'t forget to look on https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/wiki', $white );
