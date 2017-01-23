@@ -308,7 +308,7 @@ function replace_content_names( $config, $content ) {
 
 /**
  * Clean teh composer files and execute the install of the packages
- * 
+ *
  * @global array $config
  * @global object $clio
  * @global object $white
@@ -352,6 +352,12 @@ function execute_composer() {
 				print_v( 'Package ' . $package . ' removed!' );
 			}
 		}
+	}
+	if ( $config[ 'grumphp' ] === 'false' ) {
+		unset( $composer[ 'require-dev' ][ 'phpro/grumphp' ] );
+	}
+	if ( $config[ 'unit-test' ] === 'false' ) {
+		unset( $composer[ 'require-dev' ][ 'lucatume/wp-browser' ] );
 	}
 	file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
 	if ( !$cmd[ 'no-download' ] ) {
