@@ -43,6 +43,7 @@ function create_wpbp_json() {
 			$clio->styleLine( '😉 Generate with: wpbp-generator --json', $red );
 			$clio->styleLine( 'Forget a Q&A system and fill that json with your custom configuration!', $red );
 			$clio->styleLine( '  Do your changes and execute again! Use the --dev parameter to get the development version!', $red );
+			$clio->styleLine( '', $white );
 			$clio->styleLine( 'Help: wpbp-generator --help 😉', $white );
 			exit();
 		}
@@ -355,9 +356,11 @@ function execute_composer() {
 	}
 	if ( $config[ 'grumphp' ] === 'false' ) {
 		unset( $composer[ 'require-dev' ][ 'phpro/grumphp' ] );
+		$clio->styleLine( '😎 Remove GrumPHP done', $white );
 	}
 	if ( $config[ 'unit-test' ] === 'false' ) {
 		unset( $composer[ 'require-dev' ][ 'lucatume/wp-browser' ] );
+		$clio->styleLine( '😎 Remove Codeception done', $white );
 	}
 	file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
 	if ( !$cmd[ 'no-download' ] ) {
@@ -504,8 +507,10 @@ function remove_file( $file ) {
 		case strpos( $file, '/admin/views' ) && $config[ 'admin-page' ] === 'false':
 		case strpos( $file, '/admin/assets' ) && $config[ 'admin-page' ] === 'false':
 		case strpos( $file, '/tests' ) && $config[ 'unit-test' ] === 'false':
-		case strpos( $file, '_WPCli.php' ) && $config[ 'wp-cli' ] === 'false':
-		case strpos( $file, 'phpcs' ) && $config[ 'phpcs' ] === 'false':
+		case strpos( $file, 'codeception.yml' ) && $config[ 'unit-test' ] === 'false':
+		case strpos( $file, 'wp-config-test.php' ) && $config[ 'unit-test' ] === 'false':
+		case strpos( $file, '_WPCli.php' ) && $config[ 'wpcli' ] === 'false':
+		case strpos( $file, '.phpcs' ) && $config[ 'phpcs' ] === 'false':
 		case strpos( $file, 'grumphp.yml' ) && $config[ 'grumphp' ] === 'false':
 		case strpos( $file, '_Extras.php' ) && ( $config[ 'backend_bubble-notification-pending-cpt' ] === 'false' &&
 		$config[ 'backend_dashboard-atglance' ] === 'false' && $config[ 'backend_dashboard-activity' ] === 'false' &&

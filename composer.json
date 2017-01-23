@@ -18,9 +18,9 @@
   "minimum-stability": "dev",
   "require": {
     "php": ">=5.5",
-    "zordius/lightncandy": "0.95",
-    "nategood/commando": "0.2.8",
-    "1happyplace/clio": "v0.5.1-beta",
+    "zordius/lightncandy": "1.0.0",
+    "nategood/commando": "0.2.9",
+    "1happyplace/clio": "v0.5.3-beta",
     "perchten/rmrdir": "1.*"
   },
   "bin": [
