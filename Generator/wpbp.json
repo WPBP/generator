@@ -45,7 +45,8 @@
     "WPBP/PointerPlus",
     "WPBP/Requirements",
     "WPBP/Template",
-    "WPBP/Widgets-Helper"
+    "WPBP/Widgets-Helper",
+    "WPBP/Backbone-Modal-View"
   ],
   "snippet": {
     "backend": [
