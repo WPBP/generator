@@ -368,6 +368,9 @@ function execute_composer() {
 		unset( $composer[ 'require-dev' ][ 'lucatume/wp-browser' ] );
 		$clio->styleLine( '😎 Remove Codeception done', $white );
 	}
+	if ( count( $composer[ 'require-dev' ] ) === 0 ) {
+		unset( $composer[ 'require-dev' ] );
+	}
 	file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
 	if ( !$cmd[ 'no-download' ] ) {
 		$clio->styleLine( '😀 Composer install in progress', $white );
