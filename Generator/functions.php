@@ -195,7 +195,8 @@ function parse_config() {
  *
  * @param  array $array The config to parse.
  * @return array
- */function array_to_var( $array ) {
+ */
+function array_to_var( $array ) {
 	$newarray = array();
 	// Get the json
 	foreach ( $array as $key => $subarray ) {
@@ -302,7 +303,8 @@ function replace_content_names( $config, $content ) {
 	$content = str_replace( "//\n", '', $content );
 	$content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
 	$content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
-	preg_match_all( '/[A-Z]/', ucwords( strtolower( $config[ 'plugin_name' ] ) ), $ucword );
+	$plugin_name_no_number = preg_replace( '/[0-9]+/', '', $config[ 'plugin_name' ] );
+	preg_match_all( '/[A-Z]/', ucwords( strtolower( $plugin_name_no_number ) ), $ucword );
 	$ucword = implode( '', $ucword[ 0 ] );
 	$content = str_replace( 'PN_', $ucword . '_', $content );
 	$lower = strtolower( $ucword );
@@ -537,6 +539,14 @@ function remove_file( $file ) {
 	return $return;
 }
 
+/**
+ * Copy the directory
+ * 
+ * @param string $source Path of origin.
+ * @param string $dest   Path of destination.
+ * 
+ * @return boolean
+ */
 function copy_dir( $source, $dest ) {
 	// Simple copy for a file
 	if ( is_file( $source ) ) {
