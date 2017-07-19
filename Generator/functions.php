@@ -505,10 +505,9 @@ function remove_file( $file ) {
 		case strpos( $file, '_FakePage.php' ) && $config[ 'libraries_wpbp__fakepage' ] === 'false':
 		case strpos( $file, '_Pointers.php' ) && $config[ 'libraries_wpbp__pointerplus' ] === 'false':
 		case strpos( $file, '_CMB.php' ) && $config[ 'libraries_webdevstudios__cmb2' ] === 'false':
-		case strpos( $file, '_ContextualHelp.php' ) && $config[ 'libraries_voceconnect__wp-contextual-help' ] === 'false':
-		case strpos( $file, '/help-docs' ) && $config[ 'libraries_voceconnect__wp-contextual-help' ] === 'false':
+		case strpos( $file, '_ContextualHelp.php' ) && $config[ 'libraries_kevinlangleyjr__wp-contextual-help' ] === 'false':
+		case strpos( $file, '/help-docs' ) && $config[ 'libraries_kevinlangleyjr__wp-contextual-help' ] === 'false':
 		case strpos( $file, '/templates' ) && $config[ 'frontend_template-system' ] === 'false':
-		case strpos( $file, '/widgets/sample.php' ) && $config[ 'libraries_wpbp__widgets-helper' ] === 'false':
 		case strpos( $file, '/widgets' ) && $config[ 'libraries_wpbp__widgets-helper' ] === 'false':
 		case strpos( $file, '/public/assets/js' ) && $config[ 'public-assets_js' ] === 'false':
 		case strpos( $file, '/public/assets/css' ) && $config[ 'public-assets_css' ] === 'false':
