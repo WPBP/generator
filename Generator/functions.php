@@ -303,8 +303,7 @@ function replace_content_names( $config, $content ) {
 	$content = str_replace( "//\n", '', $content );
 	$content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
 	$content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
-	$plugin_name_no_number = preg_replace( '/[0-9]+/', '', $config[ 'plugin_name' ] );
-	preg_match_all( '/[A-Z]/', ucwords( strtolower( $plugin_name_no_number ) ), $ucword );
+	preg_match_all( '/[A-Z]/', ucwords( strtolower( preg_replace( '/[0-9]+/', '', $config[ 'plugin_name' ] ) ) ), $ucword );
 	$ucword = implode( '', $ucword[ 0 ] );
 	$content = str_replace( 'PN_', $ucword . '_', $content );
 	$lower = strtolower( $ucword );
@@ -515,8 +514,16 @@ function remove_file( $file ) {
 		case strpos( $file, '/public/assets/css' ) && $config[ 'public-assets_css' ] === 'false':
 		case strpos( $file, '/public/assets/sass' ) && $config[ 'public-assets_css' ] === 'false':
 		case strpos( $file, '/public/assets' ) && $config[ 'public-assets_css' ] === 'false' && $config[ 'public-assets_js' ] === 'false':
-		case strpos( $file, '/admin/views' ) && $config[ 'admin-page' ] === 'false':
-		case strpos( $file, '/admin/assets' ) && $config[ 'admin-page' ] === 'false':
+		case strpos( $file, '/admin/views' ) && $config[ 'admin-assets_admin-page' ] === 'false':
+		case strpos( $file, '/admin/assets' ) && $config[ 'admin-assets_admin-page' ] === 'false':
+		case strpos( $file, '/admin/assets/css/admin' ) && $config[ 'admin-assets_admin-css' ] === 'false':
+		case strpos( $file, '/admin/assets/sass/admin' ) && $config[ 'admin-assets_admin-css' ] === 'false':
+		case strpos( $file, '/admin/assets/js/admin' ) && $config[ 'admin-assets_admin-js' ] === 'false':
+		case strpos( $file, '/admin/assets/coffee/admin' ) && $config[ 'admin-assets_admin-js' ] === 'false':
+		case strpos( $file, '/admin/assets/css/settings' ) && $config[ 'admin-assets_settings-css' ] === 'false':
+		case strpos( $file, '/admin/assets/sass/settings' ) && $config[ 'admin-assets_settings-css' ] === 'false':
+		case strpos( $file, '/admin/assets/js/settings' ) && $config[ 'admin-assets_settings-js' ] === 'false':
+		case strpos( $file, '/admin/assets/coffee/settings' ) && $config[ 'admin-assets_settings-js' ] === 'false':
 		case strpos( $file, '/tests' ) && $config[ 'unit-test' ] === 'false':
 		case strpos( $file, 'codeception.yml' ) && $config[ 'unit-test' ] === 'false':
 		case strpos( $file, 'wp-config-test.php' ) && $config[ 'unit-test' ] === 'false':

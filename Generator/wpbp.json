@@ -18,7 +18,13 @@
     "actdeact": "true",
     "uninstall": "true"
   },
-  "admin-page": "true",
+  "admin-assets": {
+    "admin-js": "true",
+    "admin-css": "true",
+    "settings-js": "true",
+    "settings-css": "true",
+    "admin-page": "true"
+  },
   "git-repo": "true",
   "coffeescript": "true",
   "grumphp": "true",
