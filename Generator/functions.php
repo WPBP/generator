@@ -514,6 +514,8 @@ function remove_file( $file ) {
 		case strpos( $file, '/public/assets/css' ) && $config[ 'public-assets_css' ] === 'false':
 		case strpos( $file, '/public/assets/sass' ) && $config[ 'public-assets_css' ] === 'false':
 		case strpos( $file, '/public/assets' ) && $config[ 'public-assets_css' ] === 'false' && $config[ 'public-assets_js' ] === 'false':
+		case strpos( $file, '/public/ajax' ) && $config[ 'ajax_public' ] === 'false':
+		case strpos( $file, '/admin/ajax' ) && $config[ 'ajax_admin' ] === 'false':
 		case strpos( $file, '/admin/views' ) && $config[ 'admin-assets_admin-page' ] === 'false':
 		case strpos( $file, '/admin/assets' ) && $config[ 'admin-assets_admin-page' ] === 'false':
 		case strpos( $file, '/admin/assets/css/admin' ) && $config[ 'admin-assets_admin-css' ] === 'false':
