@@ -57,7 +57,8 @@
     "WPBP/Template",
     "WPBP/Widgets-Helper",
     "WPBP/Backbone-Modal-View",
-    "Yoast/i18n-module"
+    "Yoast/i18n-module",
+    "Yoast/whip"
   ],
   "snippet": {
     "backend": [
