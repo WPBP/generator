@@ -36,7 +36,6 @@
   "unit-test": "true",
   "wpcli": "true",
   "libraries": [
-    "athlan/custom-fields-permalink-plugin",
     "Freemius/wordpress-sdk",
     "julien731/WP-Dismissible-Notices-Handler",
     "julien731/WP-Review-Me",

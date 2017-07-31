@@ -141,7 +141,7 @@ function execute_generator( $config ) {
 	foreach ( $files as $file ) {
 		$file_content = file_get_contents( $file );
 		if ( $cmd[ 'verbose' ] ) {
-			$clio->styleLine( 'Parsing: ' . $file, $yellow );
+			$clio->styleLine( 'Parsed: ' . $file, $yellow );
 		}
 		if ( $cmd[ 'dev' ] ) {
 			$lc = LightnCandy::compile( $file_content, array(
