@@ -31,6 +31,7 @@
   },
   "git-repo": "true",
   "coffeescript": "true",
+  "grunt": "true",
   "grumphp": "true",
   "phpcs": "true",
   "unit-test": "true",

@@ -140,9 +140,6 @@ function execute_generator( $config ) {
 	$files = get_files();
 	foreach ( $files as $file ) {
 		$file_content = file_get_contents( $file );
-		if ( $cmd[ 'verbose' ] ) {
-			$clio->styleLine( 'Parsed: ' . $file, $yellow );
-		}
 		if ( $cmd[ 'dev' ] ) {
 			$lc = LightnCandy::compile( $file_content, array(
 						'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_ERROR_EXCEPTION | LightnCandy::FLAG_RENDER_DEBUG
@@ -358,6 +355,12 @@ function execute_composer() {
 					$composer = remove_composer_autoload( $composer, 'cmb2-tabs' );
 					$composer = remove_composer_repositories( $composer, 'cmb2-tabs' );
 				}
+				if ( strpos( $package, 'johnbillion/extended-cpts' ) !== false ) {
+					$composer = remove_composer_autoload( $composer, 'extended-cpts' );
+				}
+				if ( strpos( $package, 'johnbillion/extended-taxos' ) !== false ) {
+					$composer = remove_composer_autoload( $composer, 'extended-taxos' );
+				}
 				if ( strpos( $package, 'plugin/posts-to-posts' ) !== false ) {
 					$composer = remove_composer_autoload( $composer, 'posts-to' );
 				}
@@ -464,38 +467,43 @@ function git_init() {
 function grunt() {
 	global $config, $cmd, $clio, $white;
 
-	if ( $config[ 'coffeescript' ] === 'false' ) {
-		if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' ) ) {
-			rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' );
-		}
-		if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' ) ) {
-			rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
-		}
-		$package = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
-		$newpackage = array();
-		foreach ( $package as $line => $content ) {
-			if ( strpos( $content, 'coffee' ) ) {
-				$newpackage[ $line - 1 ] = str_replace( ',', '', $package[ $line - 1 ] );
-			} else {
-				$newpackage[] = $package[ $line ];
+	if ( $config[ 'grunt' ] === 'true' ) {
+		if ( $config[ 'coffeescript' ] === 'false' ) {
+			if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' ) ) {
+				rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' );
 			}
-		}
-		file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
-		$grunt = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
-		$newgrunt = array();
-		foreach ( $grunt as $line => $content ) {
-			if ( !(($line >= 45 && $line <= 84 ) || $line === 91 || $line === 92 || $line === 96 || $line === 105 || $line === 110) ) {
-				$newgrunt[] = $grunt[ $line ];
+			if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' ) ) {
+				rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
 			}
+			$package = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
+			$newpackage = array();
+			foreach ( $package as $line => $content ) {
+				if ( strpos( $content, 'coffee' ) ) {
+					$newpackage[ $line - 1 ] = str_replace( ',', '', $package[ $line - 1 ] );
+				} else {
+					$newpackage[] = $package[ $line ];
+				}
+			}
+			file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
+			$grunt = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
+			$newgrunt = array();
+			foreach ( $grunt as $line => $content ) {
+				if ( !(($line >= 45 && $line <= 86 ) || $line === 92 || $line === 93 || $line === 97 || $line === 105 || $line === 109) ) {
+					$newgrunt[] = $grunt[ $line ];
+				}
+			}
+			file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js', $newgrunt );
+			$clio->styleLine( '😀 Coffeescript removed', $white );
 		}
-		file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js', $newgrunt );
-		$clio->styleLine( '😀 Coffeescript removed', $white );
-	}
-	if ( !$cmd[ 'no-download' ] ) {
-		$clio->styleLine( '😀 Grunt install in progress', $white );
-		$output = '';
-		exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; npm install 2>&1', $output );
-		$clio->styleLine( '😎 Grunt install done', $white );
+		if ( !$cmd[ 'no-download' ] ) {
+			$clio->styleLine( '😀 Grunt install in progress', $white );
+			$output = '';
+			exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; npm install 2>&1', $output );
+			$clio->styleLine( '😎 Grunt install done', $white );
+		}
+	} else {
+		unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
+		$clio->styleLine( '😀 Grunt removed', $white );
 	}
 }
 
@@ -533,11 +541,11 @@ function remove_file( $file ) {
 		case strpos( $file, '/admin/assets/css/admin' ) && $config[ 'admin-assets_admin-css' ] === 'false':
 		case strpos( $file, '/admin/assets/sass/admin' ) && $config[ 'admin-assets_admin-css' ] === 'false':
 		case strpos( $file, '/admin/assets/js/admin' ) && $config[ 'admin-assets_admin-js' ] === 'false':
+		case strpos( $file, '/admin/assets/js/settings' ) && $config[ 'admin-assets_settings-js' ] === 'false':
 		case strpos( $file, '/admin/assets/coffee/admin' ) && $config[ 'admin-assets_admin-js' ] === 'false':
+		case strpos( $file, '/admin/assets/coffee/settings' ) && $config[ 'admin-assets_settings-js' ] === 'false':
 		case strpos( $file, '/admin/assets/css/settings' ) && $config[ 'admin-assets_settings-css' ] === 'false':
 		case strpos( $file, '/admin/assets/sass/settings' ) && $config[ 'admin-assets_settings-css' ] === 'false':
-		case strpos( $file, '/admin/assets/js/settings' ) && $config[ 'admin-assets_settings-js' ] === 'false':
-		case strpos( $file, '/admin/assets/coffee/settings' ) && $config[ 'admin-assets_settings-js' ] === 'false':
 		case strpos( $file, '/tests' ) && $config[ 'unit-test' ] === 'false':
 		case strpos( $file, 'codeception.yml' ) && $config[ 'unit-test' ] === 'false':
 		case strpos( $file, 'wp-config-test.php' ) && $config[ 'unit-test' ] === 'false':
