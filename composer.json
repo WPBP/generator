@@ -15,12 +15,17 @@
       "homepage": "https://github.com/wpbp"
     }
   ],
-  "minimum-stability": "beta",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/mte90/clio.git"
+    }
+  ],
   "require": {
     "php": ">=5.5",
-    "zordius/lightncandy": "1.0.0",
+    "zordius/lightncandy": "1.1.0",
     "nategood/commando": "0.2.9",
-    "1happyplace/clio": "v0.5.3-beta",
+    "mte90/clio": "dev-master as v0.5.3-beta",
     "perchten/rmrdir": "1.*"
   },
   "bin": [
