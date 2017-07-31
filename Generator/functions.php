@@ -136,13 +136,16 @@ function extract_wpbp() {
  * @param  array $config The config of the request.
  */
 function execute_generator( $config ) {
-	global $cmd, $clio, $white;
+	global $cmd, $clio, $white, $yellow;
 	$files = get_files();
 	foreach ( $files as $file ) {
 		$file_content = file_get_contents( $file );
+		if ( $cmd[ 'verbose' ] ) {
+			$clio->styleLine( 'Parsing: ' . $file, $yellow );
+		}
 		if ( $cmd[ 'dev' ] ) {
 			$lc = LightnCandy::compile( $file_content, array(
-						'flags' => LightnCandy::FLAG_RENDER_DEBUG
+						'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_ERROR_EXCEPTION | LightnCandy::FLAG_RENDER_DEBUG
 					) );
 			$lc_prepare = LightnCandy::prepare( $lc );
 			$newfile = $lc_prepare( $config, array( 'debug' => Runtime::DEBUG_ERROR_EXCEPTION ) );
@@ -344,12 +347,16 @@ function execute_composer() {
 					}
 				}
 				if ( strpos( $package, 'webdevstudios/cmb2' ) !== false ) {
-					$composer = remove_composer_autoload( $composer, 'Cmb2/' );
+					$composer = remove_composer_autoload( $composer, 'cmb2/' );
 					$composer = remove_composer_repositories( $composer, 'wpackagist' );
 				}
 				if ( strpos( $package, 'origgami/cmb2-grid' ) !== false ) {
-					$composer = remove_composer_autoload( $composer, 'Cmb2-grid' );
+					$composer = remove_composer_autoload( $composer, 'cmb2-grid' );
 					$composer = remove_composer_repositories( $composer, 'cmb2-grid' );
+				}
+				if ( strpos( $package, 'rubengc/cmb2-tabs' ) !== false ) {
+					$composer = remove_composer_autoload( $composer, 'cmb2-tabs' );
+					$composer = remove_composer_repositories( $composer, 'cmb2-tabs' );
 				}
 				if ( strpos( $package, 'plugin/posts-to-posts' ) !== false ) {
 					$composer = remove_composer_autoload( $composer, 'posts-to' );
@@ -413,7 +420,13 @@ function remove_composer_autoload( $composer, $searchpath ) {
  */
 function remove_composer_repositories( $composer, $searchpath ) {
 	foreach ( $composer[ 'repositories' ] as $key => $path ) {
-		if ( strpos( $path[ 'url' ], $searchpath ) ) {
+		$url = '';
+		if ( isset( $path[ 'url' ] ) ) {
+			$url = $path[ 'url' ];
+		} else if ( isset( $path[ 'package' ][ 'source' ][ 'url' ] ) ) {
+			$url = $path[ 'package' ][ 'source' ][ 'url' ];
+		}
+		if ( strpos( $url, $searchpath ) ) {
 			unset( $composer[ 'repositories' ][ $key ] );
 		}
 	}
@@ -531,8 +544,8 @@ function remove_file( $file ) {
 		case strpos( $file, '_WPCli.php' ) && $config[ 'wpcli' ] === 'false':
 		case strpos( $file, 'grumphp.yml' ) && $config[ 'grumphp' ] === 'false':
 		case strpos( $file, '_Extras.php' ) && ( $config[ 'backend_bubble-notification-pending-cpt' ] === 'false' &&
-		$config[ 'backend_dashboard-atglance' ] === 'false' && $config[ 'backend_dashboard-activity' ] === 'false' &&
-		$config[ 'system_push-notification' ] === 'false' && $config[ 'system_transient-example' ] === 'false' ):
+		$config[ 'backend_dashboard-activity' ] === 'false' && $config[ 'system_push-notification' ] === 'false' &&
+		$config[ 'system_transient-example' ] === 'false' ):
 			if ( file_exists( $file ) ) {
 				if ( is_dir( $file ) ) {
 					rmrdir( $file );
