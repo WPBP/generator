@@ -8,6 +8,7 @@
     "generator"
   ],
   "homepage": "https://wpbp.github.io/",
+  "minimum-stability": "dev",
   "authors": [
     {
       "name": "Daniele Scasciafratte",
@@ -15,25 +16,11 @@
       "homepage": "https://github.com/wpbp"
     }
   ],
-  "repositories": [
-    {
-      "type": "package",
-      "package": {
-        "name": "mte90/clio",
-        "version": "1.0.0",
-        "source": {
-          "url": "https://github.com/mte90/clio",
-          "type": "git",
-          "reference": "master"
-        }
-      }
-    }
-  ],
   "require": {
     "php": ">=5.5",
-    "zordius/lightncandy": "1.1.0",
+    "zordius/lightncandy": "1.1.x",
     "nategood/commando": "0.2.9",
-    "mte90/clio": "*",
+    "mte90/clio": "0.5.3",
     "perchten/rmrdir": "1.*"
   },
   "bin": [
