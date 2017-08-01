@@ -66,7 +66,7 @@ function download_wpbp() {
 	}
 	$clio->styleLine( '😎 Downloading ' . $version . ' package', $white );
 
-	$download = @file_get_contents( 'http://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/archive/' . $version . '.zip' );
+	$download = file_get_contents( 'http://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/archive/' . $version . '.zip' );
 	if ( $download === false ) {
 		$clio->styleLine( '😡 The ' . $version . ' version is not avalaible', $red );
 		die();
@@ -136,7 +136,7 @@ function extract_wpbp() {
  * @param  array $config The config of the request.
  */
 function execute_generator( $config ) {
-	global $cmd, $clio, $white, $yellow;
+	global $cmd, $clio, $white;
 	$files = get_files();
 	foreach ( $files as $file ) {
 		$file_content = file_get_contents( $file );
@@ -268,10 +268,11 @@ function get_files( $path = null ) {
 		if ( remove_file( $file ) ) {
 			continue;
 		}
-		if ( (strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) || strpos( $file, '.pot' ) ) ) {
+		if ( (strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) || strpos( $file, '.pot' ) || strpos( $file, '.sh' ) ) ) {
 			$pathparts = pathinfo( $file );
 			$newname = replace_content_names( $config, $pathparts[ 'filename' ] );
 			$newname = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
+			print_v( 'Ready to rename ' . $file );
 			if ( $newname !== $file ) {
 				try {
 					rename( $file, $newname );
@@ -503,6 +504,7 @@ function grunt() {
 		}
 	} else {
 		unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
+		unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
 		$clio->styleLine( '😀 Grunt removed', $white );
 	}
 }
