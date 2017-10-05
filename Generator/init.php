@@ -1,6 +1,6 @@
 <?php
 
-define( 'WPBP_VERSION', '2.1.0' );
+define( 'WPBP_VERSION', '2.1.1' );
 require_once(dirname( __FILE__ ) . '/functions.php');
 
 // Load libraries
