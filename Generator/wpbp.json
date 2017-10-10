@@ -70,7 +70,6 @@
     "frontend": [
       "body-class",
       "cpt-search-support",
-      "js-dom-routing",
       "wp-localize-script",
       "template-system"
     ],
@@ -79,11 +78,6 @@
       "upgrade-procedure",
       "transient-example",
       "push-notification"
-    ],
-    "custom": [
-      "action",
-      "filter",
-      "shortcode"
     ]
   }
 }
