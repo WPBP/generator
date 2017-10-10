@@ -554,9 +554,6 @@ function remove_file( $file ) {
 		case strpos( $file, 'wp-config-test.php' ) && $config[ 'unit-test' ] === 'false':
 		case strpos( $file, '_WPCli.php' ) && $config[ 'wpcli' ] === 'false':
 		case strpos( $file, 'grumphp.yml' ) && $config[ 'grumphp' ] === 'false':
-		case strpos( $file, '_Extras.php' ) && ( $config[ 'backend_bubble-notification-pending-cpt' ] === 'false' &&
-		$config[ 'backend_dashboard-activity' ] === 'false' && $config[ 'system_push-notification' ] === 'false' &&
-		$config[ 'system_transient-example' ] === 'false' ):
 			if ( file_exists( $file ) ) {
 				if ( is_dir( $file ) ) {
 					rmrdir( $file );
