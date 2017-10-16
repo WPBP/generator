@@ -141,6 +141,7 @@ function execute_generator( $config ) {
 	foreach ( $files as $file ) {
 		$file_content = file_get_contents( $file );
 		if ( $cmd[ 'dev' ] ) {
+			print_v( 'Parsing ' . $file );
 			$lc = LightnCandy::compile( $file_content, array(
 						'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_ERROR_EXCEPTION | LightnCandy::FLAG_RENDER_DEBUG
 					) );
