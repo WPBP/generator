@@ -146,7 +146,7 @@ function execute_generator( $config ) {
 						'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_ERROR_EXCEPTION | LightnCandy::FLAG_RENDER_DEBUG
 					) );
 			$lc_prepare = LightnCandy::prepare( $lc );
-			$newfile = $lc_prepare( $config, array( 'debug' => Runtime::DEBUG_ERROR_EXCEPTION ) );
+			$newfile = $lc_prepare( $config, array( 'debug' => Runtime::DEBUG_ERROR_EXCEPTION | Runtime::DEBUG_ERROR_LOG ) );
 		} else {
 			$lc = LightnCandy::compile( $file_content );
 			$lc_prepare = LightnCandy::prepare( $lc );
@@ -334,17 +334,6 @@ function execute_composer() {
 				if ( isset( $composer[ 'require' ][ $package ] ) ) {
 					unset( $composer[ 'require' ][ $package ] );
 				}
-				foreach ( $composer[ 'extra' ][ 'installer-paths' ] as $folder => $packageset ) {
-					if ( empty( $composer[ 'extra' ][ 'installer-paths' ][ $folder ] ) ) {
-						unset( $composer[ 'extra' ][ 'installer-paths' ][ $folder ] );
-					} else {
-						foreach ( $packageset as $ispackage => $value ) {
-							if ( $value === $package ) {
-								unset( $composer[ 'extra' ][ 'installer-paths' ][ $folder ][ $ispackage ] );
-							}
-						}
-					}
-				}
 				if ( strpos( $package, 'webdevstudios/cmb2' ) !== false ) {
 					$composer = remove_composer_autoload( $composer, 'cmb2/' );
 					$composer = remove_composer_repositories( $composer, 'wpackagist' );
@@ -405,13 +394,15 @@ function execute_composer() {
  * @return array
  */
 function remove_composer_autoload( $composer, $searchpath ) {
-	foreach ( $composer[ 'autoload' ][ 'files' ] as $key => $path ) {
-		if ( strpos( $path, $searchpath ) ) {
-			unset( $composer[ 'autoload' ][ 'files' ][ $key ] );
+	if ( isset( $composer[ 'autoload' ] ) ) {
+		foreach ( $composer[ 'autoload' ][ 'files' ] as $key => $path ) {
+			if ( strpos( $path, $searchpath ) ) {
+				unset( $composer[ 'autoload' ][ 'files' ][ $key ] );
+			}
 		}
-	}
-	if ( empty( $composer[ 'autoload' ][ 'files' ] ) ) {
-		unset( $composer[ 'autoload' ] );
+		if ( empty( $composer[ 'autoload' ][ 'files' ] ) ) {
+			unset( $composer[ 'autoload' ] );
+		}
 	}
 	return $composer;
 }
@@ -424,15 +415,17 @@ function remove_composer_autoload( $composer, $searchpath ) {
  * @return array
  */
 function remove_composer_repositories( $composer, $searchpath ) {
-	foreach ( $composer[ 'repositories' ] as $key => $path ) {
-		$url = '';
-		if ( isset( $path[ 'url' ] ) ) {
-			$url = $path[ 'url' ];
-		} else if ( isset( $path[ 'package' ][ 'source' ][ 'url' ] ) ) {
-			$url = $path[ 'package' ][ 'source' ][ 'url' ];
-		}
-		if ( strpos( $url, $searchpath ) ) {
-			unset( $composer[ 'repositories' ][ $key ] );
+	if ( isset( $composer[ 'repositories' ] ) ) {
+		foreach ( $composer[ 'repositories' ] as $key => $path ) {
+			$url = '';
+			if ( isset( $path[ 'url' ] ) ) {
+				$url = $path[ 'url' ];
+			} else if ( isset( $path[ 'package' ][ 'source' ][ 'url' ] ) ) {
+				$url = $path[ 'package' ][ 'source' ][ 'url' ];
+			}
+			if ( strpos( $url, $searchpath ) ) {
+				unset( $composer[ 'repositories' ][ $key ] );
+			}
 		}
 	}
 	return $composer;
