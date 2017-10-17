@@ -373,6 +373,9 @@ function execute_composer() {
 	if ( count( $composer[ 'require-dev' ] ) === 0 ) {
 		unset( $composer[ 'require-dev' ] );
 	}
+	if ( count( $composer[ 'require' ] ) === 3 ) {
+		unset( $composer[ 'extra' ] );
+	}
 	file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
 	if ( !$cmd[ 'no-download' ] ) {
 		$clio->styleLine( '😀 Composer install in progress', $white );
