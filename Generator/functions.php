@@ -152,6 +152,9 @@ function execute_generator( $config ) {
 			$lc_prepare = LightnCandy::prepare( $lc );
 			$newfile = $lc_prepare( $config );
 		}
+		if ( strpos( $file, '.gitignore' ) ) {
+			$newfile = str_replace( 'plugin-name/', '', $newfile );
+		}
 		$newfile = replace_content_names( $config, $newfile );
 		if ( $newfile !== $file_content ) {
 			print_v( 'Parsed ' . $file );
@@ -271,7 +274,7 @@ function get_files( $path = null ) {
 		if ( remove_file( $file ) ) {
 			continue;
 		}
-		if ( (strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) || strpos( $file, '.pot' ) || strpos( $file, '.sh' ) ) ) {
+		if ( (strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) || strpos( $file, '.pot' ) || strpos( $file, '.yml' ) || strpos( $file, 'gitignore' ) ) ) {
 			$pathparts = pathinfo( $file );
 			$newname = replace_content_names( $config, $pathparts[ 'filename' ] );
 			$newname = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
@@ -307,6 +310,7 @@ function replace_content_names( $config, $content ) {
 	$content = str_replace( "//\n", '', $content );
 	$content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
 	$content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
+	$content = str_replace( 'WordPress-Plugin-Boilerplate-Powered', WPBP_PLUGIN_SLUG, $content );
 	preg_match_all( '/[A-Z]/', ucwords( strtolower( preg_replace( '/[0-9]+/', '', $config[ 'plugin_name' ] ) ) ), $ucword );
 	$ucword = implode( '', $ucword[ 0 ] );
 	$content = str_replace( 'PN_', $ucword . '_', $content );
