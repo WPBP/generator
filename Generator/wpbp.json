@@ -36,6 +36,7 @@
   "phpcs": "true",
   "unit-test": "true",
   "wpcli": "true",
+  "language-files": "true",
   "libraries": [
     "Freemius/wordpress-sdk",
     "julien731/WP-Dismissible-Notices-Handler",

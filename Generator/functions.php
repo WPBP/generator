@@ -551,6 +551,7 @@ function remove_file( $file ) {
 		case strpos( $file, '/tests' ) && $config[ 'unit-test' ] === 'false':
 		case strpos( $file, 'codeception.yml' ) && $config[ 'unit-test' ] === 'false':
 		case strpos( $file, 'wp-config-test.php' ) && $config[ 'unit-test' ] === 'false':
+		case strpos( $file, 'languages' ) && $config[ 'language-files' ] === 'false':
 		case strpos( $file, '_WPCli.php' ) && $config[ 'wpcli' ] === 'false':
 		case strpos( $file, 'grumphp.yml' ) && $config[ 'grumphp' ] === 'false':
 			if ( file_exists( $file ) ) {
