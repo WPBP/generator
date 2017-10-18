@@ -186,6 +186,8 @@ function parse_config() {
 	foreach ( $config_default as $key => $value ) {
 		if ( !isset( $config[ $key ] ) ) {
 			$config[ $key ] = 'false';
+		} elseif ( $config[ $key ] === 'true' ) {
+			$config[ $key ] = '';
 		}
 	}
 	return $config;
@@ -222,8 +224,8 @@ function array_to_var( $array ) {
 			}
 		} else {
 			// Is a single key
-			if ( $subarray === 'true' ) {
-				$newarray[ $key ] = 'true';
+			if ( $subarray === 'true' || $subvalue === 'true' ) {
+				$newarray[ $key ] = '';
 			} elseif ( $subarray === 'false' ) {
 				$newarray[ $key ] = 'false';
 			} else {
