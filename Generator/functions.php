@@ -258,10 +258,11 @@ function get_files( $path = null ) {
 	$clio->styleLine( 'Rename in progress', $white );
 	$dir_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
 	$iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
-	// Remove phpcs file if set
-	if ( $config[ 'phpcs' ] === 'false' ) {
-		unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.php_cs' );
-		$clio->styleLine( 'Remove PHPCS done', $white );
+
+	if ( !empty( $config[ 'phpcs-standard' ] ) ) {
+		$codeat = file_get_contents( $config[ 'phpcs-standard' ] );
+		file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/phpcs.xml', $codeat );
+		$clio->styleLine( '😎 PHPCS Standard downloaded', $white );
 	}
 	// Move in array with only paths
 	foreach ( $iterator as $file => $object ) {
