@@ -66,9 +66,9 @@ function download_wpbp() {
 	}
 	$clio->styleLine( '😎 Downloading ' . $version . ' package', $white );
 
-	$download = file_get_contents( 'http://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/archive/' . $version . '.zip' );
+	$download = @file_get_contents( 'http://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/archive/' . $version . '.zip' );
 	if ( $download === false ) {
-		$clio->styleLine( '😡 The ' . $version . ' version is not avalaible', $red );
+		$clio->styleLine( '😡 The ' . $version . ' version is not yet avalaible! Use the --dev parameter!', $red );
 		die();
 	}
 	file_put_contents( 'plugin.zip', $download );
@@ -119,7 +119,7 @@ function extract_wpbp() {
 			} catch ( Exception $e ) {
 				$clio->styleLine( $e, $red );
 			}
-			$clio->styleLine( 'Boilerplate Extracted ', $white );
+			$clio->styleLine( 'Boilerplate Extracted', $white );
 		}
 	} else {
 		// If the package not exist download it
@@ -189,8 +189,6 @@ function parse_config() {
 	foreach ( $config_default as $key => $value ) {
 		if ( !isset( $config[ $key ] ) ) {
 			$config[ $key ] = 'false';
-		} elseif ( $config[ $key ] === 'true' ) {
-			$config[ $key ] = '';
 		}
 	}
 	return $config;
@@ -227,12 +225,11 @@ function array_to_var( $array ) {
 			}
 		} else {
 			// Is a single key
-			if ( $subarray === 'true' || $subvalue === 'true' ) {
-				$newarray[ $key ] = '';
+			$newarray[ $key ] = $subarray;
+			if ( $subarray === 'true' ) {
+				$newarray[ $key ] = 'true';
 			} elseif ( $subarray === 'false' ) {
 				$newarray[ $key ] = 'false';
-			} else {
-				$newarray[ $key ] = $subvalue;
 			}
 		}
 	}
@@ -386,7 +383,7 @@ function execute_composer() {
 	}
 	file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
 	if ( !$cmd[ 'no-download' ] ) {
-		$clio->styleLine( '😀 Composer install in progress', $white );
+		$clio->styleLine( '😀 Composer install in progress (can require few minutes)', $white );
 		$output = '';
 		$composer_cmd = 'composer update';
 		if ( !$cmd[ 'verbose' ] ) {
