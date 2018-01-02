@@ -40,9 +40,9 @@ function create_wpbp_json() {
 	} else {
 		if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
 			$clio->styleLine( '😡 wpbp.json file missing...', $red );
-			$clio->styleLine( '😉 Generate with: wpbp-generator --json', $red );
-			$clio->styleLine( 'Forget a Q&A system and fill that json with your custom configuration!', $red );
-			$clio->styleLine( '  Do your changes and execute again! Use the --dev parameter to get the development version!', $red );
+			$clio->styleLine( '😉 Generate it with: wpbp-generator --json', $red );
+			$clio->styleLine( 'Forget a hipster Q&A procedure and fill that JSON with your custom configuration!', $red );
+			$clio->styleLine( '  Let\'s do your changes and execute the script again! Use the --dev parameter to use the development version of the boilerplate!', $red );
 			$clio->styleLine( '', $white );
 			$clio->styleLine( 'Help: wpbp-generator --help 😉', $white );
 			exit();
