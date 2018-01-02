@@ -354,9 +354,6 @@ function execute_composer() {
 				if ( strpos( $package, 'johnbillion/extended-cpts' ) !== false ) {
 					$composer = remove_composer_autoload( $composer, 'extended-cpts' );
 				}
-				if ( strpos( $package, 'johnbillion/extended-taxos' ) !== false ) {
-					$composer = remove_composer_autoload( $composer, 'extended-taxos' );
-				}
 				if ( strpos( $package, 'plugin/posts-to-posts' ) !== false ) {
 					$composer = remove_composer_autoload( $composer, 'posts-to' );
 				}
