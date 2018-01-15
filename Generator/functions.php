@@ -526,6 +526,7 @@ function remove_file( $file ) {
 		case strpos( $file, '_P2P.php' ) && $config[ 'libraries_wpackagist-plugin__posts-to-posts' ] === 'false':
 		case strpos( $file, '_FakePage.php' ) && $config[ 'libraries_wpbp__fakepage' ] === 'false':
 		case strpos( $file, '_Pointers.php' ) && $config[ 'libraries_wpbp__pointerplus' ] === 'false':
+		case strpos( $file, '_template.php' ) && $config[ 'libraries_wpbp__template' ] === 'false':
 		case strpos( $file, '_CMB.php' ) && $config[ 'libraries_webdevstudios__cmb2' ] === 'false':
 		case strpos( $file, '_ContextualHelp.php' ) && $config[ 'libraries_kevinlangleyjr__wp-contextual-help' ] === 'false':
 		case strpos( $file, '_PostTypes.php' ) && $config[ 'libraries_johnbillion__extended-cpts' ] === 'false':
