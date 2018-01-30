@@ -1,6 +1,6 @@
 {
   "name": "wpbp/generator",
-  "license": "GPL-2.0",
+  "license": "GPL-2.0-or-later",
   "description": "Generator of Wordpress Plugin Boilerplate Powered",
   "keywords": [
     "wordpress",
