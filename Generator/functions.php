@@ -2,8 +2,11 @@
 
 use LightnCandy\LightnCandy;
 use LightnCandy\Runtime;
-
 use Clio\Style\Style;
+
+$white = new Style();
+$red = new Style();
+$yellow = new Style();
 
 function set_color_scheme() {
 	global $cmd;
@@ -17,19 +20,17 @@ function set_color_scheme() {
 function set_color_scheme_dark() {
 	global $white, $yellow, $red;
 
-	$white = new Style();
 	$white->setTextColor( 'white' )->setBold( true )->setUnderscore();
-	$red = new Style();
 	$red->setTextColor( 'red' )->setBold( true );
-	$yellow = new Style();
 	$yellow->setTextColor( 'yellow' )->setBold( true );
 }
 
 function set_color_scheme_light() {
 	global $white, $yellow, $red;
 
-	$white = new Style();
 	$white->setTextColor( 'black' )->setBold( true )->setUnderscore();
+	$red->setTextColor( 'red' )->setBold( true );
+	$yellow->setTextColor( 'yellow' )->setBold( true );
 }
 
 /**

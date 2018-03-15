@@ -14,7 +14,7 @@ $cmd->setHelp( 'WPBP Generator enable you to get a customized version (based on 
 $cmd->option( 'dark' )->describedAs( 'Use a dark theme for console output.' )->boolean();
 $cmd->option( 'dev' )->describedAs( 'Download from the master branch (the development version).' )->boolean();
 $cmd->option( 'verbose' )->describedAs( 'Verbose output. Because this can be helpful for debugging!' )->boolean();
-$cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the current folder.' )->boolean();
+$cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the current folder. Suggested to use the WordPress plugin folder.' )->boolean();
 $cmd->option( 'no-download' )->describedAs( 'Do you want to execute composer and npm manually? This is your flag!' )->boolean();
 
 set_color_scheme();
