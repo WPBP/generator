@@ -162,7 +162,7 @@ function execute_generator( $config ) {
 		}
 	}
 
-	echo "\n";
+	echo PHP_EOL;
 	$clio->styleLine( 'Generation done, I am superfast! You: (ʘ_ʘ)', $white );
 	execute_composer();
 	git_init();

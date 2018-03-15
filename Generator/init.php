@@ -23,7 +23,7 @@ $cmd->option( 'verbose' )->describedAs( 'Verbose output. Because this can be hel
 $cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the current folder.' )->boolean();
 $cmd->option( 'no-download' )->describedAs( 'Do you want to execute composer and npm manually? This is your flag!' )->boolean();
 $clio->styleLine( "(>'-')> WPBP Code Generator by Mte90", $white );
-echo "\n";
+echo PHP_EOL;
 // Generate the wpbp.json file
 create_wpbp_json();
 // Load the config with defaults
@@ -40,6 +40,6 @@ extract_wpbp();
 // Magic in progress
 execute_generator( $config );
 // Done!
-echo "\n";
+echo PHP_EOL;
 $clio->styleLine( 'Done, I am superfast! You:(ʘ_ʘ)', $white );
 $clio->styleLine( 'Don\'t forget to look on https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/wiki', $white );
