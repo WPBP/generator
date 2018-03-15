@@ -20,9 +20,9 @@ $cmd->option( 'no-download' )->describedAs( 'Do you want to execute composer and
 set_color_scheme();
 $clio->styleLine( "(>'-')> WPBP Code Generator by Mte90", $info );
 if ( $cmd[ 'dark' ] ) {
-	$clio->styleLine( "!! Dark color scheme in use !!", $info );
+	echo "!! Dark color scheme in use !!" . PHP_EOL;
 } else {
-	$clio->styleLine( "!! Light color scheme in use !!", $info );
+	echo "!! Light color scheme in use !!" . PHP_EOL;
 }
 
 echo PHP_EOL;
@@ -34,8 +34,8 @@ $config = parse_config();
 define( 'WPBP_PLUGIN_SLUG', str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) );
 // Check if a folder with that name already exist
 if ( file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
-  $clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $error );
-  die( 0 );
+	$clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $error );
+	die( 0 );
 }
 // Unpack the boilerplate
 extract_wpbp();
