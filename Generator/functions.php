@@ -5,18 +5,16 @@ use LightnCandy\Runtime;
 
 use Clio\Style\Style;
 
-function setTheme() {
+function set_color_scheme() {
 	global $cmd;
+	set_color_scheme_light();
 
 	if ( $cmd[ 'dark' ] ) {
-		setDarkTheme();
-	}
-	else {
-		setLightTheme();
+		set_color_scheme_dark();
 	}
 }
 
-function setDarkTheme() {
+function set_color_scheme_dark() {
 	global $white, $yellow, $red;
 
 	$white = new Style();
@@ -27,15 +25,11 @@ function setDarkTheme() {
 	$yellow->setTextColor( 'yellow' )->setBold( true );
 }
 
-function setLightTheme() {
+function set_color_scheme_light() {
 	global $white, $yellow, $red;
 
 	$white = new Style();
 	$white->setTextColor( 'black' )->setBold( true )->setUnderscore();
-	$red = new Style();
-	$red->setTextColor( 'red' )->setBold( true );
-	$yellow = new Style();
-	$yellow->setTextColor( 'yellow' )->setBold( true );
 }
 
 /**
