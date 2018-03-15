@@ -9,19 +9,17 @@ use Clio\Style\Style;
 
 // Initiate Libraries
 $cmd = new Commando\Command();
-$white = new Style();
-$white->setTextColor( 'white' )->setBold( true )->setUnderscore();
-$red = new Style();
-$red->setTextColor( 'red' )->setBold( true );
-$yellow = new Style();
-$yellow->setTextColor( 'yellow' )->setBold( true );
 $clio = new Clio();
 // Set info on shell for the script
 $cmd->setHelp( 'WPBP Generator enable you to get a customized version (based on your needs) of WordPress Plugin Boilerplate Powered.' );
+$cmd->option( 'dark' )->describedAs( 'Use a dark theme console output.' )->boolean();
 $cmd->option( 'dev' )->describedAs( 'Download from the master branch (the development version).' )->boolean();
 $cmd->option( 'verbose' )->describedAs( 'Verbose output. Because this can be helpful for debugging!' )->boolean();
 $cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the current folder.' )->boolean();
 $cmd->option( 'no-download' )->describedAs( 'Do you want to execute composer and npm manually? This is your flag!' )->boolean();
+
+setTheme();
+
 $clio->styleLine( "(>'-')> WPBP Code Generator by Mte90", $white );
 echo PHP_EOL;
 // Generate the wpbp.json file

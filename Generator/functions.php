@@ -3,6 +3,41 @@
 use LightnCandy\LightnCandy;
 use LightnCandy\Runtime;
 
+use Clio\Style\Style;
+
+function setTheme() {
+	global $cmd;
+
+	if ( $cmd[ 'dark' ] ) {
+		setDarkTheme();
+	}
+	else {
+		setLightTheme();
+	}
+}
+
+function setDarkTheme() {
+	global $white, $yellow, $red;
+
+	$white = new Style();
+	$white->setTextColor( 'white' )->setBold( true )->setUnderscore();
+	$red = new Style();
+	$red->setTextColor( 'red' )->setBold( true );
+	$yellow = new Style();
+	$yellow->setTextColor( 'yellow' )->setBold( true );
+}
+
+function setLightTheme() {
+	global $white, $yellow, $red;
+
+	$white = new Style();
+	$white->setTextColor( 'black' )->setBold( true )->setUnderscore();
+	$red = new Style();
+	$red->setTextColor( 'red' )->setBold( true );
+	$yellow = new Style();
+	$yellow->setTextColor( 'yellow' )->setBold( true );
+}
+
 /**
  * Print the label if the shell is executed as verbose
  *
