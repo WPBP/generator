@@ -10,7 +10,7 @@ use Clio\Style\Style;
 // Initiate Libraries
 $cmd = new Commando\Command();
 $white = new Style();
-$white->setTextColor( 'white' )->setBold( true )->setUnderscore();
+$white->setTextColor( 'blue' )->setBold( true )->setUnderscore();
 $red = new Style();
 $red->setTextColor( 'red' )->setBold( true );
 $yellow = new Style();
