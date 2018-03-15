@@ -4,9 +4,9 @@ use LightnCandy\LightnCandy;
 use LightnCandy\Runtime;
 use Clio\Style\Style;
 
-$white = new Style();
-$red = new Style();
-$yellow = new Style();
+$info = new Style();
+$error = new Style();
+$notice = new Style();
 
 function set_color_scheme() {
 	global $cmd;
@@ -18,19 +18,19 @@ function set_color_scheme() {
 }
 
 function set_color_scheme_dark() {
-	global $white, $yellow, $red;
+	global $info, $notice, $error;
 
-	$white->setTextColor( 'white' )->setBold( true )->setUnderscore();
-	$red->setTextColor( 'red' )->setBold( true );
-	$yellow->setTextColor( 'yellow' )->setBold( true );
+	$info->setTextColor( 'white' )->setBold( true )->setUnderscore();
+	$error->setTextColor( 'red' )->setBold( true );
+	$notice->setTextColor( 'yellow' )->setBold( true );
 }
 
 function set_color_scheme_light() {
-	global $white, $yellow, $red;
+	global $info, $notice, $error;
 
-	$white->setTextColor( 'black' )->setBold( true )->setUnderscore();
-	$red->setTextColor( 'red' )->setBold( true );
-	$yellow->setTextColor( 'yellow' )->setBold( true );
+	$info->setTextColor( 'black' )->setBold( true )->setUnderscore();
+	$error->setTextColor( 'red' )->setBold( true );
+	$notice->setTextColor( 'yellow' )->setBold( true );
 }
 
 /**
@@ -38,14 +38,14 @@ function set_color_scheme_light() {
  *
  * @global object $cmd
  * @global object $clio
- * @global object $yellow
+ * @global object $notice
  * @param  string $label Text.
  */
 function print_v( $label ) {
-	global $cmd, $clio, $yellow;
+	global $cmd, $clio, $notice;
 
 	if ( $cmd[ 'verbose' ] ) {
-		$clio->styleLine( $label, $yellow );
+		$clio->styleLine( $label, $notice );
 	}
 }
 
@@ -54,27 +54,27 @@ function print_v( $label ) {
  *
  * @global object $cmd
  * @global object $clio
- * @global object $red
- * @global object $white
+ * @global object $error
+ * @global object $info
  */
 function create_wpbp_json() {
-	global $cmd, $clio, $red, $white;
+	global $cmd, $clio, $error, $info;
 
 	if ( $cmd[ 'json' ] ) {
 		if ( !copy( dirname( __FILE__ ) . '/wpbp.json', getcwd() . '/wpbp.json' ) ) {
-			$clio->styleLine( 'Failed to copy wpbp.json...', $red );
+			$clio->styleLine( 'Failed to copy wpbp.json...', $error );
 		} else {
-			$clio->styleLine( '😀 wpbp.json generated', $white );
+			$clio->styleLine( '😀 wpbp.json generated', $info );
 			exit();
 		}
 	} else {
 		if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
-			$clio->styleLine( '😡 wpbp.json file missing...', $red );
-			$clio->styleLine( '😉 Generate it with: wpbp-generator --json', $red );
-			$clio->styleLine( 'Forget a hipster Q&A procedure and fill that JSON with your custom configuration!', $red );
-			$clio->styleLine( '  Let\'s do your changes and execute the script again! Use the --dev parameter to use the development version of the boilerplate!', $red );
-			$clio->styleLine( '', $white );
-			$clio->styleLine( 'Help: wpbp-generator --help 😉', $white );
+			$clio->styleLine( '😡 wpbp.json file missing...', $error );
+			$clio->styleLine( '😉 Generate it with: wpbp-generator --json', $error );
+			$clio->styleLine( 'Forget a hipster Q&A procedure and fill that JSON with your custom configuration!', $error );
+			$clio->styleLine( '  Let\'s do your changes and execute the script again! Use the --dev parameter to use the development version of the boilerplate!', $error );
+			$clio->styleLine( '', $info );
+			$clio->styleLine( 'Help: wpbp-generator --help 😉', $info );
 			exit();
 		}
 	}
@@ -85,20 +85,20 @@ function create_wpbp_json() {
  *
  * @global object $cmd
  * @global object $clio
- * @global object $white
+ * @global object $info
  */
 function download_wpbp() {
-	global $cmd, $clio, $white, $red;
+	global $cmd, $clio, $info, $error;
 	$version = WPBP_VERSION;
 
 	if ( $cmd[ 'dev' ] ) {
 		$version = 'master';
 	}
-	$clio->styleLine( '😎 Downloading ' . $version . ' package', $white );
+	$clio->styleLine( '😎 Downloading ' . $version . ' package', $info );
 
 	$download = @file_get_contents( 'http://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/archive/' . $version . '.zip' );
 	if ( $download === false ) {
-		$clio->styleLine( '😡 The ' . $version . ' version is not yet avalaible! Use the --dev parameter!', $red );
+		$clio->styleLine( '😡 The ' . $version . ' version is not yet avalaible! Use the --dev parameter!', $error );
 		die();
 	}
 	file_put_contents( 'plugin.zip', $download );
@@ -111,13 +111,13 @@ function download_wpbp() {
  *
  * @global object $cmd
  * @global object $clio
- * @global object $white
- * @global object $red
+ * @global object $info
+ * @global object $error
  */
 function extract_wpbp() {
-	global $cmd, $clio, $white, $red;
+	global $cmd, $clio, $info, $error;
 	if ( file_exists( getcwd() . '/plugin_temp' ) ) {
-		$clio->styleLine( 'Boilerplate extracted found', $white );
+		$clio->styleLine( 'Boilerplate extracted found', $info );
 		if ( $cmd[ 'dev' ] ) {
 			copy_dir( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
 		} else {
@@ -125,10 +125,10 @@ function extract_wpbp() {
 		}
 	} elseif ( file_exists( getcwd() . '/plugin.zip' ) ) {
 		if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
-			$clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $red );
+			$clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $error );
 			exit();
 		}
-		$clio->styleLine( 'Extract Boilerplate', $white );
+		$clio->styleLine( 'Extract Boilerplate', $info );
 		$zip = new ZipArchive;
 		$res = $zip->open( getcwd() . '/plugin.zip' );
 		if ( $res === true ) {
@@ -147,9 +147,9 @@ function extract_wpbp() {
 					unlink( getcwd() . '/plugin.zip' );
 				}
 			} catch ( Exception $e ) {
-				$clio->styleLine( $e, $red );
+				$clio->styleLine( $e, $error );
 			}
-			$clio->styleLine( 'Boilerplate Extracted', $white );
+			$clio->styleLine( 'Boilerplate Extracted', $info );
 		}
 	} else {
 		// If the package not exist download it
@@ -162,11 +162,11 @@ function extract_wpbp() {
  *
  * @global object $cmd
  * @global object $clio
- * @global object $white
+ * @global object $info
  * @param  array $config The config of the request.
  */
 function execute_generator( $config ) {
-	global $cmd, $clio, $white;
+	global $cmd, $clio, $info;
 	$files = get_files();
 	foreach ( $files as $file ) {
 		$file_content = file_get_contents( $file );
@@ -193,7 +193,7 @@ function execute_generator( $config ) {
 	}
 
 	echo PHP_EOL;
-	$clio->styleLine( 'Generation done, I am superfast! You: (ʘ_ʘ)', $white );
+	$clio->styleLine( 'Generation done, I am superfast! You: (ʘ_ʘ)', $info );
 	execute_composer();
 	git_init();
 	grunt();
@@ -203,15 +203,15 @@ function execute_generator( $config ) {
  * Load user wpbp.json and add the terms missing as false
  *
  * @global object $clio
- * @global object $red
+ * @global object $error
  * @return array
  */
 function parse_config() {
-	global $clio, $red;
+	global $clio, $error;
 	$config = json_decode( file_get_contents( getcwd() . '/wpbp.json' ), true );
 	// Detect a misleading json file
 	if ( json_last_error() !== JSON_ERROR_NONE ) {
-		$clio->styleLine( '😡 Your JSON is broken!', $red );
+		$clio->styleLine( '😡 Your JSON is broken!', $error );
 		exit;
 	}
 	$config = array_to_var( $config );
@@ -271,25 +271,25 @@ function array_to_var( $array ) {
  *
  * @global array $config
  * @global object $clio
- * @global object $red
- * @global object $white
+ * @global object $error
+ * @global object $info
  * @param  string $path Where scan.
  * @return array
  */
 function get_files( $path = null ) {
-	global $config, $clio, $red, $white;
+	global $config, $clio, $error, $info;
 	if ( $path === null ) {
 		$path = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG;
 	}
 	$files = $list = array();
-	$clio->styleLine( 'Rename in progress', $white );
+	$clio->styleLine( 'Rename in progress', $info );
 	$dir_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
 	$iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
 
 	if ( !empty( $config[ 'phpcs-standard' ] ) ) {
 		$codeat = file_get_contents( $config[ 'phpcs-standard' ] );
 		file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/phpcs.xml', $codeat );
-		$clio->styleLine( '😎 PHPCS Standard downloaded', $white );
+		$clio->styleLine( '😎 PHPCS Standard downloaded', $info );
 	}
 	// Move in array with only paths
 	foreach ( $iterator as $file => $object ) {
@@ -311,7 +311,7 @@ function get_files( $path = null ) {
 				try {
 					rename( $file, $newname );
 				} catch ( Exception $e ) {
-					$clio->styleLine( $e, $red );
+					$clio->styleLine( $e, $error );
 				}
 				$files[] = $newname;
 				print_v( 'Renamed ' . $file . ' to ' . $newname );
@@ -356,10 +356,10 @@ function replace_content_names( $config, $content ) {
  *
  * @global array $config
  * @global object $clio
- * @global object $white
+ * @global object $info
  */
 function execute_composer() {
-	global $config, $cmd, $clio, $white;
+	global $config, $cmd, $clio, $info;
 	$composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json' ), true );
 	foreach ( $config as $key => $value ) {
 		if ( strpos( $key, 'libraries_' ) !== false ) {
@@ -396,11 +396,11 @@ function execute_composer() {
 	}
 	if ( $config[ 'grumphp' ] === 'false' ) {
 		unset( $composer[ 'require-dev' ][ 'phpro/grumphp' ] );
-		$clio->styleLine( '😎 Remove GrumPHP done', $white );
+		$clio->styleLine( '😎 Remove GrumPHP done', $info );
 	}
 	if ( $config[ 'unit-test' ] === 'false' ) {
 		unset( $composer[ 'require-dev' ][ 'lucatume/wp-browser' ] );
-		$clio->styleLine( '😎 Remove Codeception done', $white );
+		$clio->styleLine( '😎 Remove Codeception done', $info );
 	}
 	if ( count( $composer[ 'require-dev' ] ) === 0 ) {
 		unset( $composer[ 'require-dev' ] );
@@ -410,14 +410,14 @@ function execute_composer() {
 	}
 	file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
 	if ( !$cmd[ 'no-download' ] ) {
-		$clio->styleLine( '😀 Composer install in progress (can require few minutes)', $white );
+		$clio->styleLine( '😀 Composer install in progress (can require few minutes)', $info );
 		$output = '';
 		$composer_cmd = 'composer update';
 		if ( !$cmd[ 'verbose' ] ) {
 			$composer_cmd .= ' 2>&1';
 		}
 		exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; ' . $composer_cmd, $output );
-		$clio->styleLine( '😎 Composer install done', $white );
+		$clio->styleLine( '😎 Composer install done', $info );
 	}
 }
 
@@ -471,17 +471,17 @@ function remove_composer_repositories( $composer, $searchpath ) {
  * 
  * @global array $config
  * @global object $clio
- * @global object $white
+ * @global object $info
  */
 function git_init() {
-	global $config, $clio, $white;
+	global $config, $clio, $info;
 
 	if ( $config[ 'git-repo' ] === 'true' ) {
 		exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; git init' );
-		$clio->styleLine( '😎 .git folder generated', $white );
+		$clio->styleLine( '😎 .git folder generated', $info );
 		$gitignore = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore';
 		file_put_contents( $gitignore, str_replace( '/plugin-name/', '', file_get_contents( $gitignore ) ) );
-		$clio->styleLine( '😎 .gitignore file generated', $white );
+		$clio->styleLine( '😎 .gitignore file generated', $info );
 	} else {
 		unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore' );
 	}
@@ -492,10 +492,10 @@ function git_init() {
  *
  * @global array $config
  * @global object $clio
- * @global object $white
+ * @global object $info
  */
 function grunt() {
-	global $config, $cmd, $clio, $white;
+	global $config, $cmd, $clio, $info;
 
 	if ( $config[ 'grunt' ] === 'true' ) {
 		if ( $config[ 'coffeescript' ] === 'false' ) {
@@ -523,18 +523,18 @@ function grunt() {
 				}
 			}
 			file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js', $newgrunt );
-			$clio->styleLine( '😀 Coffeescript removed', $white );
+			$clio->styleLine( '😀 Coffeescript removed', $info );
 		}
 		if ( !$cmd[ 'no-download' ] ) {
-			$clio->styleLine( '😀 Grunt install in progress', $white );
+			$clio->styleLine( '😀 Grunt install in progress', $info );
 			$output = '';
 			exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; npm install 2>&1', $output );
-			$clio->styleLine( '😎 Grunt install done', $white );
+			$clio->styleLine( '😎 Grunt install done', $info );
 		}
 	} else {
 		unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
 		unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
-		$clio->styleLine( '😀 Grunt removed', $white );
+		$clio->styleLine( '😀 Grunt removed', $info );
 	}
 }
 

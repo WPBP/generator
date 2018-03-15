@@ -18,11 +18,11 @@ $cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the current f
 $cmd->option( 'no-download' )->describedAs( 'Do you want to execute composer and npm manually? This is your flag!' )->boolean();
 
 set_color_scheme();
-$clio->styleLine( "(>'-')> WPBP Code Generator by Mte90", $white );
+$clio->styleLine( "(>'-')> WPBP Code Generator by Mte90", $info );
 if ( $cmd[ 'dark' ] ) {
-	$clio->styleLine( "!! Dark color scheme in use !!", $white );
+	$clio->styleLine( "!! Dark color scheme in use !!", $info );
 } else {
-	$clio->styleLine( "!! Light color scheme in use !!", $white );
+	$clio->styleLine( "!! Light color scheme in use !!", $info );
 }
 
 echo PHP_EOL;
@@ -34,7 +34,7 @@ $config = parse_config();
 define( 'WPBP_PLUGIN_SLUG', str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) );
 // Check if a folder with that name already exist
 if ( file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
-  $clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $red );
+  $clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $error );
   die( 0 );
 }
 // Unpack the boilerplate
@@ -43,5 +43,5 @@ extract_wpbp();
 execute_generator( $config );
 // Done!
 echo PHP_EOL;
-$clio->styleLine( 'Done, I am superfast! You:(ʘ_ʘ)', $white );
-$clio->styleLine( 'Don\'t forget to look on https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/wiki', $white );
+$clio->styleLine( 'Done, I am superfast! You:(ʘ_ʘ)', $info );
+$clio->styleLine( 'Don\'t forget to look on https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/wiki', $info );
