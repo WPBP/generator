@@ -43,5 +43,6 @@ extract_wpbp();
 execute_generator( $config );
 // Done!
 echo PHP_EOL;
-$clio->styleLine( 'Done, I am superfast! You:(ʘ_ʘ)', $info );
+$clio->styleLine( 'Done, I am superfast!', $info );
 $clio->styleLine( 'Don\'t forget to look on https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/wiki', $info );
+$clio->styleLine( 'Love WordPress-Plugin-Boilerplate-Powered? Please consider supporting our collective:👉 https://opencollective.com/WordPress-Plugin-Boilerplate-Powered/donate', $info );
