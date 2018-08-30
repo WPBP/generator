@@ -19,13 +19,14 @@ if ( !$found ) {
   );
 }
 
-if ( !'which npm' ) {
+// Backtick operator is used to execute the command and get the result: http://php.net/manual/en/language.operators.execution.php
+if ( !`which npm` ) {
   die(
 	    'You need to install NPM!' . PHP_EOL
   );
 }
 
-if ( !'which git' ) {
+if ( !`which git` ) {
   die(
 	    'You need to install Git!' . PHP_EOL
   );
