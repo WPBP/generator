@@ -19,13 +19,13 @@ if ( !$found ) {
   );
 }
 
-if ( !'which npm' ) {
+if ( !`which npm` ) {
   die(
 	    'You need to install NPM!' . PHP_EOL
   );
 }
 
-if ( !'which git' ) {
+if ( !`which git` ) {
   die(
 	    'You need to install Git!' . PHP_EOL
   );
