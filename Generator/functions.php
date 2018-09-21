@@ -112,9 +112,9 @@ function extract_wpbp() {
                 try {
                     rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
                     rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/.gitignore', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore' );
-                    rmrdir( getcwd() . '/plugin_temp/' );
+                    remove_file_folder( getcwd() . '/plugin_temp/' );
                     if ( !$cmd[ 'dev' ] ) {
-                        unlink( getcwd() . '/plugin.zip' );
+                        remove_file_folder( getcwd() . '/plugin.zip' );
                     }
                 } catch ( Exception $e ) {
                     $clio->styleLine( $e, $error );
