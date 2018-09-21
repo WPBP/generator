@@ -12,3 +12,4 @@ dist/
 nbdist/
 nbactions.xml
 .nb-gradle/
+.padawan
