@@ -1,54 +1,5 @@
 <?php
 
-use LightnCandy\LightnCandy;
-use LightnCandy\Runtime;
-use Clio\Style\Style;
-
-$info = new Style();
-$error = new Style();
-$notice = new Style();
-
-function set_color_scheme() {
-	global $cmd;
-	set_color_scheme_light();
-
-	if ( $cmd[ 'dark' ] ) {
-		set_color_scheme_dark();
-	}
-}
-
-function set_color_scheme_dark() {
-	global $info, $notice, $error;
-
-	$info->setTextColor( 'white' )->setBold( true )->setUnderscore();
-	$error->setTextColor( 'red' )->setBold( true );
-	$notice->setTextColor( 'yellow' )->setBold( true );
-}
-
-function set_color_scheme_light() {
-    global $info, $notice, $error;
-
-    $info->setTextColor( 'black' )->setBold( true )->setUnderscore();
-    $error->setTextColor( 'red' )->setBold( true );
-    $notice->setTextColor( 'yellow' )->setBold( true );
-}
-
-/**
- * Print the label if the shell is executed as verbose
- *
- * @global object $cmd
- * @global object $clio
- * @global object $notice
- * @param  string $label Text.
- */
-function print_v( $label ) {
-    global $cmd, $clio, $notice;
-
-    if ( $cmd[ 'verbose' ] ) {
-        $clio->styleLine( $label, $notice );
-    }
-}
-
 /**
  * Generate a new wpbp.json in the folder
  *
@@ -108,6 +59,26 @@ function download_wpbp() {
     extract_wpbp();
 }
 
+/*
+ * If temporary folder exist rename it or copy to the folder to process
+ *
+  @return boolean
+ */
+function plugin_temp_exist() {
+    global $cmd, $clio, $info;
+    if ( file_exists( getcwd() . '/plugin_temp' ) ) {
+        $clio->styleLine( 'Boilerplate extracted found', $info );
+        if ( $cmd[ 'dev' ] ) {
+            copy_dir( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
+        } else {
+            rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
+        }
+        return true;
+    }
+
+    return;
+}
+
 /**
  * Extract the boilerplate
  *
@@ -118,47 +89,43 @@ function download_wpbp() {
  */
 function extract_wpbp() {
     global $cmd, $clio, $info, $error;
-    if ( file_exists( getcwd() . '/plugin_temp' ) ) {
-        $clio->styleLine( 'Boilerplate extracted found', $info );
-        if ( $cmd[ 'dev' ] ) {
-            copy_dir( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
-        } else {
-            rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
-        }
-    } elseif ( file_exists( getcwd() . '/plugin.zip' ) ) {
-        if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
-            $clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $error );
-            exit();
-        }
-
-        $clio->styleLine( 'Extract Boilerplate', $info );
-        $zip = new ZipArchive;
-        $res = $zip->open( getcwd() . '/plugin.zip' );
-        if ( $res === true ) {
-            $zip->extractTo( getcwd() . '/plugin_temp/' );
-            $zip->close();
-            $version = WPBP_VERSION;
-
-            if ( $cmd[ 'dev' ] ) {
-                $version = 'master';
+    if ( ! plugin_temp_exist() ) {
+        if ( file_exists( getcwd() . '/plugin.zip' ) ) {
+            if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
+                $clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $error );
+                exit();
             }
 
-            try {
-                rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
-                rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/.gitignore', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore' );
-                rmrdir( getcwd() . '/plugin_temp/' );
-                if ( !$cmd[ 'dev' ] ) {
-                    unlink( getcwd() . '/plugin.zip' );
+            $clio->styleLine( 'Extract Boilerplate', $info );
+            $zip = new ZipArchive;
+            $res = $zip->open( getcwd() . '/plugin.zip' );
+            if ( $res === true ) {
+                $zip->extractTo( getcwd() . '/plugin_temp/' );
+                $zip->close();
+                $version = WPBP_VERSION;
+
+                if ( $cmd[ 'dev' ] ) {
+                    $version = 'master';
                 }
-            } catch ( Exception $e ) {
-                $clio->styleLine( $e, $error );
-            }
 
-            $clio->styleLine( 'Boilerplate Extracted', $info );
-        }
-    } else {
-        // If the package not exist download it
-        download_wpbp();
+                try {
+                    rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
+                    rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/.gitignore', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore' );
+                    rmrdir( getcwd() . '/plugin_temp/' );
+                    if ( !$cmd[ 'dev' ] ) {
+                        unlink( getcwd() . '/plugin.zip' );
+                    }
+                } catch ( Exception $e ) {
+                    $clio->styleLine( $e, $error );
+                }
+
+                $clio->styleLine( 'Boilerplate Extracted', $info );
+            }
+            
+            return;
+        } 
+    // If the package not exist download it
+    download_wpbp();
     }
 }
 
@@ -235,46 +202,40 @@ function parse_config() {
 }
 
 /**
- * LightnCandy require an array bidimensional "key" = true, so we need to convert a multidimensional in bidimensional
- *
- * @param  array $array The config to parse.
- * @return array
+ * Download the phpcs file
  */
-function array_to_var( $array ) {
-    $newarray = array();
-    // Get the json
-    foreach ( $array as $key => $subarray ) {
-        // Check if an array
-        if ( is_array( $subarray ) ) {
-            foreach ( $subarray as $subkey => $subvalue ) {
-                // Again it's an array with another inside
-                if ( is_array( $subvalue ) ) {
-                    foreach ( $subvalue as $subsubkey => $subsubvalue ) {
-                        if ( !is_nan( $subsubkey ) ) {
-                            // If empty lightcandy takes as true
-                            $newarray[ $subkey . '_' . strtolower( str_replace( '/', '__', $subsubvalue ) ) ] = '';
-                        }
-                    }
-                } else {
-                    if ( !is_numeric( $subkey ) ) {
-                        $newarray[ $key . '_' . strtolower( $subkey ) ] = $subvalue;
-                    } else {
-                        $newarray[ $key . '_' . strtolower( str_replace( '/', '__', $subvalue ) ) ] = '';
-                    }
-                }
+function download_phpcs_standard() {
+    global $config, $clio, $info;
+    if ( !empty( $config[ 'phpcs-standard' ] ) ) {
+        $codeat = file_get_contents( $config[ 'phpcs-standard' ] );
+        file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/phpcs.xml', $codeat );
+        $clio->styleLine( '😎 PHPCS Standard downloaded', $info );
+    }
+}
+
+/**
+ * Rename the files based on a pattern name
+ */
+function rename_by_specific_names( $file ) {
+    global $config, $clio, $error;
+    if ( ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) || strpos( $file, '.pot' ) || strpos( $file, '.yml' ) || strpos( $file, 'gitignore' ) ) ) {
+        $pathparts = pathinfo( $file );
+        $newname   = replace_content_names( $config, $pathparts[ 'filename' ] );
+        $newname   = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
+        print_v( 'Ready to rename ' . $file );
+        if ( $newname !== $file ) {
+            try {
+                rename( $file, $newname );
+            } catch ( Exception $e ) {
+                $clio->styleLine( $e, $error );
             }
+
+            $files[] = $newname;
+            print_v( 'Renamed ' . $file . ' to ' . $newname );
         } else {
-            // Is a single key
-            $newarray[ $key ] = $subarray;
-            if ( $subarray === 'true' ) {
-                $newarray[ $key ] = 'true';
-            } elseif ( $subarray === 'false' ) {
-                $newarray[ $key ] = 'false';
-            }
+            $files[] = $file;
         }
     }
-
-    return $newarray;
 }
 
 /**
@@ -288,7 +249,7 @@ function array_to_var( $array ) {
  * @return array
  */
 function get_files( $path = null ) {
-    global $config, $clio, $error, $info;
+    global $clio, $info;
     if ( $path === null ) {
         $path = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG;
     }
@@ -298,11 +259,7 @@ function get_files( $path = null ) {
     $dir_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
     $iterator     = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
 
-    if ( !empty( $config[ 'phpcs-standard' ] ) ) {
-        $codeat = file_get_contents( $config[ 'phpcs-standard' ] );
-        file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/phpcs.xml', $codeat );
-        $clio->styleLine( '😎 PHPCS Standard downloaded', $info );
-    }
+    download_phpcs_standard();
 
     // Move in array with only paths
     foreach ( $iterator as $file => $object ) {
@@ -318,24 +275,7 @@ function get_files( $path = null ) {
             continue;
         }
 
-        if ( ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) || strpos( $file, '.pot' ) || strpos( $file, '.yml' ) || strpos( $file, 'gitignore' ) ) ) {
-            $pathparts = pathinfo( $file );
-            $newname   = replace_content_names( $config, $pathparts[ 'filename' ] );
-            $newname   = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
-            print_v( 'Ready to rename ' . $file );
-            if ( $newname !== $file ) {
-                try {
-                    rename( $file, $newname );
-                } catch ( Exception $e ) {
-                    $clio->styleLine( $e, $error );
-                }
-
-                $files[] = $newname;
-                print_v( 'Renamed ' . $file . ' to ' . $newname );
-            } else {
-                $files[] = $file;
-            }
-        }
+        rename_by_specific_names( $file );
     }
 
     return $files;
@@ -388,23 +328,9 @@ function execute_composer() {
                     unset( $composer[ 'require' ][ $package ] );
                 }
 
-                if ( strpos( $package, 'webdevstudios/cmb2' ) !== false ) {
-                    $composer = remove_composer_autoload( $composer, 'cmb2/' );
-                    $composer = remove_composer_repositories( $composer, 'wpackagist' );
-                }
-
-                if ( strpos( $package, 'origgami/cmb2-grid' ) !== false ) {
-                    $composer = remove_composer_autoload( $composer, 'cmb2-grid' );
-                    $composer = remove_composer_repositories( $composer, 'cmb2-grid' );
-                }
-
-                if ( strpos( $package, 'rubengc/cmb2-tabs' ) !== false ) {
-                    $composer = remove_composer_autoload( $composer, 'cmb2-tabs' );
-                    $composer = remove_composer_repositories( $composer, 'cmb2-tabs' );
-                }
-
-                if ( strpos( $package, 'johnbillion/extended-cpts' ) !== false ) {
-                    $composer = remove_composer_autoload( $composer, 'extended-cpts' );
+                if ( strpos( $package, 'wp-contextual-help' ) !== false ) {
+                    $composer = remove_composer_autoload( $composer, 'wp-contextual-help' );
+                    $composer = remove_composer_repositories( $composer, 'wp-contextual-help' );
                 }
 
                 if ( strpos( $package, 'wp-admin-notice' ) !== false ) {
@@ -620,54 +546,10 @@ function remove_file( $file ) {
         case strpos( $file, 'languages' ) && $config[ 'language-files' ] === 'false':
         case strpos( $file, '_WPCli.php' ) && $config[ 'wpcli' ] === 'false':
         case strpos( $file, 'grumphp.yml' ) && $config[ 'grumphp' ] === 'false':
-            if ( file_exists( $file ) ) {
-                if ( is_dir( $file ) ) {
-                    rmrdir( $file );
-                } else {
-                    unlink( $file );
-                }
-            }
-
-            $return = true;
+            $return = remove_file_folder($file);
             break;
     }
 
     return $return;
-}
-
-/**
- * Copy the directory
- *
- * @param string $source Path of origin.
- * @param string $dest   Path of destination.
- *
- * @return boolean
- */
-function copy_dir( $source, $dest ) {
-    // Simple copy for a file
-    if ( is_file( $source ) ) {
-        return copy( $source, $dest );
-    }
-
-    // Make destination directory
-    if ( !is_dir( $dest ) ) {
-        mkdir( $dest );
-    }
-
-    // Loop through the folder
-    $dir = dir( $source );
-    while ( false !== $entry = $dir->read() ) {
-        // Skip pointers
-        if ( $entry === '.' || $entry === '..' ) {
-            continue;
-        }
-
-        // Deep copy directories
-        copy_dir( "$source/$entry", "$dest/$entry" );
-    }
-
-    // Clean up
-    $dir->close();
-    return true;
 }
 
