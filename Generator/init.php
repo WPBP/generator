@@ -2,6 +2,9 @@
 
 define( 'WPBP_VERSION', '2.3' );
 require_once(dirname( __FILE__ ) . '/miscellaneous.php');
+require_once(dirname( __FILE__ ) . '/composer.php');
+require_once(dirname( __FILE__ ) . '/tools.php');
+require_once(dirname( __FILE__ ) . '/rename.php');
 require_once(dirname( __FILE__ ) . '/functions.php');
 
 // Load libraries

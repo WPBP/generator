@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * The functions used internally
+ */
+
 use LightnCandy\LightnCandy;
 use LightnCandy\Runtime;
 use Clio\Style\Style;
