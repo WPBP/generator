@@ -73,6 +73,7 @@ function plugin_temp_exist() {
         } else {
             rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
         }
+
         return true;
     }
 
@@ -121,11 +122,12 @@ function extract_wpbp() {
 
                 $clio->styleLine( 'Boilerplate Extracted', $info );
             }
-            
+
             return;
-        } 
-    // If the package not exist download it
-    download_wpbp();
+        }
+
+		// If the package not exist download it
+		download_wpbp();
     }
 }
 
@@ -144,16 +146,18 @@ function execute_generator( $config ) {
         $file_content = file_get_contents( $file );
         if ( $cmd[ 'dev' ] ) {
             print_v( 'Parsing ' . $file );
-            $lc = LightnCandy::compile( $file_content, array(
-                'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_ERROR_EXCEPTION | LightnCandy::FLAG_RENDER_DEBUG
+            $lc         = LightnCandy::compile(
+                 $file_content,
+                array(
+                'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_ERROR_EXCEPTION | LightnCandy::FLAG_RENDER_DEBUG,
             )
-        );
+			);
             $lc_prepare = LightnCandy::prepare( $lc );
-            $newfile = $lc_prepare( $config, array( 'debug' => Runtime::DEBUG_ERROR_EXCEPTION | Runtime::DEBUG_ERROR_LOG ) );
+            $newfile    = $lc_prepare( $config, array( 'debug' => Runtime::DEBUG_ERROR_EXCEPTION | Runtime::DEBUG_ERROR_LOG ) );
         } else {
-            $lc = LightnCandy::compile( $file_content );
+            $lc         = LightnCandy::compile( $file_content );
             $lc_prepare = LightnCandy::prepare( $lc );
-            $newfile = $lc_prepare( $config );
+            $newfile    = $lc_prepare( $config );
         }
 
         if ( strpos( $file, '.gitignore' ) ) {
@@ -190,7 +194,7 @@ function parse_config() {
         exit;
     }
 
-    $config = array_to_var( $config );
+    $config         = array_to_var( $config );
     $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true ) );
     foreach ( $config_default as $key => $value ) {
         if ( !isset( $config[ $key ] ) ) {
@@ -316,31 +320,10 @@ function replace_content_names( $config, $content ) {
  * @global object $clio
  * @global object $info
  */
-function execute_composer() {
+function clean_composer_file() {
     global $config, $cmd, $clio, $info;
     $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json' ), true );
-    foreach ( $config as $key => $value ) {
-        if ( strpos( $key, 'libraries_' ) !== false ) {
-            if ( $value === 'false' ) {
-                $package = str_replace( 'libraries_', '', $key );
-                $package = str_replace( '__', '/', $package );
-                if ( isset( $composer[ 'require' ][ $package ] ) ) {
-                    unset( $composer[ 'require' ][ $package ] );
-                }
-
-                if ( strpos( $package, 'wp-contextual-help' ) !== false ) {
-                    $composer = remove_composer_autoload( $composer, 'wp-contextual-help' );
-                    $composer = remove_composer_repositories( $composer, 'wp-contextual-help' );
-                }
-
-                if ( strpos( $package, 'wp-admin-notice' ) !== false ) {
-                    $composer = remove_composer_repositories( $composer, 'wordpress-admin-notice' );
-                }
-
-                print_v( 'Package ' . $package . ' removed!' );
-            }
-        }
-    }
+    $composer = remove_composer_packages( $composer );
 
     if ( $config[ 'grumphp' ] === 'false' ) {
         unset( $composer[ 'require-dev' ][ 'phpro/grumphp' ] );
@@ -361,9 +344,66 @@ function execute_composer() {
     }
 
     file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
+}
+
+/**
+ * Remove composer packages that require additional stuff
+ *
+ * @param string $package The package to parse_config.
+ * @param string $composer The composer.json content.
+ * @return array
+ */
+function remove_specific_composer_respositories( $package, $composer ) {
+    if ( strpos( $package, 'wp-contextual-help' ) !== false ) {
+        $composer = remove_composer_autoload( $composer, 'wp-contextual-help' );
+        $composer = remove_composer_repositories( $composer, 'wp-contextual-help' );
+    }
+
+    if ( strpos( $package, 'wp-admin-notice' ) !== false ) {
+        $composer = remove_composer_repositories( $composer, 'wordpress-admin-notice' );
+    }
+
+    return $composer;
+}
+
+/**
+ * Remove composer packages
+ *
+ * @param string $composer The composer.json content.
+ * @return array
+ */
+function remove_composer_packages( $composer ) {
+    global $config;
+    foreach ( $config as $key => $value ) {
+        if ( strpos( $key, 'libraries_' ) !== false ) {
+            if ( $value === 'false' ) {
+                $package = str_replace( 'libraries_', '', $key );
+                $package = str_replace( '__', '/', $package );
+                if ( isset( $composer[ 'require' ][ $package ] ) ) {
+                    unset( $composer[ 'require' ][ $package ] );
+                }
+
+                $composer = remove_specific_composer_respositories( $package, $composer );
+
+                print_v( 'Package ' . $package . ' removed!' );
+            }
+        }
+    }
+
+    return $composer;
+}
+
+/**
+ * Remove composer packages that require additional stuff
+ *
+ * @return void
+ */
+function execute_composer() {
+    global $cmd, $clio, $info;
+    clean_composer_file();
     if ( !$cmd[ 'no-download' ] ) {
         $clio->styleLine( '😀 Composer install in progress (can require few minutes)', $info );
-        $output = '';
+        $output       = '';
         $composer_cmd = 'composer update';
         if ( !$cmd[ 'verbose' ] ) {
             $composer_cmd .= ' 2>&1';
@@ -377,8 +417,8 @@ function execute_composer() {
 /**
  * Remove the path from autoload
  *
- * @param array  $composer
- * @param string $searchpath
+ * @param array  $composer The composer.json content.
+ * @param string $searchpath The path where search.
  * @return array
  */
 function remove_composer_autoload( $composer, $searchpath ) {
@@ -400,8 +440,8 @@ function remove_composer_autoload( $composer, $searchpath ) {
 /**
  * Remove the url from repositories
  *
- * @param array  $composer
- * @param string $searchpath
+ * @param array  $composer The composer.json content.
+ * @param string $searchpath The path where search.
  * @return array
  */
 function remove_composer_repositories( $composer, $searchpath ) {
@@ -464,7 +504,7 @@ function grunt() {
                 rmrdir( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
             }
 
-            $package = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
+            $package    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
             $newpackage = array();
             foreach ( $package as $line => $content ) {
                 if ( strpos( $content, 'coffee' ) ) {
@@ -475,7 +515,7 @@ function grunt() {
             }
 
             file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
-            $grunt = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
+            $grunt    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
             $newgrunt = array();
             foreach ( $grunt as $line => $content ) {
                 if ( !( ( $line >= 45 && $line <= 86 ) || $line === 92 || $line === 93 || $line === 97 || $line === 105 || $line === 109 ) ) {
@@ -514,7 +554,7 @@ function remove_file( $file ) {
     switch ( $file ) {
         case strpos( $file, '_ActDeact.php' ) && $config[ 'act-deact_actdeact' ] === 'false':
         case strpos( $file, '_ImpExp.php' ) && $config[ 'backend_impexp-settings' ] === 'false':
-            case strpos( $file, '_Uninstall.php' ) && $config[ 'act-deact_uninstall' ] === 'false'
+        case strpos( $file, '_Uninstall.php' ) && $config[ 'act-deact_uninstall' ] === 'false':
         case strpos( $file, '_FakePage.php' ) && $config[ 'libraries_wpbp__fakepage' ] === 'false':
         case strpos( $file, '_Pointers.php' ) && $config[ 'libraries_wpbp__pointerplus' ] === 'false':
         case strpos( $file, '_template.php' ) && $config[ 'libraries_wpbp__template' ] === 'false':
@@ -546,7 +586,7 @@ function remove_file( $file ) {
         case strpos( $file, 'languages' ) && $config[ 'language-files' ] === 'false':
         case strpos( $file, '_WPCli.php' ) && $config[ 'wpcli' ] === 'false':
         case strpos( $file, 'grumphp.yml' ) && $config[ 'grumphp' ] === 'false':
-            $return = remove_file_folder($file);
+            $return = remove_file_folder( $file );
             break;
     }
 
