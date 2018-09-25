@@ -29,7 +29,7 @@ function clean_empty_folder() {
     $iterator     = iterator_to_array( new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST ) );
 
     foreach ( $iterator as $file => $object ) {
-        if ( is_dir($file) ) {
+        if ( is_dir( $file ) ) {
             $files = count_files( $file );
             if ( $files === 1 ) {
                 remove_file_folder( $file );
@@ -40,26 +40,24 @@ function clean_empty_folder() {
     }
 }
 
-
-
 function count_files($path) {
     // (Ensure that the path contains an ending slash)
     $file_count = 0;
-    $dir_handle = opendir($path);
+    $dir_handle = opendir( $path );
  
-    if (!$dir_handle) return -1;
+    if ( !$dir_handle ) return -1;
  
-    while ($file = readdir($dir_handle)) {
+    while ($file = readdir( $dir_handle )) {
         if ($file == '.' || $file == '..') continue;
  
-        if (is_dir($path . $file)){      
+        if ( is_dir( $path . $file ) ){      
             $file_count += count_files($path . $file . DIRECTORY_SEPARATOR);
         } else {
             $file_count++; // increase file count
         }
     }
  
-    closedir($dir_handle);
+    closedir( $dir_handle );
     return $file_count;
 }
 
