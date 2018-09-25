@@ -10,10 +10,15 @@ require_once(dirname( __FILE__ ) . '/wpbp.php');
 
 // Load libraries
 use Clio\Clio;
+use Clio\Style\Style;
 
 // Initiate Libraries
 $cmd = new Commando\Command();
 $clio = new Clio();
+$info   = new Style();
+$error  = new Style();
+$notice = new Style();
+
 // Set info on shell for the script
 $cmd->setHelp( 'WPBP Generator enable you to get a customized version (based on your needs) of WordPress Plugin Boilerplate Powered.' );
 $cmd->option( 'dark' )->describedAs( 'Use a dark theme for console output.' )->boolean();

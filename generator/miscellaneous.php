@@ -4,14 +4,6 @@
  * The functions used internally
  */
 
-use LightnCandy\LightnCandy;
-use LightnCandy\Runtime;
-use Clio\Style\Style;
-
-$info   = new Style();
-$error  = new Style();
-$notice = new Style();
-
 function set_color_scheme() {
     global $cmd;
     set_color_scheme_light();

@@ -1,6 +1,12 @@
 <?php
 
 /**
+ * The functions used to run the generator
+ */
+ 
+use LightnCandy\LightnCandy;
+use LightnCandy\Runtime;
+/**
  * Generate a new wpbp.json in the folder
  *
  * @global object $cmd
@@ -122,6 +128,10 @@ function execute_generator( $config ) {
     global $cmd, $clio, $info;
     $files = get_files();
     foreach ( $files as $file ) {
+        if ( empty( $file ) || strpos( $file, 'index.php' ) ) {
+            continue;
+        }
+        
         $file_content = file_get_contents( $file );
         if ( $cmd[ 'dev' ] ) {
             print_v( 'Parsing ' . $file );
@@ -145,7 +155,6 @@ function execute_generator( $config ) {
 
         $newfile = replace_content_names( $config, $newfile );
         if ( $newfile !== $file_content ) {
-            print_v( 'Parsed ' . $file );
             file_put_contents( $file, $newfile );
         }
     }

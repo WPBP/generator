@@ -83,11 +83,17 @@ function rename_by_specific_names( $file ) {
  */
 function replace_content_names( $config, $content, $ext = '' ) {
     if ( ! empty( $content ) && $content !== 'index' ) {
-        print_v( 'Replace placeholders for ' . $content . $ext );
+        if ( ! empty( $ext ) ) {
+            print_v( 'Replace placeholders for ' . $content . $ext );
+        }
         $ucword  = '';
         $lower   = '';
         $content = str_replace( '// WPBPGen', '', $content );
+        $content = str_replace( '//WPBPGen', '', $content );
+        $content = str_replace( '// {{/', '{{/', $content );
+        $content = str_replace( '//{{/', '{{/', $content );
         $content = str_replace( "//\n", '', $content );
+        $content = str_replace( "// \n", '', $content );
         $content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
         $content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
         $content = str_replace( 'plugin_name', str_replace( ' ', '_', str_replace( '-', '_', WPBP_PLUGIN_SLUG ) ), $content );

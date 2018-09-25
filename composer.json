@@ -18,7 +18,7 @@
   ],
   "require": {
     "php": ">=5.5",
-    "zordius/lightncandy": "1.2.x",
+    "zordius/lightncandy": "1.2.2",
     "nategood/commando": "0.2.9",
     "1HappyPlace/clio": "1.1.x",
     "perchten/rmrdir": "1.*"
