@@ -156,33 +156,22 @@ function parse_conditional_template( $file, $config, $file_content, $stop = fals
     global $cmd;
     if ( $cmd[ 'dev' ] ) {
         print_v( 'Parsing ' . $file );
-        try {
-            $lc         = LightnCandy::compile(
-                    $file_content,
-                    array(
-                        'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_ERROR_EXCEPTION | LightnCandy::FLAG_RENDER_DEBUG,
-                    )
-            );
-            $lc_prepare = LightnCandy::prepare( $lc );
-            $file_content    = $lc_prepare( $config, array( 'debug' => Runtime::DEBUG_ERROR_EXCEPTION | Runtime::DEBUG_ERROR_LOG ) );
-        } catch ( Exception $e ) {
-            if ( !$stop ) {
-                print_v( 'Issues with ' . $file );
-                $file_content    = str_replace( '{{author_name}}', $config[ 'author_name' ], $file_content );
-                $file_content    = str_replace( '{{author_email}}', $config[ 'author_email' ], $file_content );
-                $file_content    = str_replace( '{{author_copyright}}', $config[ 'author_copyright' ], $file_content );
-                $file_content    = str_replace( '{{author_license}}', $config[ 'author_license' ], $file_content );
-                $file_content    = str_replace( '{{author_url}}', $config[ 'author_url' ], $file_content );
-                $file_content    = parse_conditional_template( $file, $config, $file_content, true );
-            }
-        }
-        
+        $lc         = LightnCandy::compile(
+                $file_content,
+                array(
+                    'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_ERROR_EXCEPTION | LightnCandy::FLAG_RENDER_DEBUG,
+                )
+        );
+        $lc_prepare = LightnCandy::prepare( $lc );
+        $file_content = $lc_prepare( $config, array( 'debug' => Runtime::DEBUG_ERROR_EXCEPTION | Runtime::DEBUG_ERROR_LOG ) );
+
         return $file_content;
     }
     
     $lc         = LightnCandy::compile( $file_content );
     $lc_prepare = LightnCandy::prepare( $lc );
     $file_content    = $lc_prepare( $config );
+    
     return $file_content;
 }
 
