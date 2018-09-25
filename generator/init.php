@@ -5,7 +5,8 @@ require_once(dirname( __FILE__ ) . '/miscellaneous.php');
 require_once(dirname( __FILE__ ) . '/composer.php');
 require_once(dirname( __FILE__ ) . '/tools.php');
 require_once(dirname( __FILE__ ) . '/rename.php');
-require_once(dirname( __FILE__ ) . '/functions.php');
+require_once(dirname( __FILE__ ) . '/remove.php');
+require_once(dirname( __FILE__ ) . '/wpbp.php');
 
 // Load libraries
 use Clio\Clio;

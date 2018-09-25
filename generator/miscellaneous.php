@@ -132,20 +132,23 @@ function copy_dir( $source, $dest ) {
     return true;
 }
 
-/**
- * Remove the file or directory
+/*
+ * If temporary folder exist rename it or copy to the folder to process
  *
- * @param string $file Path to remove.
  * @return boolean
  */
-function remove_file_folder( $file ) {
-    if ( file_exists( $file ) ) {
-        if ( is_dir( $file ) ) {
-            rmrdir( $file );
+function plugin_temp_exist() {
+    global $cmd, $clio, $info;
+    if ( file_exists( getcwd() . '/plugin_temp' ) ) {
+        $clio->styleLine( 'Boilerplate extracted found', $info );
+        if ( $cmd[ 'dev' ] ) {
+            copy_dir( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
         } else {
-            unlink( $file );
+            rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
         }
+
+        return true;
     }
 
-    return true;
+    return;
 }
