@@ -86,6 +86,7 @@ function replace_content_names( $config, $content, $ext = '' ) {
         if ( ! empty( $ext ) ) {
             print_v( 'Replace placeholders for ' . $content . $ext );
         }
+        
         $ucword  = '';
         $lower   = '';
         $content = str_replace( '// WPBPGen', '', $content );
@@ -94,6 +95,9 @@ function replace_content_names( $config, $content, $ext = '' ) {
         $content = str_replace( '//{{/', '{{/', $content );
         $content = str_replace( "//\n", '', $content );
         $content = str_replace( "// \n", '', $content );
+        $content = str_replace( "        \n\n", '', $content );
+        $content = str_replace( "        \n        \n", '', $content );
+        $content = str_replace( "\t\t\t\n\t\t\t\n", '', $content );
         $content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
         $content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
         $content = str_replace( 'plugin_name', str_replace( ' ', '_', str_replace( '-', '_', WPBP_PLUGIN_SLUG ) ), $content );
@@ -104,7 +108,6 @@ function replace_content_names( $config, $content, $ext = '' ) {
         $lower   = strtolower( $ucword );
         $content = str_replace( 'Pn_', ucwords( $lower ) . '_', $content );
         $content = str_replace( 'pn_', $lower . '_', $content );
-        $content = str_replace( "\n\n", "\n", $content );
     }
     return $content;
 }
