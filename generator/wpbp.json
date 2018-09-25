@@ -43,11 +43,10 @@
     "julien731/WP-Review-Me",
     "nathanielks/wp-admin-notice",
     "origgami/CMB2-grid",
-    "rubengc/cmb2-tabs",
-    "kevinlangleyjr/wp-contextual-help",
+    "mte90/wp-contextual-help",
     "WebDevStudios/CMB2",
     "johnbillion/extended-cpts",
-    "wpackagist-plugin/posts-to-posts",
+    "stevegrunwell/wp-cache-remember",
     "WPBP/CPT_Columns",
     "WPBP/CronPlus",
     "WPBP/Debug",
@@ -77,8 +76,7 @@
     "system": [
       "capability-system",
       "upgrade-procedure",
-      "transient-example",
-      "push-notification"
+      "transient-example"
     ]
   }
 }

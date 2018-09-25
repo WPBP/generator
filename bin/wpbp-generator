@@ -13,9 +13,10 @@ foreach ( $files as $file ) {
     $found = true;
   }
 }
+
 if ( !$found ) {
   die(
-	    'You need to install Composer!' . PHP_EOL
+	    'You need to install Composer first!' . PHP_EOL
   );
 }
 

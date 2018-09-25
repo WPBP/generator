@@ -22,7 +22,6 @@ function remove_file_folder( $file ) {
     return true;
 }
 
-
 /**
  * Remove file in case of settings
  *
