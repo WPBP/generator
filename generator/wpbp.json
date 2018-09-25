@@ -71,12 +71,14 @@
       "body-class",
       "cpt-search-support",
       "wp-localize-script",
+      "shortcode",
       "template-system"
     ],
     "system": [
       "capability-system",
       "upgrade-procedure",
-      "transient-example"
+      "transient",
+      "rest"
     ]
   }
 }
