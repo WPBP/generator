@@ -36,8 +36,8 @@ function remove_file( $file ) {
     switch ( $file ) {
         // Admin folder
         case strpos( $file, 'actdeact.php' ) && $config[ 'act-deact_actdeact' ] === 'false':
-        case strpos( $file, 'admin-enqueue.php' ) && $config[ 'admin-assets_js' ] === 'false' 
-                && $config[ 'admin-assets_css' ] === 'false':
+        case strpos( $file, 'admin-enqueue.php' ) && $config[ 'admin-assets_admin-js' ] === 'false' 
+                && $config[ 'admin-assets_admin-css' ] === 'false':
         case strpos( $file, 'impexp.php' ) && $config[ 'backend_impexp-settings' ] === 'false':
         case strpos( $file, 'uninstall.php' ) && $config[ 'act-deact_uninstall' ] === 'false':
         case strpos( $file, 'notices.php' ) && $config[ 'libraries_nathanielks__wp-admin-notice' ] === 'false' 
@@ -49,17 +49,18 @@ function remove_file( $file ) {
         case strpos( $file, 'class-ajax.php' ) && $config[ 'ajax_public' ] === 'false':
         case strpos( $file, 'admin-ajax.php' ) && $config[ 'ajax_admin' ] === 'false':
         // Assets folder
+        case strpos( $file, 'public.coffee' ) && $config[ 'public-assets_js' ] === 'false':
         case strpos( $file, 'public.js' ) && $config[ 'public-assets_js' ] === 'false':
         case strpos( $file, 'public.css' ) && $config[ 'public-assets_css' ] === 'false':
-        case strpos( $file, 'public.sass' ) && $config[ 'public-assets_css' ] === 'false':
+        case strpos( $file, 'public.scss' ) && $config[ 'public-assets_css' ] === 'false':
         case strpos( $file, 'admin.css' ) && $config[ 'admin-assets_admin-css' ] === 'false':
-        case strpos( $file, 'admin.sass' ) && $config[ 'admin-assets_admin-css' ] === 'false':
+        case strpos( $file, 'admin.scss' ) && $config[ 'admin-assets_admin-css' ] === 'false':
         case strpos( $file, 'admin.coffee' ) && $config[ 'admin-assets_admin-js' ] === 'false':
         case strpos( $file, 'admin.js' ) && $config[ 'admin-assets_admin-js' ] === 'false':
         case strpos( $file, 'settings.js' ) && $config[ 'admin-assets_settings-js' ] === 'false':
         case strpos( $file, 'settings.coffee' ) && $config[ 'admin-assets_settings-js' ] === 'false':
         case strpos( $file, 'settings.css' ) && $config[ 'admin-assets_settings-css' ] === 'false':
-        case strpos( $file, 'settings.sass' ) && $config[ 'admin-assets_settings-css' ] === 'false':
+        case strpos( $file, 'settings.scss' ) && $config[ 'admin-assets_settings-css' ] === 'false':
         // Cli folder
         case strpos( $file, 'cli.php' ) && $config[ 'wpcli' ] === 'false':
         // Integrations
@@ -70,6 +71,7 @@ function remove_file( $file ) {
         case strpos( $file, 'fakepage.php' ) && $config[ 'libraries_wpbp__fakepage' ] === 'false':
         case strpos( $file, 'pointers.php' ) && $config[ 'libraries_wpbp__pointerplus' ] === 'false':
         case strpos( $file, 'template.php' ) && $config[ 'libraries_wpbp__template' ] === 'false':
+        case strpos( $file, 'widgets.php' ) && $config[ 'libraries_wpbp__widgets-helper' ] === 'false':
         case strpos( $file, '/widgets' ) && $config[ 'libraries_wpbp__widgets-helper' ] === 'false':
         // Internals
         case strpos( $file, 'posttypes.php' ) && $config[ 'libraries_johnbillion__extended-cpts' ] === 'false':

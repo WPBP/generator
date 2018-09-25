@@ -9,7 +9,7 @@
  */
 function download_phpcs_standard() {
     global $config, $clio, $info;
-    if ( !empty( $config[ 'phpcs-standard' ] ) ) {
+    if ( !empty( $config[ 'phpcs-standard' ] ) && $config[ 'phpcs-standard' ] === false ) {
         $codeat = file_get_contents( $config[ 'phpcs-standard' ] );
         file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/phpcs.xml', $codeat );
         $clio->styleLine( '😎 PHPCS Standard downloaded', $info );
