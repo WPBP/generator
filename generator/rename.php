@@ -53,10 +53,11 @@ function get_files( $path = null ) {
 function rename_by_specific_names( $file ) {
     global $config, $clio, $error;
     $files = '';
-    if ( ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) || strpos( $file, '.pot' ) || strpos( $file, '.yml' ) || strpos( $file, 'gitignore' ) ) ) {
+    if ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, '.pot' ) || strpos( $file, '.yml' ) || strpos( $file, 'gitignore' ) ) {
         $pathparts = pathinfo( $file );
-        $newname   = replace_content_names( $config, $pathparts[ 'filename' ], '.' . $pathparts[ 'extension' ] );
+        $newname   = replace_content_names( $config, $pathparts[ 'filename' ] );
         $newname   = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
+        $files = $file;
         if ( $newname !== $file ) {
             try {
                 rename( $file, $newname );
@@ -66,8 +67,6 @@ function rename_by_specific_names( $file ) {
 
             $files = $newname;
             print_v( 'Renamed ' . $file . ' to ' . $newname );
-        } else {
-            $files = $file;
         }
     }
     
@@ -81,12 +80,8 @@ function rename_by_specific_names( $file ) {
  * @param string $content The text.
  * @return string
  */
-function replace_content_names( $config, $content, $ext = '' ) {
-    if ( ! empty( $content ) && $content !== 'index' ) {
-        if ( ! empty( $ext ) ) {
-            print_v( 'Replace placeholders for ' . $content . $ext );
-        }
-        
+function replace_content_names( $config, $content ) {
+    if ( ! empty( $content ) && $content !== 'index' ) {        
         $ucword  = '';
         $lower   = '';
         $content = str_replace( '// WPBPGen', '', $content );
@@ -109,5 +104,6 @@ function replace_content_names( $config, $content, $ext = '' ) {
         $content = str_replace( 'Pn_', ucwords( $lower ) . '_', $content );
         $content = str_replace( 'pn_', $lower . '_', $content );
     }
+    
     return $content;
 }

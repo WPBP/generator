@@ -128,34 +128,20 @@ function execute_generator( $config ) {
     global $cmd, $clio, $info;
     $files = get_files();
     foreach ( $files as $file ) {
-        if ( empty( $file ) || strpos( $file, 'index.php' ) ) {
+        if ( empty( $file ) || strpos( $file, 'index.php' ) || strpos( $file, '_generated' ) || strpos( $file, 'Helper' ) || strpos( $file, '_output' ) ) {
             continue;
         }
         
         $file_content = file_get_contents( $file );
-        if ( $cmd[ 'dev' ] ) {
-            print_v( 'Parsing ' . $file );
-            $lc         = LightnCandy::compile(
-                $file_content,
-                array(
-                    'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_ERROR_EXCEPTION | LightnCandy::FLAG_RENDER_DEBUG,
-                )
-            );
-            $lc_prepare = LightnCandy::prepare( $lc );
-            $newfile    = $lc_prepare( $config, array( 'debug' => Runtime::DEBUG_ERROR_EXCEPTION | Runtime::DEBUG_ERROR_LOG ) );
-        } else {
-            $lc         = LightnCandy::compile( $file_content );
-            $lc_prepare = LightnCandy::prepare( $lc );
-            $newfile    = $lc_prepare( $config );
-        }
+        $new_file_content = replace_content_names( $config, $file_content );
+        $new_file_content = parse_conditional_template( $file, $config, $new_file_content );
 
         if ( strpos( $file, '.gitignore' ) ) {
-            $newfile = str_replace( 'plugin-name/', '', $newfile );
+            $new_file_content = str_replace( 'plugin-name/', '', $new_file_content );
         }
 
-        $newfile = replace_content_names( $config, $newfile );
-        if ( $newfile !== $file_content ) {
-            file_put_contents( $file, $newfile );
+        if ( $new_file_content !== $file_content ) {
+            file_put_contents( $file, $new_file_content );
         }
     }
 
@@ -164,6 +150,40 @@ function execute_generator( $config ) {
     execute_composer();
     git_init();
     grunt();
+}
+
+function parse_conditional_template( $file, $config, $file_content, $stop = false ) {
+    global $cmd;
+    if ( $cmd[ 'dev' ] ) {
+        print_v( 'Parsing ' . $file );
+        try {
+            $lc         = LightnCandy::compile(
+                    $file_content,
+                    array(
+                        'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_ERROR_EXCEPTION | LightnCandy::FLAG_RENDER_DEBUG,
+                    )
+            );
+            $lc_prepare = LightnCandy::prepare( $lc );
+            $file_content    = $lc_prepare( $config, array( 'debug' => Runtime::DEBUG_ERROR_EXCEPTION | Runtime::DEBUG_ERROR_LOG ) );
+        } catch ( Exception $e ) {
+            if ( !$stop ) {
+                print_v( 'Issues with ' . $file );
+                $file_content    = str_replace( '{{author_name}}', $config[ 'author_name' ], $file_content );
+                $file_content    = str_replace( '{{author_email}}', $config[ 'author_email' ], $file_content );
+                $file_content    = str_replace( '{{author_copyright}}', $config[ 'author_copyright' ], $file_content );
+                $file_content    = str_replace( '{{author_license}}', $config[ 'author_license' ], $file_content );
+                $file_content    = str_replace( '{{author_url}}', $config[ 'author_url' ], $file_content );
+                $file_content    = parse_conditional_template( $file, $config, $file_content, true );
+            }
+        }
+        
+        return $file_content;
+    }
+    
+    $lc         = LightnCandy::compile( $file_content );
+    $lc_prepare = LightnCandy::prepare( $lc );
+    $file_content    = $lc_prepare( $config );
+    return $file_content;
 }
 
 /**
