@@ -14,9 +14,10 @@ function remove_file_folder( $file ) {
     if ( file_exists( $file ) ) {
         if ( is_dir( $file ) ) {
             rmrdir( $file );
-        } else {
-            unlink( $file );
-        }
+            return true;
+        } 
+        
+        unlink( $file );
     }
 
     return true;

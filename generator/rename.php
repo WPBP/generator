@@ -56,7 +56,6 @@ function rename_by_specific_names( $file ) {
         $pathparts = pathinfo( $file );
         $newname   = replace_content_names( $config, $pathparts[ 'filename' ] );
         $newname   = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
-        print_v( 'Ready to rename ' . $file );
         if ( $newname !== $file ) {
             try {
                 rename( $file, $newname );
@@ -80,6 +79,7 @@ function rename_by_specific_names( $file ) {
  * @return string
  */
 function replace_content_names( $config, $content ) {
+    print_v( 'Replace placeholders for ' . $content );
     $ucword  = '';
     $lower   = '';
     $content = str_replace( "//WPBPGen\n", '', $content );

@@ -50,4 +50,5 @@ execute_generator( $config );
 echo PHP_EOL;
 $clio->styleLine( 'Done, I am superfast!', $info );
 $clio->styleLine( 'Don\'t forget to look on https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/wiki', $info );
-$clio->styleLine( 'Love WordPress-Plugin-Boilerplate-Powered? Please consider supporting our collective:👉 https://opencollective.com/WordPress-Plugin-Boilerplate-Powered/donate', $info );
+$clio->styleLine( 'Love WordPress-Plugin-Boilerplate-Powered? Please consider supporting our collective:', $info );
+$clio->styleLine( '👉 https://opencollective.com/WordPress-Plugin-Boilerplate-Powered/donate', $info );

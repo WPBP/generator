@@ -43,11 +43,18 @@ function clean_composer_file() {
 
     if ( $config[ 'unit-test' ] === 'false' ) {
         unset( $composer[ 'require-dev' ][ 'lucatume/wp-browser' ] );
+        unset( $composer[ 'require-dev' ][ 'lucatume/function-mocker' ] );
+        unset( $composer[ 'require-dev' ][ 'codeception/codeception' ] );
+        unset( $composer[ 'require-dev' ][ 'codeception/codeception-progress-reporter' ] );
         $clio->styleLine( '😎 Remove Codeception done', $info );
     }
 
     if ( count( $composer[ 'require-dev' ] ) === 0 ) {
         unset( $composer[ 'require-dev' ] );
+    }
+    
+    if ( count( $composer[ 'repositories' ] ) === 0 ) {
+        unset( $composer[ 'repositories' ] );
     }
 
     if ( count( $composer[ 'require' ] ) === 3 ) {
