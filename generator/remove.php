@@ -23,6 +23,46 @@ function remove_file_folder( $file ) {
     return true;
 }
 
+function clean_empty_folder() {
+    $path = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG; 
+    $dir_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
+    $iterator     = iterator_to_array( new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST ) );
+
+    foreach ( $iterator as $file => $object ) {
+        if ( is_dir($file) ) {
+            $files = count_files( $file );
+            if ( $files === 1 ) {
+                remove_file_folder( $file );
+            }
+                
+            continue;
+        }
+    }
+}
+
+
+
+function count_files($path) {
+    // (Ensure that the path contains an ending slash)
+    $file_count = 0;
+    $dir_handle = opendir($path);
+ 
+    if (!$dir_handle) return -1;
+ 
+    while ($file = readdir($dir_handle)) {
+        if ($file == '.' || $file == '..') continue;
+ 
+        if (is_dir($path . $file)){      
+            $file_count += count_files($path . $file . DIRECTORY_SEPARATOR);
+        } else {
+            $file_count++; // increase file count
+        }
+    }
+ 
+    closedir($dir_handle);
+    return $file_count;
+}
+
 /**
  * Remove file in case of settings
  *

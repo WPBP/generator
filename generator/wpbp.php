@@ -20,20 +20,23 @@ function create_wpbp_json() {
     if ( $cmd[ 'json' ] ) {
         if ( !copy( dirname( __FILE__ ) . '/wpbp.json', getcwd() . '/wpbp.json' ) ) {
             $clio->styleLine( 'Failed to copy wpbp.json...', $error );
-        } else {
-            $clio->styleLine( '😀 wpbp.json generated', $info );
-            exit();
+            return;
         }
-    } else {
-        if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
-            $clio->styleLine( '😡 wpbp.json file missing...', $error );
-            $clio->styleLine( '😉 Generate it with: wpbp-generator --json', $error );
-            $clio->styleLine( 'Forget a hipster Q&A procedure and fill that JSON with your custom configuration!', $error );
-            $clio->styleLine( '  Let\'s do your changes and execute the script again! Use the --dev parameter to use the development version of the boilerplate!', $error );
-            $clio->styleLine( '', $info );
-            $clio->styleLine( 'Help: wpbp-generator --help 😉', $info );
-            exit();
-        }
+        
+        $clio->styleLine( '😀 wpbp.json generated', $info );
+        exit();
+        
+        return;
+    }
+    
+    if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
+        $clio->styleLine( '😡 wpbp.json file missing...', $error );
+        $clio->styleLine( '😉 Generate it with: wpbp-generator --json', $error );
+        $clio->styleLine( 'Forget a hipster Q&A procedure and fill that JSON with your custom configuration!', $error );
+        $clio->styleLine( '  Let\'s do your changes and execute the script again! Use the --dev parameter to use the development version of the boilerplate!', $error );
+        $clio->styleLine( '', $info );
+        $clio->styleLine( 'Help: wpbp-generator --help 😉', $info );
+        exit();
     }
 }
 
@@ -152,7 +155,7 @@ function execute_generator( $config ) {
     grunt();
 }
 
-function parse_conditional_template( $file, $config, $file_content, $stop = false ) {
+function parse_conditional_template( $file, $config, $file_content ) {
     global $cmd;
     if ( $cmd[ 'dev' ] ) {
         print_v( 'Parsing ' . $file );
