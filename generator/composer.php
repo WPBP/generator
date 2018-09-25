@@ -60,6 +60,8 @@ function clean_composer_file() {
     if ( count( $composer[ 'require' ] ) === 3 ) {
         unset( $composer[ 'extra' ] );
     }
+    
+    $clio->styleLine( '😎 Cleaning Composer file', $info );
 
     file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
 }

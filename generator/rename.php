@@ -41,7 +41,7 @@ function get_files( $path = null ) {
             continue;
         }
 
-        rename_by_specific_names( $file );
+        $files[] = rename_by_specific_names( $file );
     }
 
     return $files;
@@ -52,9 +52,10 @@ function get_files( $path = null ) {
  */
 function rename_by_specific_names( $file ) {
     global $config, $clio, $error;
+    $files = '';
     if ( ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, 'Gruntfile.js' ) || strpos( $file, '.pot' ) || strpos( $file, '.yml' ) || strpos( $file, 'gitignore' ) ) ) {
         $pathparts = pathinfo( $file );
-        $newname   = replace_content_names( $config, $pathparts[ 'filename' ] );
+        $newname   = replace_content_names( $config, $pathparts[ 'filename' ], '.' . $pathparts[ 'extension' ] );
         $newname   = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
         if ( $newname !== $file ) {
             try {
@@ -63,12 +64,14 @@ function rename_by_specific_names( $file ) {
                 $clio->styleLine( $e, $error );
             }
 
-            $files[] = $newname;
+            $files = $newname;
             print_v( 'Renamed ' . $file . ' to ' . $newname );
         } else {
-            $files[] = $file;
+            $files = $file;
         }
     }
+    
+    return $files;
 }
 
 /**
@@ -78,24 +81,24 @@ function rename_by_specific_names( $file ) {
  * @param string $content The text.
  * @return string
  */
-function replace_content_names( $config, $content ) {
-    print_v( 'Replace placeholders for ' . $content );
-    $ucword  = '';
-    $lower   = '';
-    $content = str_replace( "//WPBPGen\n", '', $content );
-    $content = str_replace( '//WPBPGen', '', $content );
-    $content = str_replace( "//\n", '', $content );
-    $content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
-    $content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
-    $content = str_replace( 'plugin_name', str_replace( ' ', '_', str_replace( '-', '_', WPBP_PLUGIN_SLUG ) ), $content );
-    $content = str_replace( 'WordPress-Plugin-Boilerplate-Powered', WPBP_PLUGIN_SLUG, $content );
-    preg_match_all( '/[A-Z]/', ucwords( strtolower( preg_replace( '/[0-9]+/', '', $config[ 'plugin_name' ] ) ) ), $ucword );
-    $ucword  = implode( '', $ucword[ 0 ] );
-    $content = str_replace( 'PN_', $ucword . '_', $content );
-    $lower   = strtolower( $ucword );
-    $content = str_replace( 'Pn_', ucwords( $lower ) . '_', $content );
-    $content = str_replace( 'pn_', $lower . '_', $content );
-    $content = str_replace( '                                      ', '', $content );
-    $content = str_replace( "\n\n", "\n", $content );
+function replace_content_names( $config, $content, $ext = '' ) {
+    if ( ! empty( $content ) && $content !== 'index' ) {
+        print_v( 'Replace placeholders for ' . $content . $ext );
+        $ucword  = '';
+        $lower   = '';
+        $content = str_replace( '// WPBPGen', '', $content );
+        $content = str_replace( "//\n", '', $content );
+        $content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
+        $content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
+        $content = str_replace( 'plugin_name', str_replace( ' ', '_', str_replace( '-', '_', WPBP_PLUGIN_SLUG ) ), $content );
+        $content = str_replace( 'WordPress-Plugin-Boilerplate-Powered', WPBP_PLUGIN_SLUG, $content );
+        preg_match_all( '/[A-Z]/', ucwords( strtolower( preg_replace( '/[0-9]+/', '', $config[ 'plugin_name' ] ) ) ), $ucword );
+        $ucword  = implode( '', $ucword[ 0 ] );
+        $content = str_replace( 'PN_', $ucword . '_', $content );
+        $lower   = strtolower( $ucword );
+        $content = str_replace( 'Pn_', ucwords( $lower ) . '_', $content );
+        $content = str_replace( 'pn_', $lower . '_', $content );
+        $content = str_replace( "\n\n", "\n", $content );
+    }
     return $content;
 }
