@@ -63,9 +63,10 @@ function grunt() {
             foreach ( $package as $line => $content ) {
                 if ( strpos( $content, 'coffee' ) ) {
                     $newpackage[ $line - 1 ] = str_replace( ',', '', $package[ $line - 1 ] );
-                } else {
-                    $newpackage[] = $package[ $line ];
+                    continue;
                 }
+                
+                $newpackage[] = $package[ $line ];
             }
 
             file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );

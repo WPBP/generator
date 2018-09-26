@@ -52,9 +52,10 @@ function count_files($path) {
  
         if ( is_dir( $path . $file ) ){      
             $file_count += count_files($path . $file . DIRECTORY_SEPARATOR);
-        } else {
-            $file_count++; // increase file count
+            continue;
         }
+        
+        $file_count++; // increase file count
     }
  
     closedir( $dir_handle );
