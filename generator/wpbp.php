@@ -136,7 +136,7 @@ function execute_generator( $config ) {
         }
         
         $file_content = file_get_contents( $file );
-        $new_file_content = replace_content_names( $config, $file_content );
+        $new_file_content = replace_name_slug( $config, $file_content );
         $new_file_content = parse_conditional_template( $file, $config, $new_file_content );
 
         if ( strpos( $file, '.gitignore' ) ) {

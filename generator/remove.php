@@ -23,15 +23,19 @@ function remove_file_folder( $file ) {
     return true;
 }
 
-function clean_empty_folder() {
+
+/**
+ * Remove folders empty
+ */
+function remove_empty_folders() {
     $path = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG; 
     $dir_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
     $iterator     = iterator_to_array( new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST ) );
 
     foreach ( $iterator as $file => $object ) {
         if ( is_dir( $file ) ) {
-            $files = count_files( $file );
-            if ( $files === 1 ) {
+            $there_is_only_index_file = count_files_in_a_folder( $file );
+            if ( $there_is_only_index_file === 1 ) {
                 remove_file_folder( $file );
             }
                 
@@ -40,7 +44,13 @@ function clean_empty_folder() {
     }
 }
 
-function count_files($path) {
+/**
+ * Count files inside the folder
+ *
+ * @param string $file Path to remove.
+ * @return boolean
+ */
+function count_files_in_a_folder($path) {
     // (Ensure that the path contains an ending slash)
     $file_count = 0;
     $dir_handle = opendir( $path );
@@ -63,13 +73,13 @@ function count_files($path) {
 }
 
 /**
- * Remove file in case of settings
+ * Remove files based on the feature required
  *
  * @global array $config
  * @param  string $file
  * @return boolean
  */
-function remove_file( $file ) {
+function remove_files_by_settings( $file ) {
     global $config;
     $return = false;
 

@@ -37,20 +37,20 @@ function get_files( $path = null ) {
             continue;
         }
 
-        if ( remove_file( $file ) ) {
+        if ( remove_files_by_settings( $file ) ) {
             continue;
         }
 
-        $files[] = rename_by_specific_names( $file );
+        $files[] = rename_by_specific_extensions( $file );
     }
 
     return $files;
 }
 
 /**
- * Rename the files based on a pattern name
+ * Rename the files based on a extensions
  */
-function rename_by_specific_names( $file ) {
+function rename_by_specific_extensions( $file ) {
     global $config, $clio, $error;
     $files = '';
     if ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, '.pot' ) || strpos( $file, '.yml' ) || strpos( $file, 'gitignore' ) ) {
@@ -80,7 +80,7 @@ function rename_by_specific_names( $file ) {
  * @param string $content The text.
  * @return string
  */
-function replace_content_names( $config, $content ) {
+function replace_name_slug( $config, $content ) {
     if ( ! empty( $content ) && $content !== 'index' ) {        
         $ucword  = '';
         $lower   = '';
