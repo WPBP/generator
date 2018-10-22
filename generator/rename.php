@@ -55,7 +55,7 @@ function rename_by_specific_extensions( $file ) {
     $files = '';
     if ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, '.pot' ) || strpos( $file, '.yml' ) || strpos( $file, 'gitignore' ) ) {
         $pathparts = pathinfo( $file );
-        $newname   = replace_content_names( $config, $pathparts[ 'filename' ] );
+        $newname   = replace_name_slug( $config, $pathparts[ 'filename' ] );
         $newname   = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
         $files = $file;
         if ( $newname !== $file ) {
