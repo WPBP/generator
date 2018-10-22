@@ -132,7 +132,7 @@ function copy_dir( $source, $dest ) {
 function plugin_temp_exist() {
     global $cmd, $clio, $info;
     if ( file_exists( getcwd() . '/plugin_temp' ) ) {
-        $clio->styleLine( 'Boilerplate extracted found', $info );
+        $clio->styleLine( 'Boilerplate already extracted found', $info );
         if ( $cmd[ 'dev' ] ) {
             copy_dir( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
         } else {

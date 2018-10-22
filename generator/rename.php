@@ -88,6 +88,7 @@ function replace_name_slug( $config, $content ) {
         $content = str_replace( '//WPBPGen', '', $content );
         $content = str_replace( '// {{/', '{{/', $content );
         $content = str_replace( '//{{/', '{{/', $content );
+        $content = str_replace( "{{plugin_name}}", $config[ 'plugin_name' ], $content );
         $content = str_replace( "//\n", '', $content );
         $content = str_replace( "// \n", '', $content );
         $content = str_replace( "        \n\n", '', $content );
@@ -96,7 +97,6 @@ function replace_name_slug( $config, $content ) {
         $content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
         $content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
         $content = str_replace( 'plugin_name', str_replace( ' ', '_', str_replace( '-', '_', WPBP_PLUGIN_SLUG ) ), $content );
-        $content = str_replace( 'WordPress-Plugin-Boilerplate-Powered', WPBP_PLUGIN_SLUG, $content );
         preg_match_all( '/[A-Z]/', ucwords( strtolower( preg_replace( '/[0-9]+/', '', $config[ 'plugin_name' ] ) ) ), $ucword );
         $ucword  = implode( '', $ucword[ 0 ] );
         $content = str_replace( 'PN_', $ucword . '_', $content );
