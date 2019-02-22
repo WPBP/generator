@@ -1,6 +1,6 @@
 <?php
 
-define( 'WPBP_VERSION', '3.0' );
+define( 'WPBP_VERSION', '3.0.1' );
 require_once(dirname( __FILE__ ) . '/miscellaneous.php');
 require_once(dirname( __FILE__ ) . '/composer.php');
 require_once(dirname( __FILE__ ) . '/tools.php');
