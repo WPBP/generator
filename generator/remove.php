@@ -114,7 +114,7 @@ function remove_files_by_settings( $file ) {
         // Cli folder
         case strpos( $file, 'cli.php' ) && $config[ 'wpcli' ] === 'false':
         // Integrations
-        case strpos( $file, 'cmb.php' ) && $config[ 'libraries_webdevstudios__cmb2' ] === 'false':
+        case strpos( $file, 'cmb.php' ) && $config[ 'libraries_cmb2__cmb2' ] === 'false':
         case strpos( $file, 'contextualhelp.php' ) && $config[ 'libraries_mte90__wp-contextual-help' ] === 'false':
         case strpos( $file, '/help-docs' ) && $config[ 'libraries_mte90__wp-contextual-help' ] === 'false':
         case strpos( $file, 'cron.php' ) && $config[ 'libraries_wpbp__cronplus' ] === 'false':
