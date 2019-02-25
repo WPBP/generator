@@ -12,6 +12,7 @@
  */
 function remove_file_folder( $file ) {
     if ( file_exists( $file ) ) {
+        print_v( 'Removed ' . $file );
         if ( is_dir( $file ) ) {
             rmrdir( $file );
             return true;
@@ -33,7 +34,8 @@ function remove_empty_folders() {
     $iterator     = iterator_to_array( new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST ) );
 
     foreach ( $iterator as $file => $object ) {
-        if ( is_dir( $file ) ) {
+        // not execute on composer/npm folder
+        if ( is_dir( $file ) && strpos( $file, 'vendor' ) === false && strpos( $file, 'node_modules' ) === false && strpos( $file, '/.' ) === false && strpos( $file, '/tests' ) === false ) {
             $there_is_only_index_file = count_files_in_a_folder( $file );
             if ( $there_is_only_index_file === 1 ) {
                 remove_file_folder( $file );
@@ -61,7 +63,7 @@ function count_files_in_a_folder($path) {
         if ($file == '.' || $file == '..') continue;
  
         if ( is_dir( $path . $file ) ){      
-            $file_count += count_files($path . $file . DIRECTORY_SEPARATOR);
+            $file_count += count_files_in_a_folder($path . $file . DIRECTORY_SEPARATOR);
             continue;
         }
         
