@@ -1,6 +1,6 @@
 <?php
 /**
- * All the functionsthat involve the composer.json file
+ * All the functions that involve the composer.json file
  */
  
 /**
@@ -46,6 +46,7 @@ function clean_composer_file() {
         unset( $composer[ 'require-dev' ][ 'lucatume/function-mocker' ] );
         unset( $composer[ 'require-dev' ][ 'codeception/codeception' ] );
         unset( $composer[ 'require-dev' ][ 'codeception/codeception-progress-reporter' ] );
+        unset( $composer[ 'require-dev' ][ 'phpunit/phpunit' ] );
         $clio->styleLine( '😎 Remove Codeception done', $info );
     }
 
