@@ -62,6 +62,8 @@ function clean_composer_file() {
         unset( $composer[ 'extra' ] );
     }
     
+    $composer = remove_folder_for_autoload( $composer );
+    
     $clio->styleLine( '😎 Cleaning Composer file', $info );
 
     file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
@@ -162,3 +164,24 @@ function remove_composer_repositories( $composer, $searchpath ) {
 
     return $composer;
 } 
+
+
+/**
+ * Remove the autoload folders that are not avalaible
+ *
+ * @param array  $composer The composer.json content.
+ * @return array
+ */
+function remove_folder_for_autoload( $composer ) {
+    if ( isset( $composer[ 'autoload' ] ) ) {
+        foreach ( $composer[ 'autoload' ][ 'classmap' ] as $key => $path ) {
+            $there_is_only_index_file = count_files_in_a_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/' . $path );
+            if ( $there_is_only_index_file === 1 ) {
+                unset( $composer[ 'autoload' ][ 'classmap' ][ $key ] );
+            }
+        }
+        $composer[ 'autoload' ][ 'classmap' ] = array_values( $composer[ 'autoload' ][ 'classmap' ] ); 
+    }
+    
+    return $composer;
+}
