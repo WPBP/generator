@@ -130,7 +130,7 @@ function remove_composer_autoload( $composer, $searchpath ) {
         }
 
         if ( empty( $composer[ 'autoload' ][ 'files' ] ) ) {
-            unset( $composer[ 'autoload' ] );
+            unset( $composer[ 'autoload' ][ 'files' ] );
         }
     }
 
