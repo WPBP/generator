@@ -41,6 +41,11 @@ function clean_composer_file() {
         unset( $composer[ 'require-dev' ][ 'wearejust/grumphp-extra-tasks' ] );
         $clio->styleLine( '😎 Remove GrumPHP done', $info );
     }
+    
+    if ( $config[ 'phpstan' ] === 'false' ) {
+        unset( $composer[ 'require-dev' ][ 'szepeviktor/phpstan-wordpress' ] );
+        $clio->styleLine( '😎 Remove PHPStan WordPress support done', $info );
+    }
 
     if ( $config[ 'unit-test' ] === 'false' ) {
         unset( $composer[ 'require-dev' ][ 'lucatume/wp-browser' ] );
