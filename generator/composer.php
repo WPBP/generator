@@ -38,6 +38,7 @@ function clean_composer_file() {
 
     if ( $config[ 'grumphp' ] === 'false' ) {
         unset( $composer[ 'require-dev' ][ 'phpro/grumphp' ] );
+        unset( $composer[ 'require-dev' ][ 'wearejust/grumphp-extra-tasks' ] );
         $clio->styleLine( '😎 Remove GrumPHP done', $info );
     }
 
