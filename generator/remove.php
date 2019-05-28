@@ -146,6 +146,7 @@ function remove_files_by_settings( $file ) {
         // Others
         case strpos( $file, 'languages' ) && $config[ 'language-files' ] === 'false':
         case strpos( $file, 'grumphp.yml' ) && $config[ 'grumphp' ] === 'false':
+        case strpos( $file, 'phpstan.neon' ) && $config[ 'phpstan' ] === 'false':
             $return = remove_file_folder( $file );
             break;
     }
