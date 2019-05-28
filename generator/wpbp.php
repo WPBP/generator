@@ -195,9 +195,7 @@ function parse_config() {
     }
 
     $config         = array_to_var( $config );
-    print_r($config);
     $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true ), true );
-    print_r($config_default);
     foreach ( $config_default as $key => $value ) {
         if ( !isset( $config[ $key ] ) ) {
             $config[ $key ] = '';
