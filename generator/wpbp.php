@@ -131,7 +131,7 @@ function execute_generator( $config ) {
     global $cmd, $clio, $info;
     $files = get_files();
     foreach ( $files as $file ) {
-        if ( empty( $file ) || strpos( $file, 'index.php' ) || strpos( $file, '_generated' ) || strpos( $file, 'Helper' ) || strpos( $file, '_output' ) ) {
+        if ( empty( $file ) || strpos( $file, 'index.php' ) || strpos( $file, '_generated' ) || strpos( $file, 'Helper' ) || strpos( $file, '_output' ) || strpos( $file, 'vendor' ) ) {
             continue;
         }
         
@@ -195,10 +195,12 @@ function parse_config() {
     }
 
     $config         = array_to_var( $config );
-    $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true ) );
+    print_r($config);
+    $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true ), true );
+    print_r($config_default);
     foreach ( $config_default as $key => $value ) {
         if ( !isset( $config[ $key ] ) ) {
-            $config[ $key ] = 'false';
+            $config[ $key ] = '';
         }
     }
 

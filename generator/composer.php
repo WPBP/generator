@@ -36,18 +36,18 @@ function clean_composer_file() {
     $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json' ), true );
     $composer = remove_composer_packages( $composer );
 
-    if ( $config[ 'grumphp' ] === 'false' ) {
+    if ( empty( $config[ 'grumphp' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'phpro/grumphp' ] );
         unset( $composer[ 'require-dev' ][ 'wearejust/grumphp-extra-tasks' ] );
         $clio->styleLine( '😎 Remove GrumPHP done', $info );
     }
     
-    if ( $config[ 'phpstan' ] === 'false' ) {
+    if ( empty( $config[ 'phpstan' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'szepeviktor/phpstan-wordpress' ] );
         $clio->styleLine( '😎 Remove PHPStan WordPress support done', $info );
     }
 
-    if ( $config[ 'unit-test' ] === 'false' ) {
+    if ( empty( $config[ 'unit-test' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'lucatume/wp-browser' ] );
         unset( $composer[ 'require-dev' ][ 'lucatume/function-mocker' ] );
         unset( $composer[ 'require-dev' ][ 'codeception/codeception' ] );
@@ -105,7 +105,7 @@ function remove_composer_packages( $composer ) {
     global $config;
     foreach ( $config as $key => $value ) {
         if ( strpos( $key, 'libraries_' ) !== false ) {
-            if ( $value === 'false' ) {
+            if ( empty( $value ) ) {
                 $package = str_replace( 'libraries_', '', $key );
                 $package = str_replace( '__', '/', $package );
                 if ( isset( $composer[ 'require' ][ $package ] ) ) {

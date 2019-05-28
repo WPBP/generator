@@ -49,10 +49,16 @@ function print_v( $label ) {
  * LightnCandy require an array bidimensional "key" = true, so we need to convert a multidimensional in bidimensional
  *
  * @param  array $array The config to parse.
+ * @param  bool  $default If it is the default file to load.
  * @return array
  */
-function array_to_var( $array ) {
+function array_to_var( $array, $default = false ) {
     $newarray = array();
+    
+    $set = 'true';
+    if( $default ) {
+        $set = '';
+    }
     // Get the json
     foreach ( $array as $key => $subarray ) {
         // Check if an array
@@ -63,14 +69,18 @@ function array_to_var( $array ) {
                     foreach ( $subvalue as $subsubkey => $subsubvalue ) {
                         if ( !is_nan( $subsubkey ) ) {
                             // If empty lightcandy takes as true
-                            $newarray[ $subkey . '_' . strtolower( str_replace( '/', '__', $subsubvalue ) ) ] = '';
+                            $newarray[ $subkey . '_' . strtolower( str_replace( '/', '__', $subsubvalue ) ) ] = $set;
                         }
                     }
                 } else {
                     if ( !is_numeric( $subkey ) ) {
                         $newarray[ $key . '_' . strtolower( $subkey ) ] = $subvalue;
+                        
+                        if( $subvalue === 'true' && $default ) {
+                            $newarray[ $key . '_' . strtolower( $subkey ) ] = $set;
+                        }
                     } else {
-                        $newarray[ $key . '_' . strtolower( str_replace( '/', '__', $subvalue ) ) ] = '';
+                        $newarray[ $key . '_' . strtolower( str_replace( '/', '__', $subvalue ) ) ] = $set;
                     }
                 }
             }
@@ -80,7 +90,11 @@ function array_to_var( $array ) {
             if ( $subarray === 'true' ) {
                 $newarray[ $key ] = 'true';
             } elseif ( $subarray === 'false' ) {
-                $newarray[ $key ] = 'false';
+                $newarray[ $key ] = '';
+            }
+            
+            if( $default ) {
+                $newarray[ $key ] = '';
             }
         }
     }
