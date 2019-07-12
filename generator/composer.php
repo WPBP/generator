@@ -87,6 +87,11 @@ function remove_specific_composer_respositories( $package, $composer ) {
         $composer = remove_composer_autoload( $composer, 'wp-contextual-help' );
         $composer = remove_composer_repositories( $composer, 'wp-contextual-help' );
     }
+    
+    if ( strpos( $package, 'wp-custom-bulk-actions' ) !== false ) {
+        $composer = remove_composer_autoload( $composer, 'wp-custom-bulk-actions' );
+        $composer = remove_composer_repositories( $composer, 'wp-custom-bulk-actions' );
+    }
 
     if ( strpos( $package, 'wp-admin-notice' ) !== false ) {
         $composer = remove_composer_repositories( $composer, 'wordpress-admin-notice' );
