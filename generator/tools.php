@@ -88,9 +88,11 @@ function grunt() {
             exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; npm install 2>&1', $output );
             $clio->styleLine( '😎 Grunt install done', $info );
         }
-    } else {
-        unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
-        unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
-        $clio->styleLine( '😀 Grunt removed', $info );
+        
+        return;
     }
+        
+    unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
+    unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
+    $clio->styleLine( '😀 Grunt removed', $info );
 }
