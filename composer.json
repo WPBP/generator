@@ -18,8 +18,8 @@
   ],
   "require": {
     "php": ">=7.0",
-    "zordius/lightncandy": "1.2.3",
-    "nategood/commando": "0.3.0",
+    "zordius/lightncandy": "1.2.4",
+    "nategood/commando": "0.4.0",
     "1happyplace/clio": "1.1.x",
     "perchten/rmrdir": "1.*"
   },
