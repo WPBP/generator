@@ -44,6 +44,7 @@ function clean_composer_file() {
     
     if ( empty( $config[ 'phpstan' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'szepeviktor/phpstan-wordpress' ] );
+        unset( $composer[ 'require-dev' ][ 'szepeviktor/phpstan-phpdoc' ] );
         $clio->styleLine( '😎 Remove PHPStan WordPress support done', $info );
     }
 
