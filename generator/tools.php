@@ -39,6 +39,50 @@ function git_init() {
 }
 
 /**
+ * Clean the coffeescript stuff
+ *
+ * @global array $config
+ * @global object $clio
+ * @global object $info
+ */
+function coffeescript() {
+    global $config, $cmd, $clio, $info;
+    
+    if ( $config[ 'coffeescript' ] === 'false' ) {
+        if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' ) ) {
+            remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' );
+        }
+
+        if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' ) ) {
+            remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
+        }
+
+        $package    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
+        $newpackage = array();
+        foreach ( $package as $line => $content ) {
+            if ( strpos( $content, 'coffee' ) ) {
+                $newpackage[ $line - 1 ] = str_replace( ',', '', $package[ $line - 1 ] );
+                continue;
+            }
+                
+            $newpackage[] = $package[ $line ];
+        }
+
+        file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
+        $grunt    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
+        $newgrunt = array();
+        foreach ( $grunt as $line => $content ) {
+            if ( !( ( $line >= 45 && $line <= 86 ) || $line === 92 || $line === 93 || $line === 97 || $line === 105 || $line === 109 ) ) {
+                $newgrunt[] = $grunt[ $line ];
+            }
+        }
+
+        file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js', $newgrunt );
+        $clio->styleLine( '😀 Coffeescript removed', $info );
+    }
+}
+
+/**
  * Clean the grunt file and install his packages
  *
  * @global array $config
@@ -49,39 +93,7 @@ function grunt() {
     global $config, $cmd, $clio, $info;
 
     if ( $config[ 'grunt' ] === 'true' ) {
-        if ( $config[ 'coffeescript' ] === 'false' ) {
-            if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' ) ) {
-                remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' );
-            }
-
-            if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' ) ) {
-                remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
-            }
-
-            $package    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
-            $newpackage = array();
-            foreach ( $package as $line => $content ) {
-                if ( strpos( $content, 'coffee' ) ) {
-                    $newpackage[ $line - 1 ] = str_replace( ',', '', $package[ $line - 1 ] );
-                    continue;
-                }
-                
-                $newpackage[] = $package[ $line ];
-            }
-
-            file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
-            $grunt    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
-            $newgrunt = array();
-            foreach ( $grunt as $line => $content ) {
-                if ( !( ( $line >= 45 && $line <= 86 ) || $line === 92 || $line === 93 || $line === 97 || $line === 105 || $line === 109 ) ) {
-                    $newgrunt[] = $grunt[ $line ];
-                }
-            }
-
-            file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js', $newgrunt );
-            $clio->styleLine( '😀 Coffeescript removed', $info );
-        }
-
+        coffeescript();
         if ( !$cmd[ 'no-download' ] ) {
             $clio->styleLine( '😀 Grunt install in progress', $info );
             $output = '';

@@ -128,13 +128,9 @@ function extract_wpbp() {
  * @param  array $config The config of the request.
  */
 function execute_generator( $config ) {
-    global $cmd, $clio, $info;
+    global $clio, $info;
     $files = get_files();
-    foreach ( $files as $file ) {
-        if ( empty( $file ) || strpos( $file, 'index.php' ) || strpos( $file, '_generated' ) || strpos( $file, 'Helper' ) || strpos( $file, '_output' ) || strpos( $file, 'vendor' ) ) {
-            continue;
-        }
-        
+    foreach ( $files as $file ) {        
         $file_content = file_get_contents( $file );
         $new_file_content = replace_name_slug( $config, $file_content );
         $new_file_content = parse_conditional_template( $file, $config, $new_file_content );

@@ -149,9 +149,10 @@ function plugin_temp_exist() {
         $clio->styleLine( 'Boilerplate already extracted found', $info );
         if ( $cmd[ 'dev' ] ) {
             copy_dir( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
-        } else {
-            rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
+            return true;
         }
+        
+        rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
 
         return true;
     }

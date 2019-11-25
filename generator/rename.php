@@ -40,6 +40,14 @@ function get_files( $path = null ) {
         if ( remove_files_by_settings( $file ) ) {
             continue;
         }
+        
+        if ( empty( $file ) ) {
+            continue;
+        }
+        
+        if ( strpos( $file, 'index.php' ) || strpos( $file, '_generated' ) || strpos( $file, 'Helper' ) || strpos( $file, '_output' ) || strpos( $file, 'vendor' ) ) {
+            continue;
+        }
 
         $files[] = rename_by_specific_extensions( $file );
     }

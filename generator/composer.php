@@ -32,7 +32,7 @@ function execute_composer() {
  * @global object $info
  */
 function clean_composer_file() {
-    global $config, $cmd, $clio, $info;
+    global $config, $clio, $info;
     $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json' ), true );
     $composer = remove_composer_packages( $composer );
 
