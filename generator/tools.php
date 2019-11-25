@@ -40,6 +40,21 @@ function git_init() {
 
 /**
  * Clean the coffeescript stuff
+ */
+function coffeescript_grunt() {
+    $grunt    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
+    $newgrunt = array();
+    foreach ( $grunt as $line => $content ) {
+        if ( !( ( $line >= 45 && $line <= 86 ) || $line === 92 || $line === 93 || $line === 97 || $line === 105 || $line === 109 ) ) {
+            $newgrunt[] = $grunt[ $line ];
+        }
+    }
+
+    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js', $newgrunt );
+}
+
+/**
+ * Clean the coffeescript stuff
  *
  * @global array $config
  * @global object $clio
@@ -57,18 +72,8 @@ function coffeescript() {
             remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
         }
 
-        $newpackage = strip_packagejson( 'coffee' );
-        file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
-        $grunt    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
-        
-        $newgrunt = array();
-        foreach ( $grunt as $line => $content ) {
-            if ( !( ( $line >= 45 && $line <= 86 ) || $line === 92 || $line === 93 || $line === 97 || $line === 105 || $line === 109 ) ) {
-                $newgrunt[] = $grunt[ $line ];
-            }
-        }
-
-        file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js', $newgrunt );
+        strip_packagejson( 'coffee' );
+        coffeescript_grunt();
         $clio->styleLine( '😀 Coffeescript removed', $info );
     }
 }

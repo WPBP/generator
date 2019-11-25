@@ -178,5 +178,5 @@ function strip_packagejson( $term ) {
         $newpackage[] = $package[ $line ];
     }
     
-    return $newpackage;
+    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
 }
