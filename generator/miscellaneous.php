@@ -159,3 +159,24 @@ function plugin_temp_exist() {
 
     return;
 }
+
+
+/*
+ * Strip lines from package.json
+ *
+ * @return array
+ */
+function strip_packagejson( $term ) {
+    $package    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
+    $newpackage = array();
+    foreach ( $package as $line => $content ) {
+        if ( strpos( $content, $term ) ) {
+            $newpackage[ $line - 1 ] = str_replace( ',', '', $package[ $line - 1 ] );
+            continue;
+        }
+                
+        $newpackage[] = $package[ $line ];
+    }
+    
+    return $newpackage;
+}

@@ -46,7 +46,7 @@ function git_init() {
  * @global object $info
  */
 function coffeescript() {
-    global $config, $cmd, $clio, $info;
+    global $config, $clio, $info;
     
     if ( $config[ 'coffeescript' ] === 'false' ) {
         if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' ) ) {
@@ -57,19 +57,10 @@ function coffeescript() {
             remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
         }
 
-        $package    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
-        $newpackage = array();
-        foreach ( $package as $line => $content ) {
-            if ( strpos( $content, 'coffee' ) ) {
-                $newpackage[ $line - 1 ] = str_replace( ',', '', $package[ $line - 1 ] );
-                continue;
-            }
-                
-            $newpackage[] = $package[ $line ];
-        }
-
+        $newpackage = strip_packagejson( 'coffee' );
         file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
         $grunt    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
+        
         $newgrunt = array();
         foreach ( $grunt as $line => $content ) {
             if ( !( ( $line >= 45 && $line <= 86 ) || $line === 92 || $line === 93 || $line === 97 || $line === 105 || $line === 109 ) ) {
