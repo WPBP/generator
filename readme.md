@@ -18,7 +18,7 @@ This generator is completely based on PHP. Let's have a look on what you need an
 
 ## Install
 
-From [here](https://github.com/WPBP/generator/releases) you can download the phar version or you can chose to install with composer:
+From [here](https://github.com/WPBP/generator/releases) you can download the phar version or you can chose to install it with composer:
 
 `composer global require wpbp/generator:dev-master`
 
@@ -30,3 +30,22 @@ Add this directory to your PATH in your ~/.bash_profile (or ~/.bashrc) like this
 
 `wpbp-generator --help` to get a list of commands
 
+```
+--dark
+     Use a dark theme for console output.
+
+--dev
+     Download from the master branch (the development version).
+
+--help
+     Show the help page for this command.
+
+--json
+     Generate a wpbp.json file in the current folder. Suggested to use the WordPress plugin folder.
+
+--no-download
+     Do you want to execute composer and npm manually? This is your flag!
+
+--verbose
+     Verbose output. Because this can be helpful for debugging!
+```
