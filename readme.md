@@ -63,8 +63,8 @@ This [file](https://github.com/WPBP/generator/blob/master/generator/wpbp.json) c
 * *coffeescript* add the `.coffee` files and grunt packages to compile them, otherwise there will be only the js files already compiled
 * *grunt* adds the support for [GruntJS](https://gruntjs.com/), *grumphp* adds the support for [GrumPHP](https://github.com/phpro/grumphp) and *phpstan* for [PHPStan](https://github.com/phpstan/phpstan)
 * *phpcs-standard* includes the URL for a custom PHPCS rule file that will be downloaded automatically and integrated also in GrumPHP if available, the default is from [this repo](https://github.com/codeatcode/codeatcs)
-* *unit-test* adds the `tests` folder and `codeception.dist.yml` file with the various packages for composer about Codeception
+* *unit-test* adds the `tests` folder and `codeception.dist.yml` file with the various packages for composer about [Codeception](https://codeception.com/)
 * *wpcli* adds the support in the plugin code for the [WP-CLI tool](https://wp-cli.org/)
-* *language-files* adds the po/mo files and the code to load custom languages files
-* *libraries* includes all the composer packages that will be downloaded with the related example code in the boilerplate itself, removing them will not add them
-* *snippet* in the various subsections add specific code snippet integrated for the various needs in WordPress, removing them will not add them
+* *language-files* adds the [po/mo files and the code to load custom languages files](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/)
+* *libraries* includes all the composer packages that will be downloaded with the related example code in the boilerplate itself, removing them will not add it
+* *snippet* in the various subsections add specific code snippet integrated for the various needs in WordPress, removing them will not add it
