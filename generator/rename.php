@@ -49,7 +49,11 @@ function get_files( $path = null ) {
             continue;
         }
 
-        $files[] = rename_by_specific_extensions( $file );
+        $file = rename_by_specific_extensions( $file );
+        
+        if ( !empty( $file ) ) {
+            $files[] = $file;
+        }
     }
 
     return $files;
