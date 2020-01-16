@@ -72,8 +72,11 @@ function clean_composer_file() {
     $composer = remove_folder_for_autoload( $composer );
     
     $clio->styleLine( '😎 Cleaning Composer file', $info );
-
-    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', json_encode( $composer, JSON_PRETTY_PRINT ) );
+    
+    $composer = json_encode( $composer, JSON_PRETTY_PRINT );
+    $composer = replace_author_strings( $composer );
+    
+    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', $composer );
 }
 
 /**
@@ -188,7 +191,6 @@ function remove_composer_repositories( $composer, $searchpath ) {
     return $composer;
 } 
 
-
 /**
  * Remove the autoload folders that are not avalaible
  *
@@ -206,5 +208,22 @@ function remove_folder_for_autoload( $composer ) {
         $composer[ 'autoload' ][ 'classmap' ] = array_values( $composer[ 'autoload' ][ 'classmap' ] ); 
     }
     
+    return $composer;
+}
+
+/**
+ * Replace some keywords with based ones from the plugin name
+ *
+ * @param string  $composer The composer.json content.
+ * @return string
+ */
+function replace_author_strings( $composer ) {
+    global $config;
+    
+    $composer = str_replace( "wpbp\/wordpress-plugin-boilerplate-powered", strtolower( $config[ 'author_name' ] . '/' . str_replace( ' ', '-', $config[ 'plugin_name' ] ) ), $composer );
+    $composer = str_replace( 'author_name', $config[ 'author_name' ], $composer );
+    $composer = str_replace( 'http:\/\/author.url', $config[ 'author_url' ], $composer );
+    $composer = str_replace( 'author@email.it', $config[ 'author_email' ], $composer );
+
     return $composer;
 }
