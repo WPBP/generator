@@ -101,9 +101,7 @@ function remove_specific_composer_respositories( $package, $composer ) {
     
     if ( strpos( $package, 'cmb2-grid' ) !== false ) {
         unset( $composer[ 'extra' ][ 'installer-paths' ][ 'vendor/{$name}/' ][ 1 ] );
-    }
-    
-    if ( strpos( $package, 'cmb2' ) !== false ) {
+    } else if ( strpos( $package, 'cmb2' ) !== false ) {
         unset( $composer[ 'extra' ][ 'installer-paths' ][ 'vendor/{$name}/' ][ 0 ] );
     }
     
