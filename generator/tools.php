@@ -27,7 +27,7 @@ function git_init() {
     global $config, $clio, $info;
 
     if ( $config[ 'git-repo' ] === 'true' ) {
-        exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; git init' );
+        exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; git init' );
         $clio->styleLine( '😎 .git folder generated', $info );
         $gitignore = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore';
         file_put_contents( $gitignore, str_replace( '/plugin-name/', '', file_get_contents( $gitignore ) ) );

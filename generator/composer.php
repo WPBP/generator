@@ -19,7 +19,7 @@ function execute_composer() {
             $composer_cmd .= ' 2>&1';
         }
 
-        exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; ' . $composer_cmd, $output );
+        exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; ' . $composer_cmd, $output );
         $clio->styleLine( '😎 Composer install done', $info );
     }
 }
