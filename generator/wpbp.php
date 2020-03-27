@@ -86,7 +86,12 @@ function extract_wpbp() {
             }
 
             $clio->styleLine( 'Extract Boilerplate', $info );
-            $zip = new ZipArchive;
+            try {
+                $zip = new ZipArchive;
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n";
+                exit();
+            }
             $res = $zip->open( getcwd() . '/plugin.zip' );
             if ( $res === true ) {
                 $zip->extractTo( getcwd() . '/plugin_temp/' );
