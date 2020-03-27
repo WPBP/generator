@@ -93,7 +93,7 @@ function grunt() {
         if ( !$cmd[ 'no-download' ] ) {
             $clio->styleLine( '😀 Grunt install in progress', $info );
             $output = '';
-            exec( 'cd ' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '; npm install 2>&1', $output );
+            exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; npm install 2>&1', $output );
             $clio->styleLine( '😎 Grunt install done', $info );
         }
         
