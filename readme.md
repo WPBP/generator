@@ -2,7 +2,7 @@
 [![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 ![Downloads](https://img.shields.io/packagist/dt/wpbp/generator.svg) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7dea19a435514ccd9079f614dacfda46)](https://www.codacy.com/gh/WPBP/generator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=WPBP/generator&amp;utm_campaign=Badge_Grade)
 
-This generator is completely (based on PHP) parse [WPBP](https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered) and remove the stuff that you don't need.
+This generator (based on PHP) parse the [WordPress Plugin Boilerplate Powered](https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered) and remove the stuff that you don't need.
 
 ## Requirements
 
