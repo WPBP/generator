@@ -107,7 +107,7 @@ function replace_name_slug( $config, $content ) {
         $content = str_replace( "        \n        \n", '', $content );
         $content = str_replace( "\t\t\t\n\t\t\t\n", '', $content );
         $content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
-        $content = str_replace( 'Plugin Name', $config[ 'plugin_name' ], $content );
+        $content = preg_replace('/Plugin Name$/', $config[ 'plugin_name' ], $content );
         $content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
         $content = str_replace( 'plugin_name', str_replace( ' ', '_', str_replace( '-', '_', WPBP_PLUGIN_SLUG ) ), $content );
         preg_match_all( '/[A-Z]/', ucwords( strtolower( preg_replace( '/[0-9]+/', '', $config[ 'plugin_name' ] ) ) ), $ucword );
