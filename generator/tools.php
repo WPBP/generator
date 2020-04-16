@@ -63,19 +63,15 @@ function coffeescript_grunt() {
 function coffeescript() {
     global $config, $clio, $info;
     
-    if ( $config[ 'coffeescript' ] === 'false' ) {
-        if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' ) ) {
-            remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'public/assets/coffee' );
-        }
-
-        if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' ) ) {
-            remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'admin/assets/coffee' );
+    if ( is_empty_or_false( $config[ 'coffeescript' ] ) ) {
+        if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'assets/coffee' ) ) {
+            remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'assets/coffee' );
         }
 
         strip_packagejson( 'coffee' );
         coffeescript_grunt();
         $clio->styleLine( '😀 Coffeescript removed', $info );
-    }
+    } 
 }
 
 /**
@@ -89,7 +85,6 @@ function grunt() {
     global $config, $cmd, $clio, $info;
 
     if ( $config[ 'grunt' ] === 'true' ) {
-        coffeescript();
         if ( !$cmd[ 'no-download' ] ) {
             $clio->styleLine( '😀 Grunt install in progress', $info );
             $output = '';
