@@ -153,6 +153,7 @@ function execute_generator( $config ) {
     $clio->styleLine( 'Generation done, I am superfast! You: (ʘ_ʘ)', $info );
     execute_composer();
     git_init();
+    coffeescript();
     grunt();
 }
 

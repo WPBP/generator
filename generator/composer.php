@@ -36,19 +36,19 @@ function clean_composer_file() {
     $composer = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json' ), true );
     $composer = remove_composer_packages( $composer );
 
-    if ( empty( $config[ 'grumphp' ] ) ) {
+    if ( is_empty_or_false( $config[ 'grumphp' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'phpro/grumphp' ] );
         unset( $composer[ 'require-dev' ][ 'wearejust/grumphp-extra-tasks' ] );
         $clio->styleLine( '😎 Remove GrumPHP done', $info );
     }
     
-    if ( empty( $config[ 'phpstan' ] ) ) {
+    if ( is_empty_or_false( $config[ 'phpstan' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'szepeviktor/phpstan-wordpress' ] );
         unset( $composer[ 'require-dev' ][ 'szepeviktor/phpstan-phpdoc' ] );
         $clio->styleLine( '😎 Remove PHPStan WordPress support done', $info );
     }
 
-    if ( empty( $config[ 'unit-test' ] ) ) {
+    if ( is_empty_or_false( $config[ 'unit-test' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'lucatume/wp-browser' ] );
         unset( $composer[ 'require-dev' ][ 'lucatume/function-mocker' ] );
         unset( $composer[ 'require-dev' ][ 'codeception/codeception' ] );

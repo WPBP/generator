@@ -87,66 +87,66 @@ function remove_files_by_settings( $file ) {
 
     switch ( $file ) {
         // Admin folder
-        case strpos( $file, 'actdeact.php' ) && empty( $config[ 'act-deact_actdeact' ] ):
-        case strpos( $file, 'admin-enqueue.php' ) && empty( $config[ 'admin-assets_admin-js' ] ) 
-                && empty( $config[ 'admin-assets_admin-css' ] ):
-        case strpos( $file, 'impexp.php' ) && empty( $config[ 'backend_impexp-settings' ] ):
-        case strpos( $file, 'uninstall.php' ) && empty( $config[ 'act-deact_uninstall' ] ):
-        case strpos( $file, 'notices.php' ) && empty( $config[ 'libraries_nathanielks__wp-admin-notice' ] ) 
-                && empty( $config[ 'libraries_julien731__wp-review-me' ] ) 
-                && empty( $config[ 'libraries_julien731__wp-dismissible-notices-handler' ] ):
-        case strpos( $file, 'settings-page.php' ) && empty( $config[ 'admin-assets_admin-page' ] ):
-        case strpos( $file, '/admin/views' ) && empty( $config[ 'admin-assets_admin-page' ] ):
+        case strpos( $file, 'actdeact.php' ) && is_empty_or_false( $config[ 'act-deact_actdeact' ] ):
+        case strpos( $file, 'admin-enqueue.php' ) && is_empty_or_false( $config[ 'admin-assets_admin-js' ] ) 
+                && is_empty_or_false( $config[ 'admin-assets_admin-css' ] ):
+        case strpos( $file, 'impexp.php' ) && is_empty_or_false( $config[ 'backend_impexp-settings' ] ):
+        case strpos( $file, 'uninstall.php' ) && is_empty_or_false( $config[ 'act-deact_uninstall' ] ):
+        case strpos( $file, 'notices.php' ) && is_empty_or_false( $config[ 'libraries_nathanielks__wp-admin-notice' ] ) 
+                && is_empty_or_false( $config[ 'libraries_julien731__wp-review-me' ] ) 
+                && is_empty_or_false( $config[ 'libraries_julien731__wp-dismissible-notices-handler' ] ):
+        case strpos( $file, 'settings-page.php' ) && is_empty_or_false( $config[ 'admin-assets_admin-page' ] ):
+        case strpos( $file, '/admin/views' ) && is_empty_or_false( $config[ 'admin-assets_admin-page' ] ):
         // Ajax folder
-        case strpos( $file, 'class-ajax.php' ) && empty( $config[ 'ajax_public' ] ):
-        case strpos( $file, 'admin-ajax.php' ) && empty( $config[ 'ajax_admin' ] ):
+        case strpos( $file, 'class-ajax.php' ) && is_empty_or_false( $config[ 'ajax_public' ] ):
+        case strpos( $file, 'admin-ajax.php' ) && is_empty_or_false( $config[ 'ajax_admin' ] ):
         // Assets folder
-        case strpos( $file, 'public.coffee' ) && empty( $config[ 'public-assets_js' ] ):
-        case strpos( $file, 'public.js' ) && empty( $config[ 'public-assets_js' ] ):
-        case strpos( $file, 'public.css' ) && empty( $config[ 'public-assets_css' ] ):
-        case strpos( $file, 'public.scss' ) && empty( $config[ 'public-assets_css' ] ):
-        case strpos( $file, 'admin.css' ) && empty( $config[ 'admin-assets_admin-css' ] ):
-        case strpos( $file, 'admin.scss' ) && empty( $config[ 'admin-assets_admin-css' ] ):
-        case strpos( $file, 'admin.coffee' ) && empty( $config[ 'admin-assets_admin-js' ] ):
-        case strpos( $file, 'admin.js' ) && empty( $config[ 'admin-assets_admin-js' ] ):
-        case strpos( $file, 'settings.js' ) && empty( $config[ 'admin-assets_settings-js' ] ):
-        case strpos( $file, 'settings.coffee' ) && empty( $config[ 'admin-assets_settings-js' ] ):
-        case strpos( $file, 'settings.css' ) && empty( $config[ 'admin-assets_settings-css' ] ):
-        case strpos( $file, 'settings.scss' ) && empty( $config[ 'admin-assets_settings-css' ] ):
+        case strpos( $file, 'public.coffee' ) && is_empty_or_false( $config[ 'public-assets_js' ] ):
+        case strpos( $file, 'public.js' ) && is_empty_or_false( $config[ 'public-assets_js' ] ):
+        case strpos( $file, 'public.css' ) && is_empty_or_false( $config[ 'public-assets_css' ] ):
+        case strpos( $file, 'public.scss' ) && is_empty_or_false( $config[ 'public-assets_css' ] ):
+        case strpos( $file, 'admin.css' ) && is_empty_or_false( $config[ 'admin-assets_admin-css' ] ):
+        case strpos( $file, 'admin.scss' ) && is_empty_or_false( $config[ 'admin-assets_admin-css' ] ):
+        case strpos( $file, 'admin.coffee' ) && is_empty_or_false( $config[ 'admin-assets_admin-js' ] ):
+        case strpos( $file, 'admin.js' ) && is_empty_or_false( $config[ 'admin-assets_admin-js' ] ):
+        case strpos( $file, 'settings.js' ) && is_empty_or_false( $config[ 'admin-assets_settings-js' ] ):
+        case strpos( $file, 'settings.coffee' ) && is_empty_or_false( $config[ 'admin-assets_settings-js' ] ):
+        case strpos( $file, 'settings.css' ) && is_empty_or_false( $config[ 'admin-assets_settings-css' ] ):
+        case strpos( $file, 'settings.scss' ) && is_empty_or_false( $config[ 'admin-assets_settings-css' ] ):
         // Cli folder
-        case strpos( $file, 'cli.php' ) && empty( $config[ 'wpcli' ] ):
+        case strpos( $file, 'cli.php' ) && is_empty_or_false( $config[ 'wpcli' ] ):
         // Integrations
-        case strpos( $file, 'cmb.php' ) && empty( $config[ 'libraries_cmb2__cmb2' ] ):
-        case strpos( $file, 'contextualhelp.php' ) && empty( $config[ 'libraries_mte90__wp-contextual-help' ] ):
-        case strpos( $file, '/help-docs' ) && empty( $config[ 'libraries_mte90__wp-contextual-help' ] ):
-        case strpos( $file, 'cron.php' ) && empty( $config[ 'libraries_wpbp__cronplus' ] ):
-        case strpos( $file, 'fakepage.php' ) && empty( $config[ 'libraries_wpbp__fakepage' ] ):
-        case strpos( $file, 'pointers.php' ) && empty( $config[ 'libraries_wpbp__pointerplus' ] ):
-        case strpos( $file, 'template.php' ) && empty( $config[ 'libraries_wpbp__template' ] ):
-        case strpos( $file, 'widgets.php' ) && empty( $config[ 'libraries_wpbp__widgets-helper' ] ):
-        case strpos( $file, '/widgets' ) && empty( $config[ 'libraries_wpbp__widgets-helper' ] ):
+        case strpos( $file, 'cmb.php' ) && is_empty_or_false( $config[ 'libraries_cmb2__cmb2' ] ):
+        case strpos( $file, 'contextualhelp.php' ) && is_empty_or_false( $config[ 'libraries_mte90__wp-contextual-help' ] ):
+        case strpos( $file, '/help-docs' ) && is_empty_or_false( $config[ 'libraries_mte90__wp-contextual-help' ] ):
+        case strpos( $file, 'cron.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__cronplus' ] ):
+        case strpos( $file, 'fakepage.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__fakepage' ] ):
+        case strpos( $file, 'pointers.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__pointerplus' ] ):
+        case strpos( $file, 'template.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__template' ] ):
+        case strpos( $file, 'widgets.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__widgets-helper' ] ):
+        case strpos( $file, '/widgets' ) && is_empty_or_false( $config[ 'libraries_wpbp__widgets-helper' ] ):
         // Internals
-        case strpos( $file, 'posttypes.php' ) && empty( $config[ 'libraries_johnbillion__extended-cpts' ] ):
-        case strpos( $file, 'shortcode.php' ) && empty( $config[ 'frontend_shortcode' ] ):
-        case strpos( $file, 'transient.php' ) && empty( $config[ 'system_transient' ] ):
-        case strpos( $file, 'debug.php' ) && empty( $config[ 'libraries_wpbp__debug' ] ):
+        case strpos( $file, 'posttypes.php' ) && is_empty_or_false( $config[ 'libraries_johnbillion__extended-cpts' ] ):
+        case strpos( $file, 'shortcode.php' ) && is_empty_or_false( $config[ 'frontend_shortcode' ] ):
+        case strpos( $file, 'transient.php' ) && is_empty_or_false( $config[ 'system_transient' ] ):
+        case strpos( $file, 'debug.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__debug' ] ):
         // Public
-        case strpos( $file, 'class-enqueue.php' ) && empty( $config[ 'public-assets_js' ] ) 
-                && empty( $config[ 'public-assets_css' ] )
-                && empty( $config[ 'frontend_wp-localize-script' ] ):
+        case strpos( $file, 'class-enqueue.php' ) && is_empty_or_false( $config[ 'public-assets_js' ] ) 
+                && is_empty_or_false( $config[ 'public-assets_css' ] )
+                && is_empty_or_false( $config[ 'frontend_wp-localize-script' ] ):
         // REST folder
-        case strpos( $file, 'rest.php' ) && empty( $config[ 'system_rest' ] ):
+        case strpos( $file, 'rest.php' ) && is_empty_or_false( $config[ 'system_rest' ] ):
         // Template folder
-        case strpos( $file, '/templates' ) && empty( $config[ 'frontend_template-system' ] ):
+        case strpos( $file, '/templates' ) && is_empty_or_false( $config[ 'frontend_template-system' ] ):
         // Tests folder
-        case strpos( $file, '/tests' ) && empty( $config[ 'unit-test' ] ):
-        case strpos( $file, 'codeception.dist.yml' ) && empty( $config[ 'unit-test' ] ):
-        case strpos( $file, '.env' ) && empty( $config[ 'unit-test' ] ):
-        case strpos( $file, 'wp-config-test.php' ) && empty( $config[ 'unit-test' ] ):
+        case strpos( $file, '/tests' ) && is_empty_or_false( $config[ 'unit-test' ] ):
+        case strpos( $file, 'codeception.dist.yml' ) && is_empty_or_false( $config[ 'unit-test' ] ):
+        case strpos( $file, '.env' ) && is_empty_or_false( $config[ 'unit-test' ] ):
+        case strpos( $file, 'wp-config-test.php' ) && is_empty_or_false( $config[ 'unit-test' ] ):
         // Others
-        case strpos( $file, 'languages' ) && empty( $config[ 'language-files' ] ):
-        case strpos( $file, 'grumphp.yml' ) && empty( $config[ 'grumphp' ] ):
-        case strpos( $file, 'phpstan.neon' ) && empty( $config[ 'phpstan' ] ):
+        case strpos( $file, 'languages' ) && is_empty_or_false( $config[ 'language-files' ] ):
+        case strpos( $file, 'grumphp.yml' ) && is_empty_or_false( $config[ 'grumphp' ] ):
+        case strpos( $file, 'phpstan.neon' ) && is_empty_or_false( $config[ 'phpstan' ] ):
             $return = remove_file_folder( $file );
             break;
     }

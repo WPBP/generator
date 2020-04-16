@@ -180,3 +180,12 @@ function strip_packagejson( $term ) {
     
     file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
 }
+
+
+function is_empty_or_false( $testme ) {
+    if ( empty( $testme ) || $testme == 'false' ) {
+        return true;
+    }
+    
+    return;
+}
