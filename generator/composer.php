@@ -38,7 +38,6 @@ function clean_composer_file() {
 
     if ( is_empty_or_false( $config[ 'grumphp' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'phpro/grumphp' ] );
-        unset( $composer[ 'require-dev' ][ 'wearejust/grumphp-extra-tasks' ] );
         $clio->styleLine( '😎 Remove GrumPHP done', $info );
     }
     
@@ -86,20 +85,11 @@ function clean_composer_file() {
  * @param string $composer The composer.json content.
  * @return array
  */
-function remove_specific_composer_respositories( $package, $composer ) {
-    if ( strpos( $package, 'wp-contextual-help' ) !== false ) {
-        $composer = remove_composer_autoload( $composer, 'wp-contextual-help' );
-        $composer = remove_composer_repositories( $composer, 'wp-contextual-help' );
-    }
-    
+function remove_specific_composer_respositories( $package, $composer ) {    
     if ( strpos( $package, 'wp-custom-bulk-actions' ) !== false ) {
         $composer = remove_composer_autoload( $composer, 'wp-custom-bulk-actions' );
         $composer = remove_composer_repositories( $composer, 'wp-custom-bulk-actions' );
         unset( $composer[ 'extra' ][ 'installer-paths' ][ 'vendor/{$name}/' ][ 3 ] );
-    }
-
-    if ( strpos( $package, 'wp-admin-notice' ) !== false ) {
-        $composer = remove_composer_repositories( $composer, 'wordpress-admin-notice' );
     }
     
     if ( strpos( $package, 'cmb2-grid' ) !== false ) {

@@ -30,7 +30,6 @@
     "admin": "true"
   },
   "git-repo": "true",
-  "coffeescript": "true",
   "grunt": "true",
   "grumphp": "true",
   "phpstan": "true",
@@ -40,12 +39,9 @@
   "language-files": "true",
   "libraries": [
     "freemius/wordpress-sdk",
-    "julien731/wp-dismissible-notices-handler",
     "julien731/wp-review-me",
-    "nathanielks/wp-admin-notice",
     "origgami/cmb2-grid",
     "seravo/wp-custom-bulk-actions",
-    "mte90/wp-contextual-help",
     "cmb2/cmb2",
     "johnbillion/extended-cpts",
     "stevegrunwell/wp-cache-remember",
@@ -57,9 +53,10 @@
     "wpbp/pointerplus",
     "wpbp/template",
     "wpbp/widgets-helper",
-    "wpbp/backbone-modal-view",
-    "yoast/i18n-module",
-    "yoast/whip"
+    "micropackage/requirements",
+    "wpdesk/wp-notice",
+    "yahnis-elsts/plugin-update-checker",
+    "yoast/i18n-module"
   ],
   "snippet": {
     "backend": [

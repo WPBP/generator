@@ -101,16 +101,13 @@ function remove_files_by_settings( $file ) {
         case strpos( $file, 'class-ajax.php' ) && is_empty_or_false( $config[ 'ajax_public' ] ):
         case strpos( $file, 'admin-ajax.php' ) && is_empty_or_false( $config[ 'ajax_admin' ] ):
         // Assets folder
-        case strpos( $file, 'public.coffee' ) && is_empty_or_false( $config[ 'public-assets_js' ] ):
         case strpos( $file, 'public.js' ) && is_empty_or_false( $config[ 'public-assets_js' ] ):
         case strpos( $file, 'public.css' ) && is_empty_or_false( $config[ 'public-assets_css' ] ):
         case strpos( $file, 'public.scss' ) && is_empty_or_false( $config[ 'public-assets_css' ] ):
         case strpos( $file, 'admin.css' ) && is_empty_or_false( $config[ 'admin-assets_admin-css' ] ):
         case strpos( $file, 'admin.scss' ) && is_empty_or_false( $config[ 'admin-assets_admin-css' ] ):
-        case strpos( $file, 'admin.coffee' ) && is_empty_or_false( $config[ 'admin-assets_admin-js' ] ):
         case strpos( $file, 'admin.js' ) && is_empty_or_false( $config[ 'admin-assets_admin-js' ] ):
         case strpos( $file, 'settings.js' ) && is_empty_or_false( $config[ 'admin-assets_settings-js' ] ):
-        case strpos( $file, 'settings.coffee' ) && is_empty_or_false( $config[ 'admin-assets_settings-js' ] ):
         case strpos( $file, 'settings.css' ) && is_empty_or_false( $config[ 'admin-assets_settings-css' ] ):
         case strpos( $file, 'settings.scss' ) && is_empty_or_false( $config[ 'admin-assets_settings-css' ] ):
         // Cli folder

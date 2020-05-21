@@ -39,42 +39,6 @@ function git_init() {
 }
 
 /**
- * Clean the coffeescript stuff
- */
-function coffeescript_grunt() {
-    $grunt    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
-    $newgrunt = array();
-    foreach ( $grunt as $line => $content ) {
-        if ( !( ( $line >= 45 && $line <= 86 ) || $line === 92 || $line === 93 || $line === 97 || $line === 105 || $line === 109 ) ) {
-            $newgrunt[] = $grunt[ $line ];
-        }
-    }
-
-    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js', $newgrunt );
-}
-
-/**
- * Clean the coffeescript stuff
- *
- * @global array $config
- * @global object $clio
- * @global object $info
- */
-function coffeescript() {
-    global $config, $clio, $info;
-    
-    if ( is_empty_or_false( $config[ 'coffeescript' ] ) ) {
-        if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'assets/coffee' ) ) {
-            remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'assets/coffee' );
-        }
-
-        strip_packagejson( 'coffee' );
-        coffeescript_grunt();
-        $clio->styleLine( '😀 Coffeescript removed', $info );
-    } 
-}
-
-/**
  * Clean the grunt file and install his packages
  *
  * @global array $config
