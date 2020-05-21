@@ -92,9 +92,9 @@ function remove_files_by_settings( $file ) {
                 && is_empty_or_false( $config[ 'admin-assets_admin-css' ] ):
         case strpos( $file, 'impexp.php' ) && is_empty_or_false( $config[ 'backend_impexp-settings' ] ):
         case strpos( $file, 'uninstall.php' ) && is_empty_or_false( $config[ 'act-deact_uninstall' ] ):
-        case strpos( $file, 'notices.php' ) && is_empty_or_false( $config[ 'libraries_nathanielks__wp-admin-notice' ] ) 
+        case strpos( $file, 'notices.php' ) && is_empty_or_false( $config[ 'libraries_wpdesk__wp-notice' ] ) 
                 && is_empty_or_false( $config[ 'libraries_julien731__wp-review-me' ] ) 
-                && is_empty_or_false( $config[ 'libraries_julien731__wp-dismissible-notices-handler' ] ):
+                && is_empty_or_false( $config[ 'libraries_yoast__i18n-module' ] ):
         case strpos( $file, 'settings-page.php' ) && is_empty_or_false( $config[ 'admin-assets_admin-page' ] ):
         case strpos( $file, '/admin/views' ) && is_empty_or_false( $config[ 'admin-assets_admin-page' ] ):
         // Ajax folder
@@ -114,8 +114,6 @@ function remove_files_by_settings( $file ) {
         case strpos( $file, 'cli.php' ) && is_empty_or_false( $config[ 'wpcli' ] ):
         // Integrations
         case strpos( $file, 'cmb.php' ) && is_empty_or_false( $config[ 'libraries_cmb2__cmb2' ] ):
-        case strpos( $file, 'contextualhelp.php' ) && is_empty_or_false( $config[ 'libraries_mte90__wp-contextual-help' ] ):
-        case strpos( $file, '/help-docs' ) && is_empty_or_false( $config[ 'libraries_mte90__wp-contextual-help' ] ):
         case strpos( $file, 'cron.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__cronplus' ] ):
         case strpos( $file, 'fakepage.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__fakepage' ] ):
         case strpos( $file, 'pointers.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__pointerplus' ] ):

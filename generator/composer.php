@@ -60,7 +60,7 @@ function clean_composer_file() {
         unset( $composer[ 'require-dev' ] );
     }
     
-    if ( count( $composer[ 'repositories' ] ) === 0 ) {
+    if ( isset( $composer[ 'repositories' ] ) && count( $composer[ 'repositories' ] ) === 0 ) {
         unset( $composer[ 'repositories' ] );
     }
 
