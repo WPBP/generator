@@ -154,7 +154,7 @@ function execute_generator( $config ) {
     execute_composer();
     git_init();
     grunt();
-    phpstan();
+    grumphp();
 }
 
 function parse_conditional_template( $file, $config, $file_content ) {

@@ -75,8 +75,25 @@ function grunt() {
 function grumphp() {
     global $config, $cmd, $clio, $info;
     $grumphp = yaml_parse_file ( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml' );
-    if ( $config[ 'grunt' ] === 'true' ) {
-        unset($grumphp['grunt']);
+    if ( !is_empty_or_false( $config[ 'grunt' ] ) ) {
+        unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'grunt' ] );
+        $clio->styleLine( '😀 Grunt removed from GrumPHP', $info );
     }
+    
+    if ( !is_empty_or_false( $config[ 'phpstan' ] ) ) {
+        unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpstan' ] );
+        $clio->styleLine( '😀 PHPStan removed from GrumPHP', $info );
+    }
+    
+    if ( !is_empty_or_false( $config[ 'unit-test' ] ) ) {
+        unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'codeception' ] );
+        $clio->styleLine( '😀 Codeception removed from GrumPHP', $info );
+    }
+    
+    if ( !is_empty_or_false( $config[ 'phpcs-standard' ] ) ) {
+        unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpcs' ] );
+        $clio->styleLine( '😀 PHPCS removed from GrumPHP', $info );    
+    }
+    
     yaml_emit_file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml', $grumphp );
 }
