@@ -63,3 +63,20 @@ function grunt() {
     unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
     $clio->styleLine( '😀 Grunt removed', $info );
 }
+
+
+/**
+ * Clean the grumphp file
+ *
+ * @global array $config
+ * @global object $clio
+ * @global object $info
+ */
+function grumphp() {
+    global $config, $cmd, $clio, $info;
+    $grumphp = yaml_parse_file ( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml' );
+    if ( $config[ 'grunt' ] === 'true' ) {
+        unset($grumphp['grunt']);
+    }
+    yaml_emit_file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml', $grumphp );
+}

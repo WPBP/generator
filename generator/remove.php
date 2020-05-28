@@ -55,22 +55,24 @@ function remove_empty_folders() {
 function count_files_in_a_folder($path) {
     // (Ensure that the path contains an ending slash)
     $file_count = 0;
-    $dir_handle = opendir( $path );
- 
-    if ( !$dir_handle ) return -1;
- 
-    while ($file = readdir( $dir_handle )) {
-        if ($file == '.' || $file == '..' || $file == 'index.php' ) continue;
- 
-        if ( is_dir( $path . $file ) ){      
-            $file_count += count_files_in_a_folder($path . $file . DIRECTORY_SEPARATOR);
-            continue;
+    if( file_exists( $path ) ) {
+        $dir_handle = opendir( $path );
+    
+        if ( !$dir_handle ) return -1;
+    
+        while ($file = readdir( $dir_handle )) {
+            if ($file == '.' || $file == '..' || $file == 'index.php' ) continue;
+    
+            if ( is_dir( $path . $file ) ){      
+                $file_count += count_files_in_a_folder($path . $file . DIRECTORY_SEPARATOR);
+                continue;
+            }
+            
+            $file_count++; // increase file count
         }
-        
-        $file_count++; // increase file count
+    
+        closedir( $dir_handle );
     }
- 
-    closedir( $dir_handle );
     return $file_count;
 }
 
