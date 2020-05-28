@@ -10,11 +10,11 @@ Let's have a look on what you need and how to install it:
 
 ### Debian/Ubuntu
 
-`sudo apt-get install php php-zip php-mbstring`
+`sudo apt-get install php php-zip php-mbstring php-yaml`
 
 ### Fedora/Centos
 
-`sudo dnf install php php-zip php-mbstring`
+`sudo dnf install php php-zip php-mbstring php-yaml`
 
 ## Install
 
