@@ -73,7 +73,7 @@ function grunt() {
  * @global object $info
  */
 function grumphp() {
-    global $config, $cmd, $clio, $info;
+    global $config, $clio, $info;
     $grumphp = yaml_parse_file ( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml' );
     if ( !is_empty_or_false( $config[ 'grunt' ] ) ) {
         unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'grunt' ] );
