@@ -203,7 +203,7 @@ function remove_folder_for_autoload( $composer ) {
                 unset( $composer[ 'autoload' ][ 'psr-4' ][ $key ] );
             }
         }
-        $composer[ 'autoload' ][ 'psr-4' ] = array_values( $composer[ 'autoload' ][ 'psr-4' ] ); 
+        $composer[ 'autoload' ][ 'psr-4' ] = $composer[ 'autoload' ][ 'psr-4' ]; 
     }
     
     return $composer;
