@@ -50,6 +50,14 @@ function clean_composer_file() {
     if ( is_empty_or_false( $config[ 'unit-test' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'lucatume/wp-browser' ] );
         unset( $composer[ 'require-dev' ][ 'lucatume/function-mocker' ] );
+        unset( $composer[ 'require-dev' ][ 'codeception/module-asserts' ] );
+        unset( $composer[ 'require-dev' ][ 'codeception/module-phpbrowser' ] );
+        unset( $composer[ 'require-dev' ][ 'codeception/module-webdriver' ] );
+        unset( $composer[ 'require-dev' ][ 'codeception/module-db' ] );
+        unset( $composer[ 'require-dev' ][ 'codeception/module-filesystem' ] );
+        unset( $composer[ 'require-dev' ][ 'codeception/module-cli' ] );
+        unset( $composer[ 'require-dev' ][ 'codeception/module-rest' ] );
+        unset( $composer[ 'require-dev' ][ 'codeception/util-universalframework' ] );
         unset( $composer[ 'require-dev' ][ 'codeception/codeception' ] );
         unset( $composer[ 'require-dev' ][ 'codeception/codeception-progress-reporter' ] );
         unset( $composer[ 'require-dev' ][ 'phpunit/phpunit' ] );
@@ -189,13 +197,13 @@ function remove_composer_repositories( $composer, $searchpath ) {
  */
 function remove_folder_for_autoload( $composer ) {
     if ( isset( $composer[ 'autoload' ] ) ) {
-        foreach ( $composer[ 'autoload' ][ 'classmap' ] as $key => $path ) {
+        foreach ( $composer[ 'autoload' ][ 'psr-4' ] as $key => $path ) {
             $there_is_only_index_file = count_files_in_a_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/' . $path );
             if ( $there_is_only_index_file === 1 ) {
-                unset( $composer[ 'autoload' ][ 'classmap' ][ $key ] );
+                unset( $composer[ 'autoload' ][ 'psr-4' ][ $key ] );
             }
         }
-        $composer[ 'autoload' ][ 'classmap' ] = array_values( $composer[ 'autoload' ][ 'classmap' ] ); 
+        $composer[ 'autoload' ][ 'psr-4' ] = array_values( $composer[ 'autoload' ][ 'psr-4' ] ); 
     }
     
     return $composer;
@@ -210,7 +218,7 @@ function remove_folder_for_autoload( $composer ) {
 function replace_author_strings( $composer ) {
     global $config;
     
-    $composer = str_replace( "wpbp\/wordpress-plugin-boilerplate-powered", strtolower( $config[ 'author_name' ] . '/' . str_replace( ' ', '-', $config[ 'plugin_name' ] ) ), $composer );
+    $composer = str_replace( "wpbp\/wordpress-plugin-boilerplate-powered", strtolower( str_replace( ' ', '-', $config[ 'author_name' ] ) . '/' . str_replace( ' ', '-', $config[ 'plugin_name' ] ) ), $composer );
     $composer = str_replace( 'author_name', $config[ 'author_name' ], $composer );
     $composer = str_replace( 'http:\/\/author.url', $config[ 'author_url' ], $composer );
     $composer = str_replace( 'author@email.it', $config[ 'author_email' ], $composer );
