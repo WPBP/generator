@@ -100,8 +100,7 @@ function remove_files_by_settings( $file ) {
         case strpos( $file, 'backend/Pointers.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__pointerplus' ] ):
         case strpos( $file, 'backend/views' ) && is_empty_or_false( $config[ 'admin-assets_admin-page' ] ):
         // Ajax folder
-        case strpos( $file, 'ajax/Ajax.php' ) && is_empty_or_false( $config[ 'ajax_public' ] ):
-        case strpos( $file, 'ajax/Ajax_Admin.php' ) && is_empty_or_false( $config[ 'ajax_admin' ] ):
+        case strpos( $file, 'ajax' ) && is_empty_or_false( $config[ 'ajax' ] ):
         // Assets folder
         case strpos( $file, 'public.js' ) && is_empty_or_false( $config[ 'public-assets_js' ] ):
         case strpos( $file, 'public.css' ) && is_empty_or_false( $config[ 'public-assets_css' ] ):
