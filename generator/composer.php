@@ -120,7 +120,8 @@ function remove_specific_composer_respositories( $package, $composer ) {
  * @return array
  */
 function remove_composer_packages( $composer ) {
-    global $config;
+    global $config, $clio, $info;
+    $clio->styleLine( '😎 Remove Composer packages', $info );
     foreach ( $config as $key => $value ) {
         if ( strpos( $key, 'libraries_' ) !== false ) {
             if ( empty( $value ) ) {

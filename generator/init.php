@@ -53,8 +53,13 @@ extract_wpbp();
 execute_generator( $config );
 // Done!
 echo PHP_EOL;
+$clio->styleLine( 'Last cleanings!', $info );
+remove_empty_folders();
+// Another round to remove the folder that wasn't cleaned at first round
 remove_empty_folders();
 $clio->styleLine( 'Done, I am superfast!', $info );
-$clio->styleLine( 'Don\'t forget to look on https://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/wiki', $info );
+$clio->styleLine( '', $info );
+$clio->styleLine( '👉 Don\'t forget to look on https://wpbp.github.io/wiki.html', $info );
+$clio->styleLine( '', $info );
 $clio->styleLine( 'Love WordPress-Plugin-Boilerplate-Powered? Please consider supporting our collective:', $info );
 $clio->styleLine( '👉 https://opencollective.com/WordPress-Plugin-Boilerplate-Powered/donate', $info );
