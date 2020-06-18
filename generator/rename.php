@@ -66,7 +66,7 @@ function get_files( $path = null ) {
 function rename_by_specific_extensions( $file ) {
     global $config, $clio, $error;
     $files = '';
-    if ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, '.pot' ) || strpos( $file, '.yml' ) || strpos( $file, 'gitignore' ) ) {
+    if ( strpos( $file, '.php' ) || strpos( $file, '.txt' ) || strpos( $file, '.pot' ) || strpos( $file, '.yml' ) || strpos( $file, '.neon' ) || strpos( $file, 'gitignore' ) || strpos( $file, '.env' ) ) {
         $pathparts = pathinfo( $file );
         $newname   = replace_name_slug( $config, $pathparts[ 'filename' ] );
         $newname   = $pathparts[ 'dirname' ] . DIRECTORY_SEPARATOR . $newname . '.' . $pathparts[ 'extension' ];
