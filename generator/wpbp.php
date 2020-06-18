@@ -151,10 +151,10 @@ function execute_generator( $config ) {
 
     echo PHP_EOL;
     $clio->styleLine( 'Generation done, I am superfast! You: (ʘ_ʘ)', $info );
-    execute_composer();
     git_init();
     grunt();
     grumphp();
+    execute_composer();
 }
 
 function parse_conditional_template( $file, $config, $file_content ) {

@@ -117,21 +117,22 @@ function remove_files_by_settings( $file ) {
         case strpos( $file, 'integrations/CMB.php' ) && is_empty_or_false( $config[ 'libraries_cmb2__cmb2' ] ):
         case strpos( $file, 'integrations/Cron.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__cronplus' ] ):
         case strpos( $file, 'integrations/FakePage.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__fakepage' ] ):
-        case strpos( $file, 'integrations/Template.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__template' ] ):
-        case strpos( $file, '/Widgets' ) && is_empty_or_false( $config[ 'libraries_wpbp__widgets-helper' ] ):
+        case strpos( $file, 'integrations/Template.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__template' ] ):file:///tmp/test/test
         // Internals
         case strpos( $file, 'internals/PostTypes.php' ) && is_empty_or_false( $config[ 'libraries_johnbillion__extended-cpts' ] ):
         case strpos( $file, 'internals/Shortcode.php' ) && is_empty_or_false( $config[ 'frontend_shortcode' ] ):
         case strpos( $file, 'internals/Transient.php' ) && is_empty_or_false( $config[ 'system_transient' ] ):
         case strpos( $file, 'debug.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__debug' ] ):
-        // Public
+        // Frontend
         case strpos( $file, 'frontend' ) && is_empty_or_false( $config[ 'public-assets_js' ] ) 
                 && is_empty_or_false( $config[ 'public-assets_css' ] )
                 && is_empty_or_false( $config[ 'frontend_wp-localize-script' ] ):
+        case strpos( $file, 'Body_Class.php' ) && is_empty_or_false( $config[ 'frontend_body-class' ] ):
         // REST folder
         case strpos( $file, 'rest/Example.php' ) && is_empty_or_false( $config[ 'system_rest' ] ):
         // Template folder
         case strpos( $file, '/templates' ) && is_empty_or_false( $config[ 'frontend_template-system' ] ):
+        case strpos( $file, '/Template.php' ) && is_empty_or_false( $config[ 'frontend_template-system' ] ):
         // Tests folder
         case strpos( $file, '/tests' ) && is_empty_or_false( $config[ 'unit-test' ] ):
         case strpos( $file, 'codeception.dist.yml' ) && is_empty_or_false( $config[ 'unit-test' ] ):
