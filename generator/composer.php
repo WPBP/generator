@@ -200,11 +200,11 @@ function remove_folder_for_autoload( $composer ) {
     if ( isset( $composer[ 'autoload' ] ) ) {
         foreach ( $composer[ 'autoload' ][ 'psr-4' ] as $key => $path ) {
             $there_is_only_index_file = count_files_in_a_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/' . $path );
-            if ( $there_is_only_index_file === 1 ) {
+            if ( $there_is_only_index_file === 1 || $there_is_only_index_file === 0 ) {
                 unset( $composer[ 'autoload' ][ 'psr-4' ][ $key ] );
+                print_v( 'Removed ' . $key . ' from composer' );
             }
         }
-        $composer[ 'autoload' ][ 'psr-4' ] = $composer[ 'autoload' ][ 'psr-4' ]; 
     }
     
     return $composer;

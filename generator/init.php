@@ -57,6 +57,7 @@ $clio->styleLine( 'Last cleanings!', $info );
 remove_empty_folders();
 // Another round to remove the folder that wasn't cleaned at first round
 remove_empty_folders();
+execute_composer();
 $clio->styleLine( 'Done, I am superfast!', $info );
 $clio->styleLine( '', $info );
 $clio->styleLine( '👉 Don\'t forget to look on https://wpbp.github.io/wiki.html', $info );
