@@ -31,6 +31,8 @@
   "grumphp": "true",
   "phpstan": "true",
   "phpcs": "true",
+  "phpmd": "true",
+  "phpcs": "true",
   "unit-test": "true",
   "wpcli": "true",
   "language-files": "true",

@@ -82,7 +82,12 @@ function grumphp() {
         
         if ( !is_empty_or_false( $config[ 'phpcs' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpcs' ] );
-            $clio->styleLine( '😀 Codeception removed from PHPCS', $info );
+            $clio->styleLine( '😀 PHPCS removed from GrumPHP', $info );
+        }
+        
+        if ( !is_empty_or_false( $config[ 'phpmd' ] ) ) {
+            unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpmd' ] );
+            $clio->styleLine( '😀 PHPMD removed from GrumPHP', $info );
         }
         
         yaml_emit_file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml', $grumphp );

@@ -26,8 +26,6 @@ function get_files( $path = null ) {
     $dir_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
     $iterator     = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
 
-    download_phpcs_standard();
-
     // Move in array with only paths
     foreach ( $iterator as $file => $object ) {
         $list[] = $file;
