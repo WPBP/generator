@@ -221,8 +221,8 @@ function replace_author_strings( $composer ) {
     
     $composer = str_replace( "wpbp\/wordpress-plugin-boilerplate-powered", strtolower( str_replace( ' ', '-', $config[ 'author_name' ] ) . '/' . str_replace( ' ', '-', $config[ 'plugin_name' ] ) ), $composer );
     $composer = str_replace( 'author_name', $config[ 'author_name' ], $composer );
-    $composer = str_replace( 'http:\/\/author.url', $config[ 'author_url' ], $composer );
-    $composer = str_replace( 'author@email.it', $config[ 'author_email' ], $composer );
+    $composer = str_replace( 'https:\/\/author-url.test', $config[ 'author_url' ], $composer );
+    $composer = str_replace( 'author@example.com', $config[ 'author_email' ], $composer );
 
     return $composer;
 }
