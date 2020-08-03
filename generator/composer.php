@@ -45,6 +45,12 @@ function clean_composer_file() {
         unset( $composer[ 'require-dev' ][ 'szepeviktor/phpstan-wordpress' ] );
         $clio->styleLine( '😎 Remove PHPStan WordPress support done', $info );
     }
+    
+    if ( is_empty_or_false( $config[ 'phpcs' ] ) ) {
+        unset( $composer[ 'require-dev' ][ 'codeatcode/codeatcs' ] );
+        unset( $composer[ 'require-dev' ][ 'dealerdirect/phpcodesniffer-composer-installer' ] );
+        $clio->styleLine( '😎 Remove PHPCS support done', $info );
+    }
 
     if ( is_empty_or_false( $config[ 'unit-test' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'lucatume/wp-browser' ] );

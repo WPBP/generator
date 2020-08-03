@@ -30,7 +30,7 @@
   "grunt": "true",
   "grumphp": "true",
   "phpstan": "true",
-  "phpcs-standard": "https://raw.githubusercontent.com/CodeAtCode/CodeatCS/master/CodeatCodingStandard/ruleset.xml",
+  "phpcs": "true",
   "unit-test": "true",
   "wpcli": "true",
   "language-files": "true",

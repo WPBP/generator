@@ -5,18 +5,6 @@
  */ 
 
 /**
- * Download the phpcs file
- */
-function download_phpcs_standard() {
-    global $config, $clio, $info;
-    if ( !is_empty_or_false( $config[ 'phpcs-standard' ] ) ) {
-        $codeat = file_get_contents( $config[ 'phpcs-standard' ] );
-        file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/phpcs.xml', $codeat );
-        $clio->styleLine( '😎 PHPCS Standard downloaded', $info );
-    }
-}
-
-/**
  * Create the .git folder and update the boilerplate .gitignore file
  *
  * @global array $config
@@ -92,9 +80,9 @@ function grumphp() {
             $clio->styleLine( '😀 Codeception removed from GrumPHP', $info );
         }
         
-        if ( !is_empty_or_false( $config[ 'phpcs-standard' ] ) ) {
+        if ( !is_empty_or_false( $config[ 'phpcs' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpcs' ] );
-            $clio->styleLine( '😀 PHPCS removed from GrumPHP', $info );    
+            $clio->styleLine( '😀 Codeception removed from PHPCS', $info );
         }
         
         yaml_emit_file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml', $grumphp );

@@ -61,7 +61,7 @@ This [file](https://github.com/WPBP/generator/blob/master/generator/wpbp.json) c
 * *ajax* section add code for [WordPress Ajax](https://codex.wordpress.org/AJAX_in_Plugins) system for [logged/non-logged users](https://developer.wordpress.org/plugins/javascript/enqueuing/#ajax-action)
 * *git-repo* execute automatically `git init` in the folder created
 * *grunt* adds the support for [GruntJS](https://gruntjs.com/), *grumphp* adds the support for [GrumPHP](https://github.com/phpro/grumphp) and *phpstan* for [PHPStan](https://github.com/phpstan/phpstan)
-* *phpcs-standard* includes the URL for a custom [PHPCS rule file](https://github.com/squizlabs/PHP_CodeSniffer) that will be downloaded automatically and integrated also in GrumPHP if available, the default is from [this repo](https://github.com/codeatcode/codeatcs)
+* *phpcs/phpstan* enable predefined settings and rulesets for this tools
 * *unit-test* adds the `tests` folder and `codeception.dist.yml` file with the various packages for composer about [Codeception](https://codeception.com/)
 * *wpcli* adds the support in the plugin code for the [WP-CLI tool](https://wp-cli.org/)
 * *language-files* adds the [po/mo files and the code to load custom languages files](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/)
