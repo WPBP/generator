@@ -55,11 +55,11 @@ function download_wpbp() {
         $version = 'master';
     }
 
-    $clio->display( "😎 Downloading ' . $version . ' package\n" )->style( $info )->clear();
+    $clio->display( "😎 Downloading " . $version . " package\n" )->style( $info )->clear();
 
     $download = @file_get_contents( 'http://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/archive/' . $version . '.zip' );
     if ( $download === false ) {
-        $clio->display( "😡 The ' . $version . ' version is not yet avalaible! Use the --dev parameter!\n" )->style( $error )->clear();
+        $clio->display( "😡 The " . $version . " version is not yet avalaible! Use the --dev parameter!\n" )->style( $error )->clear();
         die();
     }
 
@@ -81,7 +81,7 @@ function extract_wpbp() {
     if ( ! plugin_temp_exist() ) {
         if ( file_exists( getcwd() . '/plugin.zip' ) ) {
             if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
-                $clio->display( "Folder ' . WPBP_PLUGIN_SLUG . ' already exist!\n" )->style( $error )->clear();
+                $clio->display( "Folder " . WPBP_PLUGIN_SLUG . " already exist!\n" )->style( $error )->clear();
                 exit();
             }
 

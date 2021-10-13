@@ -28,7 +28,7 @@ $cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the current f
 $cmd->option( 'no-download' )->describedAs( 'Do you want to execute composer and npm manually? This is your flag!' )->boolean();
 
 set_color_scheme();
-$clio->display( "(>'-')> WPBP Code Generator by Mte90\n" )->style( $info )->clear();
+$clio->display( "(>'-')> WPBP Code Generator\n" )->style( $info )->clear();
 if ( $cmd[ 'dark' ] ) {
 	echo "!! Dark color scheme in use !!" . PHP_EOL;
 } else {
@@ -53,14 +53,12 @@ extract_wpbp();
 execute_generator( $config );
 // Done!
 echo PHP_EOL;
-$clio->display( 'Last cleanings!')->style( $info )->clear();
+$clio->display( "Last cleanings!\n" )->style( $info )->clear();
 remove_empty_folders();
 // Another round to remove the folder that wasn't cleaned at first round
 remove_empty_folders();
 execute_composer();
-$clio->display( 'Done, I am superfast!' )->style( $info )->clear();
-$clio->display( '' )->style( $info )->clear();
-$clio->display( '👉 Don\'t forget to look on https://wpbp.github.io/wiki.html' )->style( $info )->clear();
-$clio->display( '' )->style( $info )->clear();
-$clio->display( 'Love WordPress-Plugin-Boilerplate-Powered? Please consider supporting our collective:' )->style( $info )->clear();
-$clio->display( '👉 https://opencollective.com/WordPress-Plugin-Boilerplate-Powered/donate' )->style( $info )->clear();
+$clio->display( "Done, I am superfast!\n\n" )->style( $info )->clear();
+$clio->display( "👉 Don't forget to look on https://wpbp.github.io/wiki.html\n" )->style( $info )->clear();
+$clio->display( "Love WordPress-Plugin-Boilerplate-Powered? Please consider supporting our collective:\n" )->style( $info )->clear();
+$clio->display( "👉 https://opencollective.com/WordPress-Plugin-Boilerplate-Powered/donate\n" )->style( $info )->clear();
