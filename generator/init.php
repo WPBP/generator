@@ -10,7 +10,7 @@ require_once(dirname( __FILE__ ) . '/wpbp.php');
 
 // Load libraries
 use Clio\Clio;
-use Clio\Style\Style;
+use Clio\Styling\Style;
 
 // Initiate Libraries
 $cmd = new Commando\Command();
@@ -28,7 +28,7 @@ $cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the current f
 $cmd->option( 'no-download' )->describedAs( 'Do you want to execute composer and npm manually? This is your flag!' )->boolean();
 
 set_color_scheme();
-$clio->styleLine( "(>'-')> WPBP Code Generator by Mte90", $info );
+$clio->display( "(>'-')> WPBP Code Generator by Mte90\n" )->style( $info )->clear();
 if ( $cmd[ 'dark' ] ) {
 	echo "!! Dark color scheme in use !!" . PHP_EOL;
 } else {
@@ -44,7 +44,7 @@ $config = parse_config();
 define( 'WPBP_PLUGIN_SLUG', str_replace( ' ', '-', strtolower( $config[ 'plugin_name' ] ) ) );
 // Check if a folder with that name already exist
 if ( file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
-	$clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $error );
+	$clio->display( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!' )->style( $error )->clear();
 	die( 0 );
 }
 // Unpack the boilerplate
@@ -53,14 +53,14 @@ extract_wpbp();
 execute_generator( $config );
 // Done!
 echo PHP_EOL;
-$clio->styleLine( 'Last cleanings!', $info );
+$clio->display( 'Last cleanings!')->style( $info )->clear();
 remove_empty_folders();
 // Another round to remove the folder that wasn't cleaned at first round
 remove_empty_folders();
 execute_composer();
-$clio->styleLine( 'Done, I am superfast!', $info );
-$clio->styleLine( '', $info );
-$clio->styleLine( '👉 Don\'t forget to look on https://wpbp.github.io/wiki.html', $info );
-$clio->styleLine( '', $info );
-$clio->styleLine( 'Love WordPress-Plugin-Boilerplate-Powered? Please consider supporting our collective:', $info );
-$clio->styleLine( '👉 https://opencollective.com/WordPress-Plugin-Boilerplate-Powered/donate', $info );
+$clio->display( 'Done, I am superfast!' )->style( $info )->clear();
+$clio->display( '' )->style( $info )->clear();
+$clio->display( '👉 Don\'t forget to look on https://wpbp.github.io/wiki.html' )->style( $info )->clear();
+$clio->display( '' )->style( $info )->clear();
+$clio->display( 'Love WordPress-Plugin-Boilerplate-Powered? Please consider supporting our collective:' )->style( $info )->clear();
+$clio->display( '👉 https://opencollective.com/WordPress-Plugin-Boilerplate-Powered/donate' )->style( $info )->clear();

@@ -19,23 +19,23 @@ function create_wpbp_json() {
 
     if ( $cmd[ 'json' ] ) {
         if ( !copy( dirname( __FILE__ ) . '/wpbp.json', getcwd() . '/wpbp.json' ) ) {
-            $clio->styleLine( 'Failed to copy wpbp.json...', $error );
+            $clio->display( "Failed to copy wpbp.json...\n" )->style( $error )->clear();
             return;
         }
         
-        $clio->styleLine( '😀 wpbp.json generated', $info );
+        $clio->display( "😀 wpbp.json generated\n" )->style( $info )->clear();
         exit();
         
         return;
     }
     
     if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
-        $clio->styleLine( '😡 wpbp.json file missing...', $error );
-        $clio->styleLine( '😉 Generate it with: wpbp-generator --json', $error );
-        $clio->styleLine( 'Forget a hipster Q&A procedure and fill that JSON with your custom configuration!', $error );
-        $clio->styleLine( '  Let\'s do your changes and execute the script again! Use the --dev parameter to use the development version of the boilerplate!', $error );
-        $clio->styleLine( '', $info );
-        $clio->styleLine( 'Help: wpbp-generator --help 😉', $info );
+        $clio->display( "😡 wpbp.json file missing...\n" )->style( $error )->clear();
+        $clio->display( "😉 Generate it with: wpbp-generator --json\n" )->style( $error )->clear();
+        $clio->display( "Forget a hipster Q&A procedure and fill that JSON with your custom configuration!\n" )->style( $error )->clear();
+        $clio->display( "  Let's do your changes and execute the script again! Use the --dev parameter to use the development version of the boilerplate!\n" )->style( $error )->clear();
+        $clio->display( "\n" )->style( $info )->clear();
+        $clio->display( "Help: wpbp-generator --help 😉\n" )->style( $info )->clear();
         exit();
     }
 }
@@ -55,11 +55,11 @@ function download_wpbp() {
         $version = 'master';
     }
 
-    $clio->styleLine( '😎 Downloading ' . $version . ' package', $info );
+    $clio->display( "😎 Downloading ' . $version . ' package\n" )->style( $info )->clear();
 
     $download = @file_get_contents( 'http://github.com/WPBP/WordPress-Plugin-Boilerplate-Powered/archive/' . $version . '.zip' );
     if ( $download === false ) {
-        $clio->styleLine( '😡 The ' . $version . ' version is not yet avalaible! Use the --dev parameter!', $error );
+        $clio->display( "😡 The ' . $version . ' version is not yet avalaible! Use the --dev parameter!\n" )->style( $error )->clear();
         die();
     }
 
@@ -81,11 +81,11 @@ function extract_wpbp() {
     if ( ! plugin_temp_exist() ) {
         if ( file_exists( getcwd() . '/plugin.zip' ) ) {
             if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
-                $clio->styleLine( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!', $error );
+                $clio->display( "Folder ' . WPBP_PLUGIN_SLUG . ' already exist!\n" )->style( $error )->clear();
                 exit();
             }
 
-            $clio->styleLine( 'Extract Boilerplate', $info );
+            $clio->display( "Extract Boilerplate\n" )->style( $info )->clear();
             try {
                 $zip = new ZipArchive;
             } catch (Exception $e) {
@@ -110,10 +110,10 @@ function extract_wpbp() {
                         remove_file_folder( getcwd() . '/plugin.zip' );
                     }
                 } catch ( Exception $e ) {
-                    $clio->styleLine( $e, $error );
+                    $clio->display( $e )->style( $error )->clear();
                 }
 
-                $clio->styleLine( 'Boilerplate Extracted', $info );
+                $clio->display( "Boilerplate Extracted\n" )->style( $info )->clear();
             }
 
             return;
@@ -150,7 +150,7 @@ function execute_generator( $config ) {
     }
 
     echo PHP_EOL;
-    $clio->styleLine( 'Generation done, I am superfast! You: (ʘ_ʘ)', $info );
+    $clio->display( "Generation done, I am superfast! You: (ʘ_ʘ)\n" )->style( $info )->clear();
     git_init();
     grunt();
     grumphp();
@@ -191,7 +191,7 @@ function parse_config() {
     $config = json_decode( file_get_contents( getcwd() . '/wpbp.json' ), true );
     // Detect a misleading json file
     if ( json_last_error() !== JSON_ERROR_NONE ) {
-        $clio->styleLine( '😡 Your JSON is broken!', $error );
+        $clio->display( "😡 Your JSON is broken!\n" )->style( $error )->clear();
         exit;
     }
 

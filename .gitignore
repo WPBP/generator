@@ -3,6 +3,7 @@
 composer.lock
 generator.phar
 wpbp-generator.phar
+wpbp-generator
 
 ### NetBeans ###
 nbproject/
@@ -12,3 +13,4 @@ dist/
 nbdist/
 nbactions.xml
 .nb-gradle/
+

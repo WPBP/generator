@@ -1,6 +1,6 @@
 {
   "name": "wpbp/generator",
-  "license": "GPL-2.0-or-later",
+  "license": "GPL-3.0-or-later",
   "description": "Generator of Wordpress Plugin Boilerplate Powered",
   "keywords": [
     "wordpress",
@@ -18,9 +18,9 @@
   ],
   "require": {
     "php": ">=7.0",
-    "zordius/lightncandy": "1.2.4",
+    "zordius/lightncandy": "^1.2",
     "nategood/commando": "0.4.0",
-    "1happyplace/clio": "1.1.x",
+    "1happyplace/clio": "2.3",
     "perchten/rmrdir": "1.*"
   },
   "bin": [

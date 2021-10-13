@@ -16,10 +16,10 @@ function git_init() {
 
     if ( $config[ 'git-repo' ] === 'true' ) {
         exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; git init' );
-        $clio->styleLine( '😎 .git folder generated', $info );
+        $clio->display( "😎 .git folder generated\n" )->style( $info )->clear();
         $gitignore = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore';
         file_put_contents( $gitignore, str_replace( '/plugin-name/', '', file_get_contents( $gitignore ) ) );
-        $clio->styleLine( '😎 .gitignore file generated', $info );
+        $clio->display( "😎 .gitignore file generated\n" )->style( $info )->clear();
         return;
     } 
     
@@ -38,10 +38,10 @@ function grunt() {
 
     if ( $config[ 'grunt' ] === 'true' ) {
         if ( !$cmd[ 'no-download' ] ) {
-            $clio->styleLine( '😀 Grunt install in progress', $info );
+            $clio->display( "😀 Grunt install in progress\n" )->style( $info )->clear();
             $output = '';
             exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; npm install 2>&1', $output );
-            $clio->styleLine( '😎 Grunt install done', $info );
+            $clio->display( "😎 Grunt install done\n" )->style( $info )->clear();
         }
         
         return;
@@ -50,7 +50,7 @@ function grunt() {
     unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
     unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
     remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/assets/sass' );
-    $clio->styleLine( '😀 Grunt removed', $info );
+    $clio->display( "😀 Grunt removed\n" )->style( $info )->clear();
 }
 
 
@@ -67,27 +67,27 @@ function grumphp() {
         $grumphp = yaml_parse_file ( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml' );
         if ( !is_empty_or_false( $config[ 'grunt' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'grunt' ] );
-            $clio->styleLine( '😀 Grunt removed from GrumPHP', $info );
+            $clio->display( "😀 Grunt removed from GrumPHP\n" )->style( $info )->clear();
         }
         
         if ( !is_empty_or_false( $config[ 'phpstan' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpstan' ] );
-            $clio->styleLine( '😀 PHPStan removed from GrumPHP', $info );
+            $clio->display( "😀 PHPStan removed from GrumPHP\n" )->style( $info )->clear();
         }
         
         if ( !is_empty_or_false( $config[ 'unit-test' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'codeception' ] );
-            $clio->styleLine( '😀 Codeception removed from GrumPHP', $info );
+            $clio->display( "😀 Codeception removed from GrumPHP\n" )->style( $info )->clear();
         }
         
         if ( !is_empty_or_false( $config[ 'phpcs' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpcs' ] );
-            $clio->styleLine( '😀 PHPCS removed from GrumPHP', $info );
+            $clio->display( "😀 PHPCS removed from GrumPHP\n" )->style( $info )->clear();
         }
         
         if ( !is_empty_or_false( $config[ 'phpmd' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpmd' ] );
-            $clio->styleLine( '😀 PHPMD removed from GrumPHP', $info );
+            $clio->display( "😀 PHPMD removed from GrumPHP\n" )->style( $info )->clear();
         }
         
         yaml_emit_file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml', $grumphp );
