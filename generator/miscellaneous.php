@@ -41,7 +41,7 @@ function print_v( $label ) {
     global $cmd, $clio, $notice;
 
     if ( $cmd[ 'verbose' ] ) {
-        $clio->styleLine( $label, $notice );
+        $clio->display( $label . "\n" )->style( $notice );
     }
 }
 
@@ -146,7 +146,7 @@ function copy_dir( $source, $dest ) {
 function plugin_temp_exist() {
     global $cmd, $clio, $info;
     if ( file_exists( getcwd() . '/plugin_temp' ) ) {
-        $clio->display( "Boilerplate already extracted found\n" )->style( $info )->clear();
+        $clio->display( "Boilerplate already extracted found\n" )->style( $info );
         if ( $cmd[ 'dev' ] ) {
             copy_dir( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
             return true;
