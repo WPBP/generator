@@ -21,7 +21,7 @@ function get_files( $path = null ) {
     }
 
     $files = $list = array();
-    $clio->display( "Rename/Remove in progress" )->style( $info )->newLine();
+    $clio->clear()->style( $info )->display( "Rename/Remove in progress" )->newLine();
     $dir_iterator = new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS );
     $iterator     = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
 

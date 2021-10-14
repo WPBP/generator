@@ -12,15 +12,11 @@ function execute_composer() {
     global $cmd, $clio, $info;
     clean_composer_file();
     if ( !$cmd[ 'no-download' ] ) {
-        $clio->display( "😀 Composer install in progress (can require few minutes)" )->style( $info )->newLine();
+        $clio->clear()->style( $info )->display( "😀 Composer install in progress (can require few minutes)" )->newLine();
         $output       = '';
-        $composer_cmd = 'composer update';
-        if ( !$cmd[ 'verbose' ] ) {
-            $composer_cmd .= ' 2>&1';
-        }
 
-        exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; ' . $composer_cmd, $output );
-        $clio->display( "😎 Composer install done" )->style( $info )->newLine();
+        exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; composer update 2>&1 > /dev/null', $output );
+        $clio->clear()->style( $info )->display( "😎 Composer install done" )->newLine();
     }
 }
 
@@ -38,18 +34,18 @@ function clean_composer_file() {
 
     if ( is_empty_or_false( $config[ 'grumphp' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'phpro/grumphp' ] );
-        $clio->display( "😎 Remove GrumPHP done" )->style( $info )->newLine();
+        $clio->style( $info )->display( "😎 Remove GrumPHP done" )->newLine();
     }
     
     if ( is_empty_or_false( $config[ 'phpstan' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'szepeviktor/phpstan-wordpress' ] );
-        $clio->display( "😎 Remove PHPStan WordPress support done" )->style( $info )->newLine();
+        $clio->style( $info )->display( "😎 Remove PHPStan WordPress support done" )->newLine();
     }
     
     if ( is_empty_or_false( $config[ 'phpcs' ] ) ) {
         unset( $composer[ 'require-dev' ][ 'codeatcode/codeatcs' ] );
         unset( $composer[ 'require-dev' ][ 'dealerdirect/phpcodesniffer-composer-installer' ] );
-        $clio->display( "😎 Remove PHPCS support done" )->style( $info )->newLine();
+        $clio->style( $info )->display( "😎 Remove PHPCS support done" )->newLine();
     }
 
     if ( is_empty_or_false( $config[ 'unit-test' ] ) ) {
@@ -66,7 +62,7 @@ function clean_composer_file() {
         unset( $composer[ 'require-dev' ][ 'codeception/codeception' ] );
         unset( $composer[ 'require-dev' ][ 'codeception/codeception-progress-reporter' ] );
         unset( $composer[ 'require-dev' ][ 'phpunit/phpunit' ] );
-        $clio->display( "😎 Remove Codeception done" )->style( $info )->newLine();
+        $clio->style( $info )->display( "😎 Remove Codeception done" )->newLine();
     }
 
     if ( count( $composer[ 'require-dev' ] ) === 0 ) {
@@ -83,7 +79,7 @@ function clean_composer_file() {
     
     $composer = remove_folder_for_autoload( $composer );
     
-    $clio->display( "😎 Cleaning Composer file" )->style( $info )->newLine();
+    $clio->style( $info )->display( "😎 Cleaning Composer file" )->newLine();
     
     $composer = json_encode( $composer, JSON_PRETTY_PRINT );
     $composer = replace_author_strings( $composer );
@@ -126,7 +122,7 @@ function remove_specific_composer_respositories( $package, $composer ) {
  */
 function remove_composer_packages( $composer ) {
     global $config, $clio, $info;
-    $clio->display( "😎 Remove Composer packages" )->style( $info );
+    $clio->style( $info )->display( "😎 Remove Composer packages" )->newLine();
     foreach ( $config as $key => $value ) {
         if ( strpos( $key, 'libraries_' ) !== false ) {
             if ( empty( $value ) ) {
