@@ -94,6 +94,7 @@ function replace_name_slug( $config, $content ) {
     if ( ! empty( $content ) && $content !== 'index' ) {        
         $ucword  = '';
         $lower   = '';
+        $class = preg_replace('/[0-9\@\.\;\" "]+/', '', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ) );
         $content = str_replace( '// WPBPGen', '', $content );
         $content = str_replace( '//WPBPGen', '', $content );
         $content = str_replace( '// {{/', '{{/', $content );
@@ -104,8 +105,8 @@ function replace_name_slug( $config, $content ) {
         $content = str_replace( "        \n\n", '', $content );
         $content = str_replace( "        \n        \n", '', $content );
         $content = str_replace( "\t\t\t\n\t\t\t\n", '', $content );
-        $content = str_replace( 'Plugin_Name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
-        $content = str_replace( 'Plugin_name', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ), $content );
+        $content = str_replace( 'Plugin_Name', $class, $content );
+        $content = str_replace( 'Plugin_name', $class, $content );
         $content = preg_replace('/Plugin Name$/', $config[ 'plugin_name' ], $content );
         $content = preg_replace('/Plugin name/', $config[ 'plugin_name' ], $content );
         $content = str_replace( 'plugin-name', WPBP_PLUGIN_SLUG, $content );
