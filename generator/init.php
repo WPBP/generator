@@ -42,7 +42,7 @@ create_wpbp_json();
 // Load the config with defaults
 $config = parse_config();
 // Create a constant with the slug of the new plugin
-define( 'WPBP_PLUGIN_SLUG', str_replace( ' ', '-', strtolower( preg_replace('/[0-9\@\.\;\" "]+/', '', ( $config[ 'plugin_name' ] ) ) ) );
+define( 'WPBP_PLUGIN_SLUG', str_replace( ' ', '-', strtolower( preg_replace('/[0-9\@\.\;\" "]+/', '', ( $config[ 'plugin_name' ] ) ) ) ) );
 // Check if a folder with that name already exist
 if ( file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
 	$clio->style( $error )->display( 'Folder ' . WPBP_PLUGIN_SLUG . ' already exist!' )->newLine();
