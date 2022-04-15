@@ -36,6 +36,7 @@
   "wpcli": "true",
   "language-files": "true",
   "libraries": [
+    "ayecode/wp-super-duper",
     "freemius/wordpress-sdk",
     "julien731/wp-review-me",
     "origgami/cmb2-grid",

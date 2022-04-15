@@ -122,6 +122,7 @@ function remove_files_by_settings( $file ) {
         // Internals
         case strpos( $file, 'internals/PostTypes.php' ) && is_empty_or_false( $config[ 'libraries_johnbillion__extended-cpts' ] ):
         case strpos( $file, 'internals/Shortcode.php' ) && is_empty_or_false( $config[ 'frontend_shortcode' ] ):
+        case strpos( $file, 'internals/ShortcodeBlock.php' ) && is_empty_or_false( $config[ 'libraries_ayecode__wp-super-duper' ] ):
         case strpos( $file, 'internals/Transient.php' ) && is_empty_or_false( $config[ 'system_transient' ] ):
         case strpos( $file, 'debug.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__debug' ] ):
         // Frontend
