@@ -65,27 +65,27 @@ function grumphp() {
     global $config, $clio, $info;
     if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml' ) ) {
         $grumphp = yaml_parse_file ( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml' );
-        if ( !is_empty_or_false( $config[ 'grunt' ] ) ) {
+        if ( is_empty_or_false( $config[ 'grunt' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'grunt' ] );
             $clio->clear()->style( $info )->display( "😀 Grunt removed from GrumPHP" )->newLine();
         }
         
-        if ( !is_empty_or_false( $config[ 'phpstan' ] ) ) {
+        if ( is_empty_or_false( $config[ 'phpstan' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpstan' ] );
             $clio->clear()->style( $info )->display( "😀 PHPStan removed from GrumPHP" )->newLine();
         }
         
-        if ( !is_empty_or_false( $config[ 'unit-test' ] ) ) {
+        if ( is_empty_or_false( $config[ 'unit-test' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'codeception' ] );
             $clio->clear()->style( $info )->display( "😀 Codeception removed from GrumPHP" )->newLine();
         }
         
-        if ( !is_empty_or_false( $config[ 'phpcs' ] ) ) {
+        if ( is_empty_or_false( $config[ 'phpcs' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpcs' ] );
             $clio->clear()->style( $info )->display( "😀 PHPCS removed from GrumPHP" )->newLine();
         }
         
-        if ( !is_empty_or_false( $config[ 'phpmd' ] ) ) {
+        if ( is_empty_or_false( $config[ 'phpmd' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpmd' ] );
             $clio->clear()->style( $info )->display( "😀 PHPMD removed from GrumPHP" )->newLine();
         }
