@@ -61,6 +61,7 @@
     "backend": [
       "bubble-notification-pending-cpt",
       "donate-link-plugin-list",
+      "block",
       "impexp-settings"
     ],
     "frontend": [
