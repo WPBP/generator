@@ -8,7 +8,7 @@
     "email": "my@email.com",
     "url": "http://domain.tld",
     "license": "GPL 2.0+",
-    "copyright": "2020 Your Name or Company Name"
+    "copyright": "2022 Your Name or Company Name"
   },
   "public-assets": {
     "js": "true",
@@ -27,7 +27,6 @@
   },
   "ajax": "true",
   "git-repo": "true",
-  "grunt": "true",
   "grumphp": "true",
   "phpstan": "true",
   "phpcs": "true",
@@ -43,11 +42,13 @@
     "seravo/wp-custom-bulk-actions",
     "cmb2/cmb2",
     "johnbillion/extended-cpts",
+    "inpsyde/assets",
     "stevegrunwell/wp-cache-remember",
     "wpbp/cpt_columns",
     "wpbp/cronplus",
     "wpbp/debug",
     "wpbp/fakepage",
+    "wpbp/page-madness-detector",
     "wpbp/pointerplus",
     "wpbp/template",
     "wpbp/widgets-helper",

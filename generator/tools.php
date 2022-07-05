@@ -27,34 +27,6 @@ function git_init() {
 }
 
 /**
- * Clean the grunt file and install his packages
- *
- * @global array $config
- * @global object $clio
- * @global object $info
- */
-function grunt() {
-    global $config, $cmd, $clio, $info;
-
-    if ( $config[ 'grunt' ] === 'true' ) {
-        if ( !$cmd[ 'no-download' ] ) {
-            $clio->clear()->style( $info )->display( "😀 Grunt install in progress" )->newLine();
-            $output = '';
-            exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; npm install 2>&1', $output );
-            $clio->clear()->style( $info )->display( "😎 Grunt install done" )->newLine();
-        }
-        
-        return;
-    }
-        
-    unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/Gruntfile.js' );
-    unlink( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
-    remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/assets/sass' );
-    $clio->clear()->style( $info )->display( "😀 Grunt removed" )->newLine();
-}
-
-
-/**
  * Clean the grumphp file
  *
  * @global array $config
@@ -65,11 +37,6 @@ function grumphp() {
     global $config, $clio, $info;
     if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml' ) ) {
         $grumphp = yaml_parse_file ( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml' );
-        if ( is_empty_or_false( $config[ 'grunt' ] ) ) {
-            unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'grunt' ] );
-            $clio->clear()->style( $info )->display( "😀 Grunt removed from GrumPHP" )->newLine();
-        }
-        
         if ( is_empty_or_false( $config[ 'phpstan' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpstan' ] );
             $clio->clear()->style( $info )->display( "😀 PHPStan removed from GrumPHP" )->newLine();

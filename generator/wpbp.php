@@ -150,7 +150,11 @@ function execute_generator( $config ) {
 
     $clio->clear()->style( $info )->display( "Generation done, I am superfast! You: (ʘ_ʘ)\n" )->newLine();
     git_init();
-    grunt();
+    $clio->clear()->style( $info )->display( "😀 NPM install in progress" )->newLine();
+    exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; npm install 2>&1', $output );
+    $clio->clear()->style( $info )->display( "😎 NPM install done" )->newLine();
+    exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; npm run build 2>&1', $output );
+    $clio->clear()->style( $info )->display( "😎 NPM build done" )->newLine();
     grumphp();
 }
 
@@ -194,7 +198,19 @@ function parse_config() {
     }
 
     $config         = array_to_var( $config );
-    $config_default = array_to_var( json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true ), true );
+
+    $config_default = json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true );
+    if ( json_last_error() !== JSON_ERROR_NONE ) {
+        $clio->clear()->style( $error )->display( "😡 WPBP JSON is broken!" )->newLine();
+        exit;
+    }
+
+    $config_default = array_to_var( $config_default, true );
+    if ( empty( $config_default ) ) {
+        $clio->style( $error )->display( dirname( __FILE__ ) . '/wpbp.json not found!' )->newLine();
+        exit;
+    }
+
     foreach ( $config_default as $key => $value ) {
         if ( !isset( $config[ $key ] ) ) {
             $config[ $key ] = '';
