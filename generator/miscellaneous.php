@@ -168,7 +168,6 @@ function plugin_temp_exist() {
  */
 function strip_packagejson() {
     global $config;
-    global $cmd, $clio, $info;
     $package    = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' ), true );
 
     foreach ( $package[ 'files' ] as $key => $path ) {

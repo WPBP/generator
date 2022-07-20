@@ -96,8 +96,10 @@ function replace_name_slug( $config, $content ) {
         $lower   = '';
         $class = preg_replace('/[0-9\@\.\;\" "]+/', '', str_replace( ' ', '_', str_replace( '-', '_', $config[ 'plugin_name' ] ) ) );
         $content = str_replace( '// WPBPGen', '', $content );
+        $content = str_replace( '# WPBPGen', '', $content );
         $content = str_replace( '//WPBPGen', '', $content );
         $content = str_replace( '// {{/', '{{/', $content );
+        $content = str_replace( '# {{/', '{{/', $content );
         $content = str_replace( '//{{/', '{{/', $content );
         $content = str_replace( "{{plugin_name}}", $config[ 'plugin_name' ], $content );
         $content = str_replace( "//\n", '', $content );
