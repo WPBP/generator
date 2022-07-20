@@ -150,7 +150,8 @@ function execute_generator( $config ) {
 
     $clio->clear()->style( $info )->display( "Generation done, I am superfast! You: (ʘ_ʘ)\n" )->newLine();
     git_init();
-    $clio->clear()->style( $info )->display( "😀 NPM install in progress" )->newLine();
+    strip_packagejson();
+    $clio->clear()->style( $info )->display( "😀 NPM install in progress (takes a while... sadly)" )->newLine();
     exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; npm install 2>&1', $output );
     $clio->clear()->style( $info )->display( "😎 NPM install done" )->newLine();
     exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; npm run build 2>&1', $output );

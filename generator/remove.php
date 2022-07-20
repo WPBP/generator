@@ -55,7 +55,7 @@ function remove_empty_folders() {
 function count_files_in_a_folder($path) {
     // (Ensure that the path contains an ending slash)
     $file_count = 0;
-    if( file_exists( $path ) ) {
+    if( file_exists( $path ) && is_dir( $path ) ) {
         $dir_handle = opendir( $path );
     
         if ( !$dir_handle ) return -1;
@@ -73,6 +73,11 @@ function count_files_in_a_folder($path) {
     
         closedir( $dir_handle );
     }
+
+    if ( !is_dir( $path ) ) {
+        return 1;
+    }
+
     return $file_count;
 }
 

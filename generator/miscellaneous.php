@@ -164,21 +164,30 @@ function plugin_temp_exist() {
 /*
  * Strip lines from package.json
  *
- * @return array
+ * @return void
  */
-function strip_packagejson( $term ) {
-    $package    = file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' );
-    $newpackage = array();
-    foreach ( $package as $line => $content ) {
-        if ( strpos( $content, $term ) ) {
-            $newpackage[ $line - 1 ] = str_replace( ',', '', $package[ $line - 1 ] );
-            continue;
+function strip_packagejson() {
+    global $config;
+    global $cmd, $clio, $info;
+    $package    = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' ), true );
+
+    foreach ( $package[ 'files' ] as $key => $path ) {
+        $_path = str_replace( '*', '', $path );
+        $there_is_only_index_file = count_files_in_a_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/' . $_path );
+        if ( $there_is_only_index_file === 0 ) {
+            unset( $package[ 'files' ][ $key ] );
         }
-                
-        $newpackage[] = $package[ $line ];
+    }
+
+    if ( is_empty_or_false( $config[ 'backend_block' ] ) ) {
+        foreach ( $package[ 'devDependencies' ] as $line => $content ) {
+            if ( in_array( $line, array( '@wordpress/blocks', '@wordpress/block-editor'), true ) ) {
+                unset( $package[ 'devDependencies' ][ $line ] );
+            }
+        }
     }
     
-    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', $newpackage );
+    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', json_encode( $package, JSON_PRETTY_PRINT ) );
 }
 
 
