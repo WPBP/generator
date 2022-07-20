@@ -61,7 +61,7 @@ function count_files_in_a_folder($path) {
         if ( !$dir_handle ) return -1;
     
         while ($file = readdir( $dir_handle )) {
-            if ($file == '.' || $file == '..' || $file == 'index.php' ) continue;
+            if ( in_array( $file, array( '.', '..', 'index.php' ), true ) ) continue;
     
             if ( is_dir( $path . $file ) ){      
                 $file_count += count_files_in_a_folder($path . $file . DIRECTORY_SEPARATOR);
