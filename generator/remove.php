@@ -121,7 +121,6 @@ function remove_files_by_settings( $file ) {
         // Integrations
         case strpos( $file, 'integrations/CMB.php' ) && is_empty_or_false( $config[ 'libraries_cmb2__cmb2' ] ):
         case strpos( $file, 'integrations/Cron.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__cronplus' ] ):
-        case strpos( $file, 'integrations/FakePage.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__fakepage' ] ):
         case strpos( $file, 'integrations/Template.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__template' ] ):
         case strpos( $file, '/Widgets' ) && is_empty_or_false( $config[ 'libraries_wpbp__widgets-helper' ] ):
         // Internals
