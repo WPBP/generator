@@ -1,6 +1,6 @@
 <?php
 
-define( 'WPBP_VERSION', '3.2.7' );
+define( 'WPBP_VERSION', '3.3.0' );
 require_once(dirname( __FILE__ ) . '/miscellaneous.php');
 require_once(dirname( __FILE__ ) . '/composer.php');
 require_once(dirname( __FILE__ ) . '/tools.php');
@@ -27,15 +27,7 @@ $cmd->option( 'verbose' )->describedAs( 'Verbose output. Because this can be hel
 $cmd->option( 'json' )->describedAs( 'Generate a wpbp.json file in the current folder. Suggested to use the WordPress plugin folder.' )->boolean();
 $cmd->option( 'no-download' )->describedAs( 'Do you want to execute composer and npm manually? This is your flag!' )->boolean();
 
-$output = '';
-exec( 'clear', $output );
 set_color_scheme();
-$clio->display( "(>'-')> WPBP Code Generator" )->style( $info )->newLine();
-if ( $cmd[ 'dark' ] ) {
-    $clio->clear()->display( "!! Dark color scheme in use !!" )->style( $info )->newLine()->newLine();
-} else {
-    $clio->clear()->display( "!! Light color scheme in use !!" )->style( $info )->newLine()->newLine();
-}
 
 // Generate the wpbp.json file
 create_wpbp_json();

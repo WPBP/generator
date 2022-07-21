@@ -5,11 +5,19 @@
  */
 
 function set_color_scheme() {
-    global $cmd;
+    global $cmd, $clio, $info;
     set_color_scheme_light();
 
     if ( $cmd[ 'dark' ] ) {
         set_color_scheme_dark();
+    }
+
+    $clio->display( "(>'-')> WPBP Code Generator" )->style( $info )->newLine();
+
+    if ( $cmd[ 'dark' ] ) {
+        $clio->display( "!! Dark color scheme in use !!" )->style( $info )->newLine()->newLine();
+    } else {
+        $clio->display( "!! Light color scheme in use !!" )->style( $info )->newLine()->newLine();
     }
 }
 
