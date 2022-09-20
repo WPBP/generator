@@ -76,7 +76,7 @@ function clean_composer_file() {
     if ( empty( $composer[ 'extra' ][ 'installer-paths' ][ 'vendor/{$name}/' ] ) ) {
         unset( $composer[ 'extra' ] );
     }
-    
+
     $composer = remove_folder_for_autoload( $composer );
     
     $clio->style( $info )->display( "😎 Cleaning Composer file" )->newLine();
