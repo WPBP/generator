@@ -81,7 +81,7 @@ function clean_composer_file() {
     
     $clio->style( $info )->display( "😎 Cleaning Composer file" )->newLine();
     
-    $composer = json_encode( $composer, JSON_PRETTY_PRINT );
+    $composer = json_encode( $composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
     $composer = replace_author_strings( $composer );
     
     file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/composer.json', $composer );

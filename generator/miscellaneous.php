@@ -194,7 +194,7 @@ function strip_packagejson() {
         }
     }
     
-    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', json_encode( $package, JSON_PRETTY_PRINT ) );
+    file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', json_encode( $package, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
 }
 
 
