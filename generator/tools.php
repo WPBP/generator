@@ -17,8 +17,8 @@ function git_init() {
     if ( $config[ 'git-repo' ] === 'true' ) {
         exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; git init &> /dev/null' );
         $clio->clear()->style( $info )->display( "😎 .git folder generated" )->newLine();
-        $gitignore = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore';
-        file_put_contents( $gitignore, str_replace( '/plugin-name/', '', file_get_contents( $gitignore ) ) );
+        $gitignore = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR .'.gitignore';
+        file_put_contents( $gitignore, str_replace( DIRECTORY_SEPARATOR .'plugin-name' . DIRECTORY_SEPARATOR, '', file_get_contents( $gitignore ) ) );
         $clio->clear()->style( $info )->display( "😎 .gitignore file generated" )->newLine();
         return;
     } 
@@ -35,8 +35,8 @@ function git_init() {
  */
 function grumphp() {
     global $config, $clio, $info;
-    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml' ) ) {
-        $grumphp = yaml_parse_file ( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml' );
+    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR .'grumphp.yml' ) ) {
+        $grumphp = yaml_parse_file ( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'grumphp.yml' );
         if ( is_empty_or_false( $config[ 'phpstan' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpstan' ] );
             $clio->clear()->style( $info )->display( "😀 PHPStan removed from GrumPHP" )->newLine();
@@ -57,6 +57,6 @@ function grumphp() {
             $clio->clear()->style( $info )->display( "😀 PHPMD removed from GrumPHP" )->newLine();
         }
         
-        yaml_emit_file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/grumphp.yml', $grumphp );
+        yaml_emit_file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'grumphp.yml', $grumphp );
     }
 }

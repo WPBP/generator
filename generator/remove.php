@@ -94,16 +94,16 @@ function remove_files_by_settings( $file ) {
 
     switch ( $file ) {
         // Admin folder
-        case strpos( $file, 'backend/ActDeact.php' ) && is_empty_or_false( $config[ 'act-deact_actdeact' ] ):
-        case strpos( $file, 'backend/Enqueue.php' ) && is_empty_or_false( $config[ 'admin-assets_admin-js' ] ) 
+        case strpos( $file, 'backend' . DIRECTORY_SEPARATOR . 'ActDeact.php' ) && is_empty_or_false( $config[ 'act-deact_actdeact' ] ):
+        case strpos( $file, 'backend' . DIRECTORY_SEPARATOR . 'Enqueue.php' ) && is_empty_or_false( $config[ 'admin-assets_admin-js' ] )
                 && is_empty_or_false( $config[ 'admin-assets_admin-css' ] ):
-        case strpos( $file, 'backend/ImpExp.php' ) && is_empty_or_false( $config[ 'backend_impexp-settings' ] ):
-        case strpos( $file, 'backend/Notices.php' ) && is_empty_or_false( $config[ 'libraries_wpdesk__wp-notice' ] ) 
+        case strpos( $file, 'backend' . DIRECTORY_SEPARATOR . 'ImpExp.php' ) && is_empty_or_false( $config[ 'backend_impexp-settings' ] ):
+        case strpos( $file, 'backend' . DIRECTORY_SEPARATOR . 'Notices.php' ) && is_empty_or_false( $config[ 'libraries_wpdesk__wp-notice' ] )
                 && is_empty_or_false( $config[ 'libraries_julien731__wp-review-me' ] ) 
                 && is_empty_or_false( $config[ 'libraries_yoast__i18n-module' ] ):
-        case strpos( $file, 'backend/Settings_Page.php' ) && is_empty_or_false( $config[ 'admin-assets_admin-page' ] ):
-        case strpos( $file, 'backend/Pointers.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__pointerplus' ] ):
-        case strpos( $file, 'backend/views' ) && is_empty_or_false( $config[ 'admin-assets_admin-page' ] ):
+        case strpos( $file, 'backend' . DIRECTORY_SEPARATOR . 'Settings_Page.php' ) && is_empty_or_false( $config[ 'admin-assets_admin-page' ] ):
+        case strpos( $file, 'backend' . DIRECTORY_SEPARATOR . 'Pointers.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__pointerplus' ] ):
+        case strpos( $file, 'backend' . DIRECTORY_SEPARATOR . 'views' ) && is_empty_or_false( $config[ 'admin-assets_admin-page' ] ):
         // Ajax folder
         case strpos( $file, 'ajax' ) && is_empty_or_false( $config[ 'ajax' ] ):
         // Assets folder
@@ -117,21 +117,21 @@ function remove_files_by_settings( $file ) {
         case strpos( $file, 'settings.css' ) && is_empty_or_false( $config[ 'admin-assets_settings-css' ] ):
         case strpos( $file, 'settings.scss' ) && is_empty_or_false( $config[ 'admin-assets_settings-css' ] ):
         // Cli folder
-        case strpos( $file, 'cli/Example.php' ) && is_empty_or_false( $config[ 'wpcli' ] ):
+        case strpos( $file, 'cli' . DIRECTORY_SEPARATOR . 'Example.php' ) && is_empty_or_false( $config[ 'wpcli' ] ):
         // Integrations
-        case strpos( $file, 'integrations/CMB.php' ) && is_empty_or_false( $config[ 'libraries_cmb2__cmb2' ] ):
-        case strpos( $file, 'integrations/Cron.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__cronplus' ] ):
-        case strpos( $file, 'integrations/Template.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__template' ] ):
-        case strpos( $file, '/Widgets' ) && is_empty_or_false( $config[ 'libraries_wpbp__widgets-helper' ] ):
+        case strpos( $file, 'integrations' . DIRECTORY_SEPARATOR . 'CMB.php' ) && is_empty_or_false( $config[ 'libraries_cmb2__cmb2' ] ):
+        case strpos( $file, 'integrations' . DIRECTORY_SEPARATOR . 'Cron.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__cronplus' ] ):
+        case strpos( $file, 'integrations' . DIRECTORY_SEPARATOR . 'Template.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__template' ] ):
+        case strpos( $file, '' . DIRECTORY_SEPARATOR . 'Widgets' ) && is_empty_or_false( $config[ 'libraries_wpbp__widgets-helper' ] ):
         // Internals
-        case strpos( $file, 'internals/PostTypes.php' ) && is_empty_or_false( $config[ 'libraries_johnbillion__extended-cpts' ] ):
-        case strpos( $file, 'internals/Shortcode.php' ) && is_empty_or_false( $config[ 'frontend_shortcode' ] ):
-        case strpos( $file, 'internals/ShortcodeBlock.php' ) && is_empty_or_false( $config[ 'libraries_ayecode__wp-super-duper' ] ):
-        case strpos( $file, 'internals/Transient.php' ) && is_empty_or_false( $config[ 'system_transient' ] ):
-        case strpos( $file, 'internals/Block.php' ) && is_empty_or_false( $config[ 'backend_block' ] ):
-        case strpos( $file, 'assets/src/block' ) && is_empty_or_false( $config[ 'backend_block' ] ):
-        case strpos( $file, 'assets/src/plugin-block.js' ) && is_empty_or_false( $config[ 'backend_block' ] ):
-        case strpos( $file, 'assets/src/styles/block.scss' ) && is_empty_or_false( $config[ 'backend_block' ] ):
+        case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'PostTypes.php' ) && is_empty_or_false( $config[ 'libraries_johnbillion__extended-cpts' ] ):
+        case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'Shortcode.php' ) && is_empty_or_false( $config[ 'frontend_shortcode' ] ):
+        case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'ShortcodeBlock.php' ) && is_empty_or_false( $config[ 'libraries_ayecode__wp-super-duper' ] ):
+        case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'Transient.php' ) && is_empty_or_false( $config[ 'system_transient' ] ):
+        case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'Block.php' ) && is_empty_or_false( $config[ 'backend_block' ] ):
+        case strpos( $file, 'assets' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'block' ) && is_empty_or_false( $config[ 'backend_block' ] ):
+        case strpos( $file, 'assets' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'plugin-block.js' ) && is_empty_or_false( $config[ 'backend_block' ] ):
+        case strpos( $file, 'assets' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'block.scss' ) && is_empty_or_false( $config[ 'backend_block' ] ):
         case strpos( $file, 'debug.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__debug' ] ):
         // Frontend
         case strpos( $file, 'frontend' ) && is_empty_or_false( $config[ 'public-assets_js' ] ) 
@@ -139,12 +139,12 @@ function remove_files_by_settings( $file ) {
                 && is_empty_or_false( $config[ 'frontend_wp-localize-script' ] ):
         case strpos( $file, 'Body_Class.php' ) && is_empty_or_false( $config[ 'frontend_body-class' ] ):
         // REST folder
-        case strpos( $file, 'rest/Example.php' ) && is_empty_or_false( $config[ 'system_rest' ] ):
+        case strpos( $file, 'rest' . DIRECTORY_SEPARATOR . 'Example.php' ) && is_empty_or_false( $config[ 'system_rest' ] ):
         // Template folder
-        case strpos( $file, '/templates' ) && is_empty_or_false( $config[ 'frontend_template-system' ] ):
-        case strpos( $file, '/Template.php' ) && is_empty_or_false( $config[ 'frontend_template-system' ] ):
+        case strpos( $file, DIRECTORY_SEPARATOR . 'templates' ) && is_empty_or_false( $config[ 'frontend_template-system' ] ):
+        case strpos( $file, DIRECTORY_SEPARATOR . 'Template.php' ) && is_empty_or_false( $config[ 'frontend_template-system' ] ):
         // Tests folder
-        case strpos( $file, '/tests' ) && is_empty_or_false( $config[ 'unit-test' ] ):
+        case strpos( $file, DIRECTORY_SEPARATOR . 'tests' ) && is_empty_or_false( $config[ 'unit-test' ] ):
         case strpos( $file, 'codeception.dist.yml' ) && is_empty_or_false( $config[ 'unit-test' ] ):
         case strpos( $file, '.env' ) && is_empty_or_false( $config[ 'unit-test' ] ):
         case strpos( $file, 'wp-config-test.php' ) && is_empty_or_false( $config[ 'unit-test' ] ):

@@ -153,14 +153,14 @@ function copy_dir( $source, $dest ) {
  */
 function plugin_temp_exist() {
     global $cmd, $clio, $info;
-    if ( file_exists( getcwd() . '/plugin_temp' ) ) {
+    if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . 'plugin_temp' ) ) {
         $clio->style( $info )->display( "Boilerplate already extracted found" )->newLine();
         if ( $cmd[ 'dev' ] ) {
-            copy_dir( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
+            copy_dir( getcwd() . DIRECTORY_SEPARATOR . 'plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
             return true;
         }
         
-        rename( getcwd() . '/plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
+        rename( getcwd() . DIRECTORY_SEPARATOR . 'plugin_temp', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
 
         return true;
     }
@@ -176,11 +176,11 @@ function plugin_temp_exist() {
  */
 function strip_packagejson() {
     global $config;
-    $package    = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json' ), true );
+    $package    = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'package.json' ), true );
 
     foreach ( $package[ 'files' ] as $key => $path ) {
         $_path = str_replace( '*', '', $path );
-        $there_is_only_index_file = count_files_in_a_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/' . $_path );
+        $there_is_only_index_file = count_files_in_a_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . $_path );
         if ( $there_is_only_index_file === 0 ) {
             unset( $package[ 'files' ][ $key ] );
         }

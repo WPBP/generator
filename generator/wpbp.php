@@ -78,7 +78,7 @@ function download_wpbp() {
 function extract_wpbp() {
     global $cmd, $clio, $info, $error;
     if ( ! plugin_temp_exist() ) {
-        if ( file_exists( getcwd() . '/plugin.zip' ) ) {
+        if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . 'plugin.zip' ) ) {
             if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG ) ) {
                 $clio->clear()->style( $error )->display( "Folder " . WPBP_PLUGIN_SLUG . " already exist!" )->newLine();
                 exit();
@@ -91,9 +91,9 @@ function extract_wpbp() {
                 echo 'Caught exception: ',  $e->getMessage(), "\n";
                 exit();
             }
-            $res = $zip->open( getcwd() . '/plugin.zip' );
+            $res = $zip->open( getcwd() . DIRECTORY_SEPARATOR . 'plugin.zip' );
             if ( $res === true ) {
-                $zip->extractTo( getcwd() . '/plugin_temp/' );
+                $zip->extractTo( getcwd() . DIRECTORY_SEPARATOR . 'plugin_temp' . DIRECTORY_SEPARATOR );
                 $zip->close();
                 $version = WPBP_VERSION;
 
@@ -102,11 +102,11 @@ function extract_wpbp() {
                 }
 
                 try {
-                    rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/plugin-name/', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
-                    rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . '/.gitignore', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/.gitignore' );
-                    remove_file_folder( getcwd() . '/plugin_temp/' );
+                    rename( getcwd() . DIRECTORY_SEPARATOR . 'plugin_temp' . DIRECTORY_SEPARATOR . 'WordPress-Plugin-Boilerplate-Powered-' . $version . DIRECTORY_SEPARATOR . 'plugin-name', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
+                    rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . DIRECTORY_SEPARATOR . '.gitignore', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . '.gitignore' );
+                    remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . 'plugin_temp' );
                     if ( !$cmd[ 'dev' ] ) {
-                        remove_file_folder( getcwd() . '/plugin.zip' );
+                        remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . 'plugin.zip' );
                     }
                 } catch ( Exception $e ) {
                     $clio->clear()->style( $error )->display( $e );
@@ -191,7 +191,7 @@ function parse_conditional_template( $file, $config, $file_content ) {
  */
 function parse_config() {
     global $clio, $error;
-    $config = json_decode( file_get_contents( getcwd() . '/wpbp.json' ), true );
+    $config = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . 'wpbp.json' ), true );
     // Detect a misleading json file
     if ( json_last_error() !== JSON_ERROR_NONE ) {
         $clio->clear()->style( $error )->display( "😡 Your JSON is broken!" )->newLine();
@@ -200,7 +200,7 @@ function parse_config() {
 
     $config         = array_to_var( $config );
 
-    $config_default = json_decode( file_get_contents( dirname( __FILE__ ) . '/wpbp.json' ), true );
+    $config_default = json_decode( file_get_contents( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'wpbp.json' ), true );
     if ( json_last_error() !== JSON_ERROR_NONE ) {
         $clio->clear()->style( $error )->display( "😡 WPBP JSON is broken!" )->newLine();
         exit;
@@ -208,7 +208,7 @@ function parse_config() {
 
     $config_default = array_to_var( $config_default, true );
     if ( empty( $config_default ) ) {
-        $clio->style( $error )->display( dirname( __FILE__ ) . '/wpbp.json not found!' )->newLine();
+        $clio->style( $error )->display( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'wpbp.json not found!' )->newLine();
         exit;
     }
 
