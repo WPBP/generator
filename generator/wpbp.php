@@ -18,7 +18,7 @@ function create_wpbp_json() {
     global $cmd, $clio, $error, $info;
 
     if ( $cmd[ 'json' ] ) {
-        if ( !copy( dirname( __FILE__ ) . '/wpbp.json', getcwd() . '/wpbp.json' ) ) {
+        if ( !copy( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'wpbp.json', getcwd() . DIRECTORY_SEPARATOR . 'wpbp.json' ) ) {
             $clio->clear()->style( $error )->display( "Failed to copy wpbp.json..." );
             return;
         }
@@ -29,7 +29,7 @@ function create_wpbp_json() {
         return;
     }
     
-    if ( !file_exists( getcwd() . '/wpbp.json' ) ) {
+    if ( !file_exists( getcwd() . DIRECTORY_SEPARATOR . 'wpbp.json' ) ) {
         $clio->clear()->style( $error )->display( "😡 wpbp.json file missing..." )->newLine();
         $clio->style( $error )->display( "😉 Generate it with: wpbp-generator --json" )->newLine();
         $clio->style( $error )->display( "Forget a hipster Q&A procedure and fill that JSON with your custom configuration!" )->newLine();
@@ -103,7 +103,7 @@ function extract_wpbp() {
 
                 try {
                     rename( getcwd() . DIRECTORY_SEPARATOR . 'plugin_temp' . DIRECTORY_SEPARATOR . 'WordPress-Plugin-Boilerplate-Powered-' . $version . DIRECTORY_SEPARATOR . 'plugin-name', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG );
-                    rename( getcwd() . '/plugin_temp/WordPress-Plugin-Boilerplate-Powered-' . $version . DIRECTORY_SEPARATOR . '.gitignore', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . '.gitignore' );
+                    rename( getcwd() . DIRECTORY_SEPARATOR . 'plugin_temp' . DIRECTORY_SEPARATOR . 'WordPress-Plugin-Boilerplate-Powered-' . $version . DIRECTORY_SEPARATOR . '.gitignore', getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . '.gitignore' );
                     remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . 'plugin_temp' );
                     if ( !$cmd[ 'dev' ] ) {
                         remove_file_folder( getcwd() . DIRECTORY_SEPARATOR . 'plugin.zip' );
