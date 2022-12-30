@@ -16,6 +16,12 @@ Let's have a look on what you need and how to install it:
 
 `sudo dnf install php php-zip php-mbstring php-yaml`
 
+### Mac OS
+
+`brew install pkg-config zlib`
+`pecl install zip mbstring yaml`
+(source: https://grrr.tech/posts/installing-homebrew-php-extensions-with-pecl)
+
 ## Install
 
 From [here](https://github.com/WPBP/generator/releases) you can download the phar version or you can chose to install it with composer:
