@@ -47,14 +47,14 @@
     "wpbp/cpt_columns",
     "wpbp/cronplus",
     "wpbp/debug",
+    "wpbp/i18n-notice",
     "wpbp/page-madness-detector",
     "wpbp/pointerplus",
     "wpbp/template",
     "wpbp/widgets-helper",
     "micropackage/requirements",
     "wpdesk/wp-notice",
-    "yahnis-elsts/plugin-update-checker",
-    "yoast/i18n-module"
+    "yahnis-elsts/plugin-update-checker"
   ],
   "snippet": {
     "backend": [
