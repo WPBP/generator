@@ -192,6 +192,10 @@ function strip_packagejson() {
                 unset( $package[ 'devDependencies' ][ $line ] );
             }
         }
+
+        $webpack = file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/webpack.config.js' );
+        $webpack = str_replace( "'plugin-block', ", '', $webpack );
+        file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/webpack.config.js', $webpack );
     }
     
     file_put_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '/package.json', json_encode( $package, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
