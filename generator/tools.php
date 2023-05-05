@@ -32,31 +32,37 @@ function git_init() {
  * @global array $config
  * @global object $clio
  * @global object $info
+ *
+ * @return void
  */
 function grumphp() {
-    global $config, $clio, $info;
+    global $config, $clio, $info, $error;
     if ( file_exists( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR .'grumphp.yml' ) ) {
+        if (! extension_loaded('yaml')) {
+            $clio->clear()->style( $error )->display( "😡 Yaml php extension not installed!" )->newLine();
+            return;
+        }
         $grumphp = yaml_parse_file ( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'grumphp.yml' );
         if ( is_empty_or_false( $config[ 'phpstan' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpstan' ] );
             $clio->clear()->style( $info )->display( "😀 PHPStan removed from GrumPHP" )->newLine();
         }
-        
+
         if ( is_empty_or_false( $config[ 'unit-test' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'codeception' ] );
             $clio->clear()->style( $info )->display( "😀 Codeception removed from GrumPHP" )->newLine();
         }
-        
+
         if ( is_empty_or_false( $config[ 'phpcs' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpcs' ] );
             $clio->clear()->style( $info )->display( "😀 PHPCS removed from GrumPHP" )->newLine();
         }
-        
+
         if ( is_empty_or_false( $config[ 'phpmd' ] ) ) {
             unset( $grumphp[ 'parameters' ][ 'tasks' ][ 'phpmd' ] );
             $clio->clear()->style( $info )->display( "😀 PHPMD removed from GrumPHP" )->newLine();
         }
-        
+
         yaml_emit_file( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'grumphp.yml', $grumphp );
     }
 }
