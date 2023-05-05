@@ -21,7 +21,9 @@
     "zordius/lightncandy": "^1.2",
     "nategood/commando": "0.4.0",
     "1happyplace/clio": "2.3.1",
-    "perchten/rmrdir": "1.*"
+    "perchten/rmrdir": "1.*",
+    "ext-json": "*",
+    "ext-yaml": "*"
   },
   "bin": [
     "bin/wpbp-generator"

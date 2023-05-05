@@ -25,8 +25,6 @@ function create_wpbp_json() {
         
         $clio->clear()->style( $info )->display( "😀 wpbp.json generated" )->newLine()->clear();
         exit();
-        
-        return;
     }
     
     if ( !file_exists( getcwd() . DIRECTORY_SEPARATOR . 'wpbp.json' ) ) {
