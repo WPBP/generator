@@ -164,8 +164,6 @@ function plugin_temp_exist() {
 
         return true;
     }
-
-    return;
 }
 
 
@@ -178,13 +176,14 @@ function strip_packagejson() {
     global $config;
     $package    = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'package.json' ), true );
 
-    foreach ( $package[ 'files' ] as $key => $path ) {
+    foreach ( $package->files as $key => $path ) {
         $_path = str_replace( '*', '', $path );
         $there_is_only_index_file = count_files_in_a_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . $_path );
         if ( $there_is_only_index_file === 0 ) {
-            unset( $package[ 'files' ][ $key ] );
+            unset( $package->files[ $key ] );
         }
     }
+    $package->files = (array) $package->files;
 
     if ( is_empty_or_false( $config[ 'backend_block' ] ) ) {
         foreach ( $package[ 'devDependencies' ] as $line => $content ) {
@@ -206,8 +205,8 @@ function is_empty_or_false( $testme ) {
     if ( empty( $testme ) || $testme == 'false' ) {
         return true;
     }
-    
-    return;
+
+    return false;
 }
 
 function strpos_arr($haystack, $needle) {
