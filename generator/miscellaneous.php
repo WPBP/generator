@@ -176,14 +176,16 @@ function strip_packagejson() {
     global $config;
     $package    = json_decode( file_get_contents( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . 'package.json' ), true );
 
-    foreach ( $package->files as $key => $path ) {
-        $_path = str_replace( '*', '', $path );
-        $there_is_only_index_file = count_files_in_a_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . $_path );
-        if ( $there_is_only_index_file === 0 ) {
-            unset( $package->files[ $key ] );
+    if ( is_object( $package ) ) {
+        foreach ( $package->files as $key => $path ) {
+            $_path = str_replace( '*', '', $path );
+            $there_is_only_index_file = count_files_in_a_folder( getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR . $_path );
+            if ( $there_is_only_index_file === 0 ) {
+                unset( $package->files[ $key ] );
+            }
         }
+        $package->files = (array) $package->files;
     }
-    $package->files = (array) $package->files;
 
     if ( is_empty_or_false( $config[ 'backend_block' ] ) ) {
         foreach ( $package[ 'devDependencies' ] as $line => $content ) {
