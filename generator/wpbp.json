@@ -26,6 +26,7 @@
     "admin-page": "true"
   },
   "ajax": "true",
+  "git-ignore-composer-lock": "false",
   "git-repo": "true",
   "grumphp": "true",
   "phpstan": "true",

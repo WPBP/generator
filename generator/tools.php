@@ -18,7 +18,12 @@ function git_init() {
         exec( 'cd "' . getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . '"; git init &> /dev/null' );
         $clio->clear()->style( $info )->display( "😎 .git folder generated" )->newLine();
         $gitignore = getcwd() . DIRECTORY_SEPARATOR . WPBP_PLUGIN_SLUG . DIRECTORY_SEPARATOR .'.gitignore';
-        file_put_contents( $gitignore, str_replace( DIRECTORY_SEPARATOR .'plugin-name' . DIRECTORY_SEPARATOR, '', file_get_contents( $gitignore ) ) );
+        $gitignore_content = file_get_contents( $gitignore );
+        if ( $config[ 'git-repo' ] === 'true' ) {
+            $gitignore_content .= "\n!composer.lock";
+        }
+
+        file_put_contents( $gitignore, str_replace( DIRECTORY_SEPARATOR .'plugin-name' . DIRECTORY_SEPARATOR, '', $gitignore_content ) );
         $clio->clear()->style( $info )->display( "😎 .gitignore file generated" )->newLine();
         return;
     } 
