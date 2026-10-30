@@ -122,11 +122,10 @@ function remove_files_by_settings( $file ) {
         case strpos( $file, 'integrations' . DIRECTORY_SEPARATOR . 'CMB.php' ) && is_empty_or_false( $config[ 'libraries_cmb2__cmb2' ] ):
         case strpos( $file, 'integrations' . DIRECTORY_SEPARATOR . 'Cron.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__cronplus' ] ):
         case strpos( $file, 'integrations' . DIRECTORY_SEPARATOR . 'Template.php' ) && is_empty_or_false( $config[ 'libraries_wpbp__template' ] ):
-        case strpos( $file, '' . DIRECTORY_SEPARATOR . 'Widgets' ) && is_empty_or_false( $config[ 'libraries_wpbp__widgets-helper' ] ):
         // Internals
         case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'PostTypes.php' ) && is_empty_or_false( $config[ 'libraries_johnbillion__extended-cpts' ] ):
         case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'Shortcode.php' ) && is_empty_or_false( $config[ 'frontend_shortcode' ] ):
-        case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'ShortcodeBlock.php' ) && is_empty_or_false( $config[ 'libraries_ayecode__wp-super-duper' ] ):
+        case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'ShortcodeBlock.php' ) && is_empty_or_false( $config[ 'backend_block' ] ):
         case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'Transient.php' ) && is_empty_or_false( $config[ 'system_transient' ] ):
         case strpos( $file, 'internals' . DIRECTORY_SEPARATOR . 'Block.php' ) && is_empty_or_false( $config[ 'backend_block' ] ):
         case strpos( $file, 'assets' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'block' ) && is_empty_or_false( $config[ 'backend_block' ] ):

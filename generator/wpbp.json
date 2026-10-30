@@ -7,7 +7,7 @@
     "name": "Your Name",
     "email": "my@email.com",
     "url": "http://domain.tld",
-    "license": "GPL 2.0+",
+    "license": "GPLv3 or later",
     "copyright": "2022 Your Name or Company Name"
   },
   "public-assets": {
@@ -36,7 +36,6 @@
   "wpcli": "true",
   "language-files": "true",
   "libraries": [
-    "ayecode/wp-super-duper",
     "freemius/wordpress-sdk",
     "julien731/wp-review-me",
     "origgami/cmb2-grid",
@@ -45,17 +44,16 @@
     "johnbillion/extended-cpts",
     "inpsyde/assets",
     "stevegrunwell/wp-cache-remember",
-    "wpbp/cpt_columns",
     "wpbp/cronplus",
     "wpbp/debug",
     "wpbp/i18n-notice",
     "wpbp/page-madness-detector",
     "wpbp/pointerplus",
     "wpbp/template",
-    "wpbp/widgets-helper",
     "micropackage/requirements",
     "wpdesk/wp-notice",
-    "yahnis-elsts/plugin-update-checker"
+    "yahnis-elsts/plugin-update-checker",
+    "joanrodas/plubo-routes"
   ],
   "snippet": {
     "backend": [
